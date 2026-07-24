@@ -1,0 +1,1288 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-07-08T00:43:01.033Z",
+    "createdAt": "2026-07-08T00:43:01.033Z",
+    "versionId": "9dde6ea6-66ef-4c64-8821-6e2bf3c01cf3",
+    "workflowId": "bvu52SGxQTXf2uiZ",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "24e66daf-5ff2-4d74-a833-dd6f5c0a1186",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -448,
+          -128
+        ],
+        "id": "eafa1e6d-9d3b-4572-9c1f-04d7367ae393",
+        "name": "Webhook",
+        "webhookId": "24e66daf-5ff2-4d74-a833-dd6f5c0a1186"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "maytapi_bbs_messages",
+            "mode": "list",
+            "cachedResultName": "maytapi_bbs_messages"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "message_type": "={{ $json.messageType }}",
+              "origin_team": "Ops",
+              "channel": "={{ $json.channel }}",
+              "timestamp": "={{ $json.timestamp }}",
+              "phone_number": "={{ $json.phone }}",
+              "name": "={{ $json.name }}",
+              "media_url": "={{ $json.mediaUrl }}",
+              "source": "Volunteer",
+              "uploaded_date": "={{ $json.uploadedAt }}",
+              "uploaded_time": "={{ $json.hourMinute }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "message_id",
+                "displayName": "message_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "timestamp",
+                "displayName": "timestamp",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "phone_number",
+                "displayName": "phone_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "message_type",
+                "displayName": "message_type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "content_text",
+                "displayName": "content_text",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "media_url",
+                "displayName": "media_url",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "raw_message",
+                "displayName": "raw_message",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "conversation_id",
+                "displayName": "conversation_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "associated_name",
+                "displayName": "associated_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "resolution_status",
+                "displayName": "resolution_status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "email",
+                "displayName": "email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "authorized",
+                "displayName": "authorized",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "source",
+                "displayName": "source",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "channel",
+                "displayName": "channel",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "interviewer",
+                "displayName": "interviewer",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "origin_team",
+                "displayName": "origin_team",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "uploaded_date",
+                "displayName": "uploaded_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "uploaded_time",
+                "displayName": "uploaded_time",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "time",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "processed",
+                "displayName": "processed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tags",
+                "displayName": "tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "suggested_tags",
+                "displayName": "suggested_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "evaluation",
+                "displayName": "evaluation",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "reason",
+                "displayName": "reason",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "transcription",
+                "displayName": "transcription",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "lum_reality_tour_mentions",
+                "displayName": "lum_reality_tour_mentions",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "duration",
+                "displayName": "duration",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "weight",
+                "displayName": "weight",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tc_in",
+                "displayName": "tc_in",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tc_out",
+                "displayName": "tc_out",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tags_in",
+                "displayName": "tags_in",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tags_out",
+                "displayName": "tags_out",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "dblocks_in",
+                "displayName": "dblocks_in",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "dblocks_out",
+                "displayName": "dblocks_out",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "avatar_tags",
+                "displayName": "avatar_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "journey_stage_tags",
+                "displayName": "journey_stage_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "objection_tags",
+                "displayName": "objection_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "proof_type_tags",
+                "displayName": "proof_type_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emotional_outcome_tags",
+                "displayName": "emotional_outcome_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "content_format_tags",
+                "displayName": "content_format_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "quality_usage_tags",
+                "displayName": "quality_usage_tags",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "sender_name",
+                "displayName": "sender_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "sender_phone",
+                "displayName": "sender_phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "submission_message",
+                "displayName": "submission_message",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "st_in",
+                "displayName": "st_in",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "st_out",
+                "displayName": "st_out",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "multiple_participants",
+                "displayName": "multiple_participants",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          224,
+          -128
+        ],
+        "id": "b70bee31-c6af-4d16-8fbb-546f1dc81cbf",
+        "name": "Insert rows in a table",
+        "credentials": {
+          "postgres": {
+            "id": "HrjPwXbCSjXnq2mx",
+            "name": "BBS user"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "fieldToSplitOut": "body.drive_urls",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitOut",
+        "typeVersion": 1,
+        "position": [
+          -224,
+          -128
+        ],
+        "id": "8b42dd92-3e62-4858-87e1-ae3f7c49af58",
+        "name": "Split Out"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "\nconst messageType = 'video';\nconst now = new Date();\nconst timestamp = now.toISOString();\n\nconst channel = 'iform';\nlet mediaUrl = $json[\"body.drive_urls\"];\n\nconst date = new Date(now.getTime() - (5 * 60 * 60 * 1000));\n\nconst uploadedAt = date.toISOString().slice(0, 10);\n\nconst hourMinute =\n  String(date.getUTCHours()).padStart(2, '0') +\n  ':' +\n  String(date.getUTCMinutes()).padStart(2, '0');\n\nconst phone = $('Webhook').item.json.body.volunteer_phone\nconst name = $('Webhook').item.json.body.volunteer_name\n\nreturn {\n  messageType,\n  channel,\n  mediaUrl,\n  uploadedAt,\n  hourMinute,\n  timestamp,\n  phone,\n  name\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          0,
+          -128
+        ],
+        "id": "1f77e177-a265-48b8-85c7-ecf5a0be8c54",
+        "name": "Prepare data"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Split Out",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Split Out": {
+        "main": [
+          [
+            {
+              "node": "Prepare data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare data": {
+        "main": [
+          [
+            {
+              "node": "Insert rows in a table",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Diego Bejarano",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "9dde6ea6-66ef-4c64-8821-6e2bf3c01cf3",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Prepare data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare data": {
+      "main": [
+        [
+          {
+            "node": "Insert rows in a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-11T23:55:50.783Z",
+  "id": "bvu52SGxQTXf2uiZ",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "BBS - Receive message from internal form",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "24e66daf-5ff2-4d74-a833-dd6f5c0a1186",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -448,
+        -128
+      ],
+      "id": "eafa1e6d-9d3b-4572-9c1f-04d7367ae393",
+      "name": "Webhook",
+      "webhookId": "24e66daf-5ff2-4d74-a833-dd6f5c0a1186"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "maytapi_bbs_messages",
+          "mode": "list",
+          "cachedResultName": "maytapi_bbs_messages"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "message_type": "={{ $json.messageType }}",
+            "origin_team": "Ops",
+            "channel": "={{ $json.channel }}",
+            "timestamp": "={{ $json.timestamp }}",
+            "phone_number": "={{ $json.phone }}",
+            "name": "={{ $json.name }}",
+            "media_url": "={{ $json.mediaUrl }}",
+            "source": "Volunteer",
+            "uploaded_date": "={{ $json.uploadedAt }}",
+            "uploaded_time": "={{ $json.hourMinute }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message_type",
+              "displayName": "message_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content_text",
+              "displayName": "content_text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "media_url",
+              "displayName": "media_url",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "raw_message",
+              "displayName": "raw_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "conversation_id",
+              "displayName": "conversation_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "associated_name",
+              "displayName": "associated_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "resolution_status",
+              "displayName": "resolution_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "authorized",
+              "displayName": "authorized",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "channel",
+              "displayName": "channel",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "interviewer",
+              "displayName": "interviewer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "origin_team",
+              "displayName": "origin_team",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "uploaded_date",
+              "displayName": "uploaded_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "uploaded_time",
+              "displayName": "uploaded_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "time",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "processed",
+              "displayName": "processed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tags",
+              "displayName": "tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "suggested_tags",
+              "displayName": "suggested_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "evaluation",
+              "displayName": "evaluation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "transcription",
+              "displayName": "transcription",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "lum_reality_tour_mentions",
+              "displayName": "lum_reality_tour_mentions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "duration",
+              "displayName": "duration",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "weight",
+              "displayName": "weight",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tc_in",
+              "displayName": "tc_in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tc_out",
+              "displayName": "tc_out",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tags_in",
+              "displayName": "tags_in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tags_out",
+              "displayName": "tags_out",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "dblocks_in",
+              "displayName": "dblocks_in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "dblocks_out",
+              "displayName": "dblocks_out",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "avatar_tags",
+              "displayName": "avatar_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "journey_stage_tags",
+              "displayName": "journey_stage_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "objection_tags",
+              "displayName": "objection_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "proof_type_tags",
+              "displayName": "proof_type_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emotional_outcome_tags",
+              "displayName": "emotional_outcome_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content_format_tags",
+              "displayName": "content_format_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "quality_usage_tags",
+              "displayName": "quality_usage_tags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "sender_name",
+              "displayName": "sender_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "sender_phone",
+              "displayName": "sender_phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "submission_message",
+              "displayName": "submission_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "st_in",
+              "displayName": "st_in",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "st_out",
+              "displayName": "st_out",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "multiple_participants",
+              "displayName": "multiple_participants",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        224,
+        -128
+      ],
+      "id": "b70bee31-c6af-4d16-8fbb-546f1dc81cbf",
+      "name": "Insert rows in a table",
+      "credentials": {
+        "postgres": {
+          "id": "HrjPwXbCSjXnq2mx",
+          "name": "BBS user"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "body.drive_urls",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        -128
+      ],
+      "id": "8b42dd92-3e62-4858-87e1-ae3f7c49af58",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "\nconst messageType = 'video';\nconst now = new Date();\nconst timestamp = now.toISOString();\n\nconst channel = 'iform';\nlet mediaUrl = $json[\"body.drive_urls\"];\n\nconst date = new Date(now.getTime() - (5 * 60 * 60 * 1000));\n\nconst uploadedAt = date.toISOString().slice(0, 10);\n\nconst hourMinute =\n  String(date.getUTCHours()).padStart(2, '0') +\n  ':' +\n  String(date.getUTCMinutes()).padStart(2, '0');\n\nconst phone = $('Webhook').item.json.body.volunteer_phone\nconst name = $('Webhook').item.json.body.volunteer_name\n\nreturn {\n  messageType,\n  channel,\n  mediaUrl,\n  uploadedAt,\n  hourMinute,\n  timestamp,\n  phone,\n  name\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -128
+      ],
+      "id": "1f77e177-a265-48b8-85c7-ecf5a0be8c54",
+      "name": "Prepare data"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-11T23:55:50.783Z",
+      "createdAt": "2026-06-11T23:55:50.783Z",
+      "role": "workflow:owner",
+      "workflowId": "bvu52SGxQTXf2uiZ",
+      "projectId": "Jh2Qr9k13AXs70cH"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-07-08T00:43:01.032Z",
+  "versionId": "9dde6ea6-66ef-4c64-8821-6e2bf3c01cf3"
+}
