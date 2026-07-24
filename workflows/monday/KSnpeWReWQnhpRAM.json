@@ -1,0 +1,2788 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-15T14:44:05.034Z",
+    "createdAt": "2026-06-15T14:44:05.034Z",
+    "versionId": "d8f0d5d1-6ead-49ba-b6ba-b2858a00134b",
+    "workflowId": "KSnpeWReWQnhpRAM",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "1c8429ef-5245-4645-b432-b99c10786046",
+          "options": {
+            "responseData": "="
+          }
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -1776,
+          -608
+        ],
+        "id": "91484c8b-d764-46e0-9e4e-f8b2152d6f1c",
+        "name": "Webhook",
+        "webhookId": "1c8429ef-5245-4645-b432-b99c10786046"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.body.command }}",
+                      "rightValue": "/mkt-ticket",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "36334363-1665-48c1-909b-908c8893aa3a"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "/mkt-ticket"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "38416e7f-dcd1-45f2-8ba7-9ac465562902",
+                      "leftValue": "={{JSON.parse($json.body.payload).type === 'block_actions' && JSON.parse($json.body.payload).actions[0].action_id !== \"C7\\/Do\" && JSON.parse($json.body.payload).actions[0].action_id !== \"monday_button_click\"}}",
+                      "rightValue": "block_actions",
+                      "operator": {
+                        "type": "boolean",
+                        "operation": "true",
+                        "singleValue": true
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Modal Update"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "a2ddc48f-17c6-4d35-9d07-6459b95b161f",
+                      "leftValue": "={{ JSON.parse($json.body.payload).type }}",
+                      "rightValue": "view_submission",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Payload of submission"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "6247ac38-93f0-4e74-91f6-2786ba8ca10e",
+                      "leftValue": "={{ $json.type }}",
+                      "rightValue": "reaction_added",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Reaction"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -1328,
+          -720
+        ],
+        "id": "1b66de23-6976-49e8-bf0a-0f4f861fe30f",
+        "name": "Switch"
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $('Switch').first().json.body\n\nconst triggerId = body.trigger_id;\n// const curret_tickets = $(\"tickets_week\").first().json.count\nconst modalView = {\n  type: \"modal\",\n  callback_id: \"mkt_ticket_submission_modal\", \n  title: {\n    type: \"plain_text\",\n    text: \"New MKT Ticket Request\", \n  },\n  submit: {\n    type: \"plain_text\",\n    text: \"Submit Ticket\",\n  },\n  close: {\n    type: \"plain_text\",\n    text: \"Cancel\",\n  },\n  blocks: [\n    {\n      type: \"section\",\n      text: {\n        type: \"mrkdwn\",\n        text: `*Please fill out the details for your marketing ticket:`,\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"ticket_title_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Ticket Title\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        action_id: \"ticket_title_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"e.g., Update email for campaign X\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"piece_type_block\",\n      \"dispatch_action\":true,\n      label: {\n        type: \"plain_text\",\n        text: \"Pieza a realizar (obligatorio)\",\n      },\n      element: {\n        type: \"multi_static_select\",\n        action_id: \"piece_type_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Selecciona una o más opciones\",\n        },\n        options: [\n          {\n  text: { type: \"plain_text\", text: \"Email\" },\n  value: \"email\",\n},\n{\n  text: { type: \"plain_text\", text: \"Video (Steph)\" },\n  value: \"video\",\n},\n{\n  text: { type: \"plain_text\", text: \"Landing Page\" },\n  value: \"landing_page\",\n},\n          {\n            text: { type: \"plain_text\", text: \"Pieza para redes sociales\" },\n            value: \"social_media_piece\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Covers para reel\" },\n            value: \"reel_covers\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Doc/Presentación\" },\n            value: \"document_presentation\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Mensaje/Saludo\" },\n            value: \"message_greeting\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Flyer\" },\n            value: \"flyer\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Página web\" },\n            value: \"website\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Banner\" },\n            value: \"banner\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Otros (especificar abajo)\" },\n            value: \"otros\",\n          },\n        ],\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"formats_block\",\n      \"dispatch_action\":true,\n      label: {\n        type: \"plain_text\",\n        text: \"Formato (obligatorio)\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"formats_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Selecciona un formato\",\n        },\n        options: [\n          {\n            text: {type: \"plain_text\", text:\"Digital\"},\n            value: \"digital\",\n          },\n          {\n            text: {type: \"plain_text\", text:\"Impreso\"},\n            value: \"impreso\",\n          },\n        ]\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"final_text_block\",\n      optional: true,\n      label: {\n        type: \"plain_text\",\n        text: \"Textos finales y revisados\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        multiline: true,\n        action_id: \"final_text_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Inserta un enlace a un Google Docs si es que se requiere.\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"assets_block\",\n      optional: true,\n      label: {\n        type: \"plain_text\",\n        text: \"Fotos e insumos gráficos (logos, referencias, etc.)\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        multiline: true,\n        action_id: \"assets_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Inserta enlaces a carpetas de Google Drive, Dropbox, WeTransfer, etc.\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"due_date_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Desired Due Date\",\n      },\n      element: {\n        type: \"datepicker\",\n        action_id: \"due_date_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select a date\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"stakeholders_block\",\n      optional: false,\n      label: {\n        type: \"plain_text\",\n        text: \"People involved\",\n      },\n      element: {\n        type: \"multi_users_select\",\n        action_id: \"stakeholders_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select people to keep in the loop\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"priority_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Priority Level\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"priority_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select a priority\",\n        },\n        options: [\n          {\n            text: { type: \"plain_text\", text: \"High\" },\n            value: \"high\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Medium\" },\n            value: \"medium\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Low\" },\n            value: \"low\",\n          },\n        ],\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"charge_level_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Estimated Charge\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"charge_level_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select an estimated charge level\",\n        },\n        options: [\n          {\n            text: {\n              type: \"plain_text\",\n              text: \"High | Más de 5 piezas, campañas completas, materiales largos o complejos\",\n            },\n            value: \"high\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Medium | 3–5 piezas variadas\" },\n            value: \"medium\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Low | 1–2 piezas simples\" },\n            value: \"low\",\n          },\n        ],\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"mkt_owner\",\n      label: {\n        type: \"plain_text\",\n        text: \"Owner\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"mkt_owner_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select who will be responsible for this task\",\n        },\n        options: [\n          {\n            text: {\n              type: \"plain_text\",\n              text: \"Danixa\",\n            },\n            value: \"U07BNHZRTNE\",\n          },\n          {\n            text: { \n              type: \"plain_text\", \n              text: \"Sheila\" },\n            value: \"U07CLM1JY68\",\n          },\n            {\n    text: {\n      type: \"plain_text\",\n      text: \"Stephanie\",\n    },\n    value: \"U07BR2PEU5S\",\n  },\n        ],\n      },\n    },\n    \t\t{\n\t\t\t\"type\": \"context\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\t\"text\": \"***For additional details a thread will be created in the corresponding channel\",\n\t\t\t\t\t\"emoji\": true\n\t\t\t\t}\n\t\t\t]\n\t\t}\n  ],\n};\n\nreturn [\n  {\n    json: {\n      trigger_id: triggerId,\n      view: modalView,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -688,
+          -1360
+        ],
+        "id": "a4b806ce-53ee-4744-a2ee-38db22c6a79b",
+        "name": "make_modal"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://slack.com/api/views.open",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "slackApi",
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json; charset=utf-8",
+          "body": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -480,
+          -1360
+        ],
+        "id": "85752261-8245-44a1-9bda-be3db28fb234",
+        "name": "Pop Modal",
+        "credentials": {
+          "slackApi": {
+            "id": "cfWZDeNm6AKf8Kqr",
+            "name": "MKT Tickets bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "boardItem",
+          "operation": "changeMultipleColumnValues",
+          "boardId": "9372827244",
+          "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+          "columnValues": "={\n  \"status\": \"Done\",\n  \"date_mkrwqyz0\": \"{{$now.format('yyyy-MM-dd')}}\"\n}\n"
+        },
+        "type": "n8n-nodes-base.mondayCom",
+        "typeVersion": 1,
+        "position": [
+          -240,
+          -464
+        ],
+        "id": "6f2f9f84-67d3-4265-8d58-255d719ccb1d",
+        "name": "Update Status",
+        "credentials": {
+          "mondayComApi": {
+            "id": "osb4QlXyLojhLsvA",
+            "name": "Monday.com account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                      "rightValue": "white_check_mark",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "566214b8-7507-4e22-ab7e-761508691222"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Done"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "8ffd445e-2450-4547-b6d9-e0b0a8b428a5",
+                      "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                      "rightValue": "typing-cat",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Working on it"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "4d1a4ab0-a7b6-4a6d-a09a-fbe0e4474ded",
+                      "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                      "rightValue": "this-is-fine",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Stuck"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "de687ca1-1293-4ab3-bc1c-d32cf0122ddc",
+                      "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                      "rightValue": "bowtie",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "On hold"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "0dff5360-a3e4-4d7a-8bbf-47a148a257a8",
+                      "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                      "rightValue": "x",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Cancelled"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          -464,
+          -176
+        ],
+        "id": "34258a81-7ce9-41a6-8458-01b261f20d44",
+        "name": "Switch1"
+      },
+      {
+        "parameters": {
+          "resource": "boardItem",
+          "operation": "changeMultipleColumnValues",
+          "boardId": "9372827244",
+          "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+          "columnValues": "={\n  \"status\": \"Working on it\"\n}\n"
+        },
+        "type": "n8n-nodes-base.mondayCom",
+        "typeVersion": 1,
+        "position": [
+          -240,
+          -256
+        ],
+        "id": "53b16777-5c1a-435a-b534-be0dd1905d2d",
+        "name": "Update Status2",
+        "credentials": {
+          "mondayComApi": {
+            "id": "osb4QlXyLojhLsvA",
+            "name": "Monday.com account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "boardItem",
+          "operation": "changeMultipleColumnValues",
+          "boardId": "9372827244",
+          "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+          "columnValues": "={\n  \"status\": \"Stuck\"\n}\n"
+        },
+        "type": "n8n-nodes-base.mondayCom",
+        "typeVersion": 1,
+        "position": [
+          -240,
+          -64
+        ],
+        "id": "fd10cb0d-8208-4a7d-9035-918f64fd2600",
+        "name": "Update Status3",
+        "credentials": {
+          "mondayComApi": {
+            "id": "osb4QlXyLojhLsvA",
+            "name": "Monday.com account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "boardItem",
+          "operation": "changeMultipleColumnValues",
+          "boardId": "9372827244",
+          "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+          "columnValues": "={\n  \"status\": \"On hold\"\n}\n"
+        },
+        "type": "n8n-nodes-base.mondayCom",
+        "typeVersion": 1,
+        "position": [
+          -240,
+          144
+        ],
+        "id": "6d28f8d2-e7b9-479e-9dc8-473c57cd1f10",
+        "name": "Update Status4",
+        "credentials": {
+          "mondayComApi": {
+            "id": "osb4QlXyLojhLsvA",
+            "name": "Monday.com account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE tickets_mkt\nSET status = 'Working on it'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+          "options": {
+            "replaceEmptyStrings": true
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -16,
+          -256
+        ],
+        "id": "83e76574-fb17-4f23-838d-03c541266bdd",
+        "name": "Postgres3",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## CHANGE STATUS\n**Change status in Monday using slack reactions** ",
+          "height": 1054,
+          "width": 966,
+          "color": 4
+        },
+        "id": "c7b74bc7-5ff1-401f-8968-27b1fd8ba487",
+        "name": "Sticky Note2",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -720,
+          -528
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## TICKET CREATION\n**Slack comms and Monday item creation** Aca se reciben *TODOS* los payloads, incluidos los del popup del Modal Handler\n\n",
+          "height": 274,
+          "width": 1010
+        },
+        "id": "c3aea4f2-8bd1-4a64-9b4e-47f9d403d5c2",
+        "name": "Sticky Note",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -720,
+          -880
+        ]
+      },
+      {
+        "parameters": {
+          "content": "## Modal Handler\n**Lo que pasa cuando se recive el /mkt-tickets** ",
+          "height": 234,
+          "width": 830,
+          "color": 7
+        },
+        "id": "c3aca343-2879-446c-a6f2-cbd9e7b1ad71",
+        "name": "Sticky Note3",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -720,
+          -1440
+        ]
+      },
+      {
+        "parameters": {
+          "resource": "boardItem",
+          "boardId": "9372827244",
+          "groupId": "={{ $('creation_f').first().json.result.monday_board_id }}",
+          "name": "={{ $('creation_f').first().json.result.ticket_title }}",
+          "additionalFields": {
+            "columnValues": "={\n  \"person\": \"{{$('creation_f').first().json.result.monday_ticket_owner}}\",\n  \"date4\": \"{{ $now.format('yyyy-MM-dd') }}\",\n  \"status\": \"New\",\n  \"color_mkrw9vbx\": \"{{$('creation_f').first().json.result.ticket_priority.toTitleCase()}}\",\n  \"color_mkrwg4n0\": \"{{$('creation_f').first().json.result.ticket_charge_level.toTitleCase()}}\",\n  \"dropdown_mkrw3a3g\": {\"ids\":[{{ $('creation_f').first().json.result.monday_piece_types }}]},\n  \"text_mkrw9hfw\": {{ JSON.stringify($('creation_f').first().json.result.piece_format) }},\n  \"text_mkrwh93m\": {{ JSON.stringify($('creation_f').first().json.result.piece_final_texts) }},\n  \"text_mkrw25re\": {{ JSON.stringify($('creation_f').first().json.result.piece_assets) }},\n  \"multiple_person_mkrw6ab5\": {{ JSON.stringify($('lookup_ids').first().json.monday_user_id) }},\n  \"date_mkrwzdy1\": \"{{ $('creation_f').first().json.result.ticket_due_date }}\",\n  \"text_mkrw6p9v\": {{JSON.stringify($('creation_f').first().json.result.piece_other_if)}}\n}"
+          }
+        },
+        "type": "n8n-nodes-base.mondayCom",
+        "typeVersion": 1,
+        "position": [
+          -368,
+          -768
+        ],
+        "id": "759594e0-32e6-4fca-afce-fc11c9a7b55c",
+        "name": "Monday.com",
+        "credentials": {
+          "mondayComApi": {
+            "id": "osb4QlXyLojhLsvA",
+            "name": "Monday.com account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "trigger": [
+            "reaction_added"
+          ],
+          "channelId": {
+            "__rl": true,
+            "value": "C090V2SAD5Y",
+            "mode": "list",
+            "cachedResultName": "tickets-mkt-content"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.slackTrigger",
+        "typeVersion": 1,
+        "position": [
+          -1776,
+          -800
+        ],
+        "id": "bb63fe44-06ba-46c1-9001-ce659d04ce03",
+        "name": "Slack Trigger",
+        "webhookId": "20f4551e-e20c-4afb-9f9c-f549f1cc1749",
+        "credentials": {
+          "slackApi": {
+            "id": "cfWZDeNm6AKf8Kqr",
+            "name": "MKT Tickets bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE tickets_mkt\nSET \n  status = 'Done', \n  closed_at = '{{ $now.setZone('America/Lima').toISO() }}'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -16,
+          -464
+        ],
+        "id": "17dcf097-a00f-49ee-b345-f0ae0d1c96c3",
+        "name": "Postgres6",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const payload = JSON.parse($input.first().json.body.payload);\n// return {payload}\nconst monday_boards = {\n  \"U07BNHZRTNE\": \"group_mkrwb00t\", //Danixa\n  \"U07CLM1JY68\": \"group_mkrwmxz9\", //Sheila\n  \"U07BR2PEU5S\": \"group_mm06wdq0\", //Steph\n}\n\nconst monday_users = {\n  \"U07BNHZRTNE\": \"55983635\", //Danixa\n  \"U07CLM1JY68\": \"56182617\", //Sheila\n  \"U07BR2PEU5S\": \"56066741\", //Steph\n}\n\nconst monday_pieces = {\n  \"landing_page\": 1,\n  \"email\": 2,\n  \"social_media_piece\": 3,\n  \"reel_covers\": 4,\n  \"document_presentation\": 5,\n  \"message_greeting\": 6,\n  \"flyer\": 7,\n  \"website\": 8,\n  \"banner\": 9,\n  \"otros\": 10,\n  \"video\": 11, //Steph\n};\n\nconst form = payload.view.state.values;\nconst result = {\n  requester_slack_slack_id: payload.user.id,\n  requester_slack_slack_username: payload.user.name,\n  ticket_title: form.ticket_title_block.ticket_title_input.value,\n  piece_types_raw: form.piece_type_block.piece_type_input.selected_options.map(\n    (option)=> option.value\n  ),\n  piece_types: form.piece_type_block.piece_type_input.selected_options.map(\n    (option) => option.value.replaceAll(\"_\", \" \")\n      .replace(/\\b\\w/g, (l) => l.toUpperCase()),\n  ),\n  monday_piece_types: form.piece_type_block.piece_type_input.selected_options.map(\n    (option) => monday_pieces[option.value]\n  ),\n  piece_other_if: form.piece_other_block?.piece_other_input?.value ?? null,\n  piece_format: form.formats_block.formats_input.selected_option.text.text,\n  piece_dimension: form.dimensions_block?.dimensions_input?.value ?? null,\n  piece_final_texts: form.final_text_block.final_text_input.value,\n  piece_assets: form.assets_block.assets_input.value,\n  ticket_due_date: form.due_date_block.due_date_input.selected_date,\n  stakeholders: form.stakeholders_block?.stakeholders_input?.selected_users ?? [],\n  ticket_priority: form.priority_block.priority_input.selected_option.value,\n  ticket_charge_level:\n    form.charge_level_block.charge_level_input.selected_option.value,\n  ticket_owner: form.mkt_owner.mkt_owner_input.selected_option.value,\n  monday_ticket_owner: monday_users[form.mkt_owner.mkt_owner_input.selected_option.value],\n  monday_board_id : monday_boards[form.mkt_owner.mkt_owner_input.selected_option.value]\n};\nreturn { result };\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -688,
+          -768
+        ],
+        "id": "388bdc55-a8b5-42bc-82eb-84b374c6ec4e",
+        "name": "creation_f"
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tickets_mkt",
+            "mode": "list",
+            "cachedResultName": "tickets_mkt"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "monday_item_id": "={{ $('Monday.com').item.json.id }}",
+              "slack_ts_root_message": "={{ $json.message_timestamp }}",
+              "slack_requester_id": "={{ $('lookup_ids').item.json.slack_user_id }}",
+              "slack_owner_id": "={{ $('creation_f').item.json.result.ticket_owner }}",
+              "due_date": "={{ $('creation_f').item.json.result.ticket_due_date }}",
+              "ticket_title": "={{ $('creation_f').item.json.result.ticket_title }}",
+              "piece_types": "={{ $('creation_f').item.json.result.piece_types_raw }}",
+              "requested_formats": "={{ $('creation_f').item.json.result.piece_format }}",
+              "final_text_link": "={{ $('creation_f').item.json.result.piece_final_texts }}",
+              "asset_links": "={{ $('creation_f').item.json.result.piece_assets }}",
+              "priority": "={{ $('creation_f').item.json.result.ticket_priority }}",
+              "charge_level": "={{ $('creation_f').item.json.result.ticket_charge_level }}",
+              "piece_other_details": "={{ $('creation_f').item.json.result.piece_other_if }}"
+            },
+            "matchingColumns": [
+              "id"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "monday_item_id",
+                "displayName": "monday_item_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "slack_ts_root_message",
+                "displayName": "slack_ts_root_message",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "slack_requester_id",
+                "displayName": "slack_requester_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "slack_owner_id",
+                "displayName": "slack_owner_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "closed_at",
+                "displayName": "closed_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "due_date",
+                "displayName": "due_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "ticket_title",
+                "displayName": "ticket_title",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "piece_types",
+                "displayName": "piece_types",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "array",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "piece_other_details",
+                "displayName": "piece_other_details",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "requested_formats",
+                "displayName": "requested_formats",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "final_text_link",
+                "displayName": "final_text_link",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "asset_links",
+                "displayName": "asset_links",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "priority",
+                "displayName": "priority",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "options",
+                "canBeUsedToMatch": true,
+                "options": [
+                  {
+                    "name": "high",
+                    "value": "high"
+                  },
+                  {
+                    "name": "medium",
+                    "value": "medium"
+                  },
+                  {
+                    "name": "low",
+                    "value": "low"
+                  }
+                ]
+              },
+              {
+                "id": "charge_level",
+                "displayName": "charge_level",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "options",
+                "canBeUsedToMatch": true,
+                "options": [
+                  {
+                    "name": "high",
+                    "value": "high"
+                  },
+                  {
+                    "name": "medium",
+                    "value": "medium"
+                  },
+                  {
+                    "name": "low",
+                    "value": "low"
+                  }
+                ]
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          0,
+          -768
+        ],
+        "id": "3cc8f3cf-0ce7-4b8a-ba57-4950631d7dee",
+        "name": "create_ticket",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "C090V2SAD5Y",
+            "mode": "list",
+            "cachedResultName": "tickets-mkt-content"
+          },
+          "messageType": "block",
+          "blocksUi": "={\n\t\"blocks\": [\n\t\t{\n\t\t\t\"type\": \"header\",\n\t\t\t\"text\": {\n\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\"text\": \"📌{{ JSON.stringify($('creation_f').item.json.result.ticket_title).slice(1,-1) }}\"\n\t\t\t}\n\t\t},\n\n\t\t{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Tipo de Ticket:*\\n {{ $('creation_f').item.json.result.piece_types }}\"\n\t\t\t\t}\n\n\t\t\t]\n\t\t},\n\n\t\t{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Estimacion de carga*: {{ \n\n$('creation_f').item.json.result.ticket_charge_level === 'high' ? ':red_circle: High' : $('creation_f').item.json.result.ticket_charge_level === 'medium' ? ':large_yellow_circle: Medium' : ':large_green_circle: Low'}}\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Prioridad*: {{$('creation_f').item.json.result.ticket_priority === 'high' ? ':large_red_square: High' : $('creation_f').item.json.result.ticket_charge_level === 'medium' ? ':large_orange_square: Medium' : ':large_blue_square: Low'}}\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"type\": \"divider\"\n\t\t},\n\t\t{\n\t\t\t\"type\": \"context\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"This ticket was created by <@{{ $('creation_f').item.json.result.requester_slack_slack_id }}>\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"image\",\n\t\t\t\t\t\"image_url\": \"https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg\",\n\t\t\t\t\t\"alt_text\": \"cat\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"Responsable: <@{{ $('creation_f').item.json.result.ticket_owner }}>\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}",
+          "text": "New MKT Content Ticket",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.3,
+        "position": [
+          -176,
+          -768
+        ],
+        "id": "47cc3e77-773d-4d53-b80d-1ea0f77daa8a",
+        "name": "Send Root Create",
+        "webhookId": "0cddc0bb-4b57-445e-8b47-e4b76e1aa22d",
+        "credentials": {
+          "slackApi": {
+            "id": "cfWZDeNm6AKf8Kqr",
+            "name": "MKT Tickets bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "medlife_users",
+            "mode": "list",
+            "cachedResultName": "medlife_users"
+          },
+          "limit": 1,
+          "where": {
+            "values": [
+              {
+                "column": "slack_user_id",
+                "value": "={{$('creation_f').first().json.result.requester_slack_slack_id}}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -528,
+          -768
+        ],
+        "id": "31143035-fb20-48b4-bb3f-bb8ccfb70c95",
+        "name": "lookup_ids",
+        "credentials": {
+          "postgres": {
+            "id": "FtsLEIbT1mt4kElV",
+            "name": "Medlife IDs READ"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "tickets_mkt",
+            "mode": "list",
+            "cachedResultName": "tickets_mkt"
+          },
+          "limit": 1,
+          "where": {
+            "values": [
+              {
+                "column": "slack_ts_root_message",
+                "value": "={{ $('Slack Trigger').item.json.item.ts }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -640,
+          -160
+        ],
+        "id": "a1d4b027-5d04-41da-a7eb-1f109bf4eb17",
+        "name": "existing_ticket",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE tickets_mkt\nSET status = 'Stuck'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -16,
+          -64
+        ],
+        "id": "e5fb7c17-b8a0-4af1-96e5-aa8afe656309",
+        "name": "Postgres7",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE tickets_mkt\nSET status = 'On hold'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -16,
+          144
+        ],
+        "id": "29852ff5-e6a4-4ca2-9dae-557df39234c7",
+        "name": "Postgres8",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://slack.com/api/views.update",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "slackApi",
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json; charset=utf-8",
+          "body": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -480,
+          -1088
+        ],
+        "id": "47b8a562-edfd-4371-94c4-d6cac8f3191a",
+        "name": "Update Modal",
+        "credentials": {
+          "slackApi": {
+            "id": "cfWZDeNm6AKf8Kqr",
+            "name": "MKT Tickets bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## Modal Update\n**Lo que pasa cuando se interactúa con ciertos elementos del modal pre-submission** ",
+          "height": 234,
+          "width": 830,
+          "color": 7
+        },
+        "id": "532c2c70-9e10-46ba-8933-b5391814d230",
+        "name": "Sticky Note4",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          -720,
+          -1168
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "// Slack sends the payload as a URL-encoded string. We need to parse the JSON inside.\nconst payload = JSON.parse($json.body.payload);\n\nconst action = payload.actions[0]; // The action that triggered this event\nconst actionId = action.action_id;\n\nif (actionId === \"monday_button_click\" || actionId === \"C7\\/Do\"){\n  throw Error(\"No deberia estar aca\")\n}\n\n// Extract the essential data from the Slack payload\nconst viewId = payload.view.id;\nconst allBlocks = payload.view.blocks;\n\n// --- LOGIC FOR \"PIEZA A REALIZAR\" DROPDOWN ---\nif (actionId === \"piece_type_input\") {\n  const selectedOptions = action.selected_options;\n  const shouldShowOtherBlock = selectedOptions.some(\n    (option) => option.value === \"otros\",\n  );\n  const hasOtherBlock = allBlocks.some(\n    (block) => block.block_id === \"piece_other_block\",\n  );\n\n  if (shouldShowOtherBlock && !hasOtherBlock) {\n    const otherBlock = {\n      type: \"input\",\n      block_id: \"piece_other_block\",\n      label: { type: \"plain_text\", text: \"Otros - Especificar\" },\n      element: {\n        type: \"plain_text_input\",\n        action_id: \"piece_other_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Describe la pieza requerida aquí.\",\n        },\n      },\n    };\n    const pieceTypeBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"piece_type_block\",\n    );\n    allBlocks.splice(pieceTypeBlockIndex + 1, 0, otherBlock);\n  } else if (!shouldShowOtherBlock && hasOtherBlock) {\n    const otherBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"piece_other_block\",\n    );\n    if (otherBlockIndex > -1) allBlocks.splice(otherBlockIndex, 1);\n  }\n}\n\n// --- LOGIC FOR \"FORMATO\" DROPDOWN ---\nif (actionId === \"formats_input\") {\n  const selectedFormat = action.selected_option.value;\n  const shouldShowDimensions = selectedFormat === \"impreso\";\n  const hasDimensionsBlock = allBlocks.some(\n    (block) => block.block_id === \"dimensions_block\",\n  );\n\n  if (shouldShowDimensions && !hasDimensionsBlock) {\n    const dimensionsBlock = {\n      type: \"input\",\n      block_id: \"dimensions_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Dimensiones (obligatorio para impresos)\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        action_id: \"dimensions_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: 'Ej: \"A4\", \"8.5in x 11in\", \"10cm x 15cm\"',\n        },\n      },\n    };\n    const formatBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"formats_block\",\n    );\n    allBlocks.splice(formatBlockIndex + 1, 0, dimensionsBlock);\n  } else if (!shouldShowDimensions && hasDimensionsBlock) {\n    const dimensionsBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"dimensions_block\",\n    );\n    if (dimensionsBlockIndex > -1) allBlocks.splice(dimensionsBlockIndex, 1);\n  }\n}\n\n// Construct the final view object for the API call\nconst updatedView = {\n  view_id: viewId,\n  view: {\n    type: \"modal\",\n    callback_id: payload.view.callback_id,\n    title: payload.view.title,\n    submit: payload.view.submit,\n    close: payload.view.close,\n    blocks: allBlocks,\n  },\n};\n\n// Return the JSON for the next node (the HTTP Request)\nreturn {\n  json: updatedView,\n};"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -688,
+          -1088
+        ],
+        "id": "6e4cadeb-47d3-4106-9b2c-c62636f578ea",
+        "name": "make_update"
+      },
+      {
+        "parameters": {
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "C090V2SAD5Y",
+            "mode": "list",
+            "cachedResultName": "tickets-mkt-content"
+          },
+          "messageType": "block",
+          "blocksUi": "={\n\t\"blocks\": [\n{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Formatos:*\\n{{ $('creation_f').item.json.result.piece_format }}\\n{{ $('creation_f').item.json.result.piece_final_texts != null\n    ? $('creation_f').item.json.result.piece_final_texts.isUrl()\n      ? `*Textos finales:*\\\\n<${$('creation_f').item.json.result.piece_final_texts}|Link>`\n      : `*Textos finales:*\\\\n${JSON.stringify($('creation_f').item.json.result.piece_final_texts.slice(0, 50)).slice(1,-1)}[...]`\n    : \"-\"}}\"\n\t\t\t\t},\n{{ $('creation_f').item.json.result.piece_dimension ? `{\"type\":\"mrkdwn\",\"text\":\"*Dimensiones*:\\\\n${JSON.stringify($('creation_f').item.json.result.piece_dimension).slice(1,-1)}\"},` : '' }}\n\n{{ $('creation_f').item.json.result.piece_other_if ? `{\"type\":\"mrkdwn\",\"text\":\"*Otros details*:\\\\n${JSON.stringify($('creation_f').item.json.result.piece_other_if).slice(1,-1)}\"},` : '' }}\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Assets:*\\n{{ $('creation_f').item.json.result.piece_assets != null\n    ? $('creation_f').item.json.result.piece_assets.isUrl()\n      ? `*Recursos gráficos:*\\\\n<${$('creation_f').item.json.result.piece_assets}|Link>`\n      : `*Recursos gráficos:*\\\\n${JSON.stringify($('creation_f').item.json.result.piece_assets.slice(0, 50)).slice(1,-1)}[...]`\n    : \"-\"}}\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Requested Due Date:* {{ $('creation_f').item.json.result.ticket_due_date }}📅\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"accessory\": {\n\t\t\t\t\"type\": \"image\",\n\t\t\t\t\"image_url\": \"https://api.slack.com/img/blocks/bkb_template_images/approvalsNewDevice.png\",\n\t\t\t\t\"alt_text\": \"computer thumbnail\"\n\t\t\t}\n\t\t},\n{{ $('creation_f').item.json.result.stakeholders?.length > 0 ? `{\n  \"type\": \"context\",\n  \"elements\": [\n    {\n      \"type\": \"mrkdwn\",\n      \"text\": \"cc: ${$('creation_f').item.json.result.stakeholders.map(id => '<@' + id + '>').join(' ')}\"\n    }\n  ]\n},` : '' }}\n\n\t\t{\n\t\t\t\"type\": \"actions\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"button\",\n\t\t\t\t\t\"text\": {\n\t\t\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\t\t\"emoji\": true,\n\t\t\t\t\t\t\"text\": \"Monday :monday:\"\n\t\t\t\t\t},\n\t\t\t\t\t\"style\": \"primary\",\n\t\t\t\t\t\"url\": \"https://medlifemovement-company.monday.com/boards/9372827244/pulses/{{ $json.monday_item_id }}\",\n                    \"action_id\":\"monday_button_click\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"type\": \"context\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\t\"text\": \"***Reply to this thread for additional details\",\n\t\t\t\t\t\"emoji\": true\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}",
+          "otherOptions": {
+            "includeLinkToWorkflow": false,
+            "thread_ts": {
+              "replyValues": {
+                "thread_ts": "={{ $('Send Root Create').item.json.message_timestamp }}"
+              }
+            }
+          }
+        },
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.3,
+        "position": [
+          160,
+          -768
+        ],
+        "id": "553f0fbf-f627-446c-95b5-7fa081d4aa71",
+        "name": "Details on Root",
+        "webhookId": "21b992e4-8098-48dd-b83c-9786a2cecd83",
+        "credentials": {
+          "slackApi": {
+            "id": "cfWZDeNm6AKf8Kqr",
+            "name": "MKT Tickets bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "boardItem",
+          "operation": "changeMultipleColumnValues",
+          "boardId": "9372827244",
+          "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+          "columnValues": "={\n  \"status\": \"Cancelled\"\n}\n"
+        },
+        "type": "n8n-nodes-base.mondayCom",
+        "typeVersion": 1,
+        "position": [
+          -240,
+          336
+        ],
+        "id": "c2b158e2-9a8d-41bf-9c42-b29f0978793c",
+        "name": "Update Status5",
+        "credentials": {
+          "mondayComApi": {
+            "id": "osb4QlXyLojhLsvA",
+            "name": "Monday.com account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "UPDATE tickets_mkt\nSET status = 'Cancelled'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.5,
+        "position": [
+          -16,
+          336
+        ],
+        "id": "1d5e3627-e876-469a-b807-d092a7fef379",
+        "name": "Postgres",
+        "credentials": {
+          "postgres": {
+            "id": "1lTpy1olMqcvHZhI",
+            "name": "ticket_mkt table FULL "
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "make_modal",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "make_update",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "creation_f",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "existing_ticket",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "make_modal": {
+        "main": [
+          [
+            {
+              "node": "Pop Modal",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Pop Modal": {
+        "main": [
+          []
+        ]
+      },
+      "Update Status": {
+        "main": [
+          [
+            {
+              "node": "Postgres6",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch1": {
+        "main": [
+          [
+            {
+              "node": "Update Status",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update Status2",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update Status3",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update Status4",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Update Status5",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update Status2": {
+        "main": [
+          [
+            {
+              "node": "Postgres3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update Status3": {
+        "main": [
+          [
+            {
+              "node": "Postgres7",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update Status4": {
+        "main": [
+          [
+            {
+              "node": "Postgres8",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Monday.com": {
+        "main": [
+          [
+            {
+              "node": "Send Root Create",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack Trigger": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "creation_f": {
+        "main": [
+          [
+            {
+              "node": "lookup_ids",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send Root Create": {
+        "main": [
+          [
+            {
+              "node": "create_ticket",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "lookup_ids": {
+        "main": [
+          [
+            {
+              "node": "Monday.com",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "existing_ticket": {
+        "main": [
+          [
+            {
+              "node": "Switch1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "create_ticket": {
+        "main": [
+          [
+            {
+              "node": "Details on Root",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "make_update": {
+        "main": [
+          [
+            {
+              "node": "Update Modal",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Update Status5": {
+        "main": [
+          [
+            {
+              "node": "Postgres",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Franz Rebaza",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "d8f0d5d1-6ead-49ba-b6ba-b2858a00134b",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "make_modal",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "make_update",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "creation_f",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "existing_ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "make_modal": {
+      "main": [
+        [
+          {
+            "node": "Pop Modal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pop Modal": {
+      "main": [
+        []
+      ]
+    },
+    "Update Status": {
+      "main": [
+        [
+          {
+            "node": "Postgres6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "Update Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Status5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status2": {
+      "main": [
+        [
+          {
+            "node": "Postgres3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status3": {
+      "main": [
+        [
+          {
+            "node": "Postgres7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status4": {
+      "main": [
+        [
+          {
+            "node": "Postgres8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Monday.com": {
+      "main": [
+        [
+          {
+            "node": "Send Root Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "creation_f": {
+      "main": [
+        [
+          {
+            "node": "lookup_ids",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Root Create": {
+      "main": [
+        [
+          {
+            "node": "create_ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "lookup_ids": {
+      "main": [
+        [
+          {
+            "node": "Monday.com",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "existing_ticket": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_ticket": {
+      "main": [
+        [
+          {
+            "node": "Details on Root",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "make_update": {
+      "main": [
+        [
+          {
+            "node": "Update Modal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Status5": {
+      "main": [
+        [
+          {
+            "node": "Postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-06-10T15:57:04.917Z",
+  "id": "KSnpeWReWQnhpRAM",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "MKT Ticket system",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "1c8429ef-5245-4645-b432-b99c10786046",
+        "options": {
+          "responseData": "="
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1776,
+        -608
+      ],
+      "id": "91484c8b-d764-46e0-9e4e-f8b2152d6f1c",
+      "name": "Webhook",
+      "webhookId": "1c8429ef-5245-4645-b432-b99c10786046"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.command }}",
+                    "rightValue": "/mkt-ticket",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "36334363-1665-48c1-909b-908c8893aa3a"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "/mkt-ticket"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "38416e7f-dcd1-45f2-8ba7-9ac465562902",
+                    "leftValue": "={{JSON.parse($json.body.payload).type === 'block_actions' && JSON.parse($json.body.payload).actions[0].action_id !== \"C7\\/Do\" && JSON.parse($json.body.payload).actions[0].action_id !== \"monday_button_click\"}}",
+                    "rightValue": "block_actions",
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Modal Update"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a2ddc48f-17c6-4d35-9d07-6459b95b161f",
+                    "leftValue": "={{ JSON.parse($json.body.payload).type }}",
+                    "rightValue": "view_submission",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Payload of submission"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6247ac38-93f0-4e74-91f6-2786ba8ca10e",
+                    "leftValue": "={{ $json.type }}",
+                    "rightValue": "reaction_added",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Reaction"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1328,
+        -720
+      ],
+      "id": "1b66de23-6976-49e8-bf0a-0f4f861fe30f",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Switch').first().json.body\n\nconst triggerId = body.trigger_id;\n// const curret_tickets = $(\"tickets_week\").first().json.count\nconst modalView = {\n  type: \"modal\",\n  callback_id: \"mkt_ticket_submission_modal\", \n  title: {\n    type: \"plain_text\",\n    text: \"New MKT Ticket Request\", \n  },\n  submit: {\n    type: \"plain_text\",\n    text: \"Submit Ticket\",\n  },\n  close: {\n    type: \"plain_text\",\n    text: \"Cancel\",\n  },\n  blocks: [\n    {\n      type: \"section\",\n      text: {\n        type: \"mrkdwn\",\n        text: `*Please fill out the details for your marketing ticket:`,\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"ticket_title_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Ticket Title\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        action_id: \"ticket_title_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"e.g., Update email for campaign X\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"piece_type_block\",\n      \"dispatch_action\":true,\n      label: {\n        type: \"plain_text\",\n        text: \"Pieza a realizar (obligatorio)\",\n      },\n      element: {\n        type: \"multi_static_select\",\n        action_id: \"piece_type_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Selecciona una o más opciones\",\n        },\n        options: [\n          {\n  text: { type: \"plain_text\", text: \"Email\" },\n  value: \"email\",\n},\n{\n  text: { type: \"plain_text\", text: \"Video (Steph)\" },\n  value: \"video\",\n},\n{\n  text: { type: \"plain_text\", text: \"Landing Page\" },\n  value: \"landing_page\",\n},\n          {\n            text: { type: \"plain_text\", text: \"Pieza para redes sociales\" },\n            value: \"social_media_piece\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Covers para reel\" },\n            value: \"reel_covers\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Doc/Presentación\" },\n            value: \"document_presentation\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Mensaje/Saludo\" },\n            value: \"message_greeting\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Flyer\" },\n            value: \"flyer\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Página web\" },\n            value: \"website\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Banner\" },\n            value: \"banner\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Otros (especificar abajo)\" },\n            value: \"otros\",\n          },\n        ],\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"formats_block\",\n      \"dispatch_action\":true,\n      label: {\n        type: \"plain_text\",\n        text: \"Formato (obligatorio)\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"formats_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Selecciona un formato\",\n        },\n        options: [\n          {\n            text: {type: \"plain_text\", text:\"Digital\"},\n            value: \"digital\",\n          },\n          {\n            text: {type: \"plain_text\", text:\"Impreso\"},\n            value: \"impreso\",\n          },\n        ]\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"final_text_block\",\n      optional: true,\n      label: {\n        type: \"plain_text\",\n        text: \"Textos finales y revisados\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        multiline: true,\n        action_id: \"final_text_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Inserta un enlace a un Google Docs si es que se requiere.\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"assets_block\",\n      optional: true,\n      label: {\n        type: \"plain_text\",\n        text: \"Fotos e insumos gráficos (logos, referencias, etc.)\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        multiline: true,\n        action_id: \"assets_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Inserta enlaces a carpetas de Google Drive, Dropbox, WeTransfer, etc.\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"due_date_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Desired Due Date\",\n      },\n      element: {\n        type: \"datepicker\",\n        action_id: \"due_date_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select a date\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"stakeholders_block\",\n      optional: false,\n      label: {\n        type: \"plain_text\",\n        text: \"People involved\",\n      },\n      element: {\n        type: \"multi_users_select\",\n        action_id: \"stakeholders_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select people to keep in the loop\",\n        },\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"priority_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Priority Level\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"priority_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select a priority\",\n        },\n        options: [\n          {\n            text: { type: \"plain_text\", text: \"High\" },\n            value: \"high\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Medium\" },\n            value: \"medium\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Low\" },\n            value: \"low\",\n          },\n        ],\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"charge_level_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Estimated Charge\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"charge_level_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select an estimated charge level\",\n        },\n        options: [\n          {\n            text: {\n              type: \"plain_text\",\n              text: \"High | Más de 5 piezas, campañas completas, materiales largos o complejos\",\n            },\n            value: \"high\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Medium | 3–5 piezas variadas\" },\n            value: \"medium\",\n          },\n          {\n            text: { type: \"plain_text\", text: \"Low | 1–2 piezas simples\" },\n            value: \"low\",\n          },\n        ],\n      },\n    },\n    {\n      type: \"input\",\n      block_id: \"mkt_owner\",\n      label: {\n        type: \"plain_text\",\n        text: \"Owner\",\n      },\n      element: {\n        type: \"static_select\",\n        action_id: \"mkt_owner_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Select who will be responsible for this task\",\n        },\n        options: [\n          {\n            text: {\n              type: \"plain_text\",\n              text: \"Danixa\",\n            },\n            value: \"U07BNHZRTNE\",\n          },\n          {\n            text: { \n              type: \"plain_text\", \n              text: \"Sheila\" },\n            value: \"U07CLM1JY68\",\n          },\n            {\n    text: {\n      type: \"plain_text\",\n      text: \"Stephanie\",\n    },\n    value: \"U07BR2PEU5S\",\n  },\n        ],\n      },\n    },\n    \t\t{\n\t\t\t\"type\": \"context\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\t\"text\": \"***For additional details a thread will be created in the corresponding channel\",\n\t\t\t\t\t\"emoji\": true\n\t\t\t\t}\n\t\t\t]\n\t\t}\n  ],\n};\n\nreturn [\n  {\n    json: {\n      trigger_id: triggerId,\n      view: modalView,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -1360
+      ],
+      "id": "a4b806ce-53ee-4744-a2ee-38db22c6a79b",
+      "name": "make_modal"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/views.open",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "slackApi",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json; charset=utf-8",
+        "body": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        -1360
+      ],
+      "id": "85752261-8245-44a1-9bda-be3db28fb234",
+      "name": "Pop Modal",
+      "credentials": {
+        "slackApi": {
+          "id": "cfWZDeNm6AKf8Kqr",
+          "name": "MKT Tickets bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "changeMultipleColumnValues",
+        "boardId": "9372827244",
+        "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+        "columnValues": "={\n  \"status\": \"Done\",\n  \"date_mkrwqyz0\": \"{{$now.format('yyyy-MM-dd')}}\"\n}\n"
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -464
+      ],
+      "id": "6f2f9f84-67d3-4265-8d58-255d719ccb1d",
+      "name": "Update Status",
+      "credentials": {
+        "mondayComApi": {
+          "id": "osb4QlXyLojhLsvA",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                    "rightValue": "white_check_mark",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "566214b8-7507-4e22-ab7e-761508691222"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Done"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8ffd445e-2450-4547-b6d9-e0b0a8b428a5",
+                    "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                    "rightValue": "typing-cat",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Working on it"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4d1a4ab0-a7b6-4a6d-a09a-fbe0e4474ded",
+                    "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                    "rightValue": "this-is-fine",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Stuck"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "de687ca1-1293-4ab3-bc1c-d32cf0122ddc",
+                    "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                    "rightValue": "bowtie",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "On hold"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0dff5360-a3e4-4d7a-8bbf-47a148a257a8",
+                    "leftValue": "={{ $('Slack Trigger').item.json.reaction }}",
+                    "rightValue": "x",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelled"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -464,
+        -176
+      ],
+      "id": "34258a81-7ce9-41a6-8458-01b261f20d44",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "changeMultipleColumnValues",
+        "boardId": "9372827244",
+        "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+        "columnValues": "={\n  \"status\": \"Working on it\"\n}\n"
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -256
+      ],
+      "id": "53b16777-5c1a-435a-b534-be0dd1905d2d",
+      "name": "Update Status2",
+      "credentials": {
+        "mondayComApi": {
+          "id": "osb4QlXyLojhLsvA",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "changeMultipleColumnValues",
+        "boardId": "9372827244",
+        "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+        "columnValues": "={\n  \"status\": \"Stuck\"\n}\n"
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -64
+      ],
+      "id": "fd10cb0d-8208-4a7d-9035-918f64fd2600",
+      "name": "Update Status3",
+      "credentials": {
+        "mondayComApi": {
+          "id": "osb4QlXyLojhLsvA",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "changeMultipleColumnValues",
+        "boardId": "9372827244",
+        "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+        "columnValues": "={\n  \"status\": \"On hold\"\n}\n"
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        144
+      ],
+      "id": "6d28f8d2-e7b9-479e-9dc8-473c57cd1f10",
+      "name": "Update Status4",
+      "credentials": {
+        "mondayComApi": {
+          "id": "osb4QlXyLojhLsvA",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE tickets_mkt\nSET status = 'Working on it'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+        "options": {
+          "replaceEmptyStrings": true
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -16,
+        -256
+      ],
+      "id": "83e76574-fb17-4f23-838d-03c541266bdd",
+      "name": "Postgres3",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## CHANGE STATUS\n**Change status in Monday using slack reactions** ",
+        "height": 1054,
+        "width": 966,
+        "color": 4
+      },
+      "id": "c7b74bc7-5ff1-401f-8968-27b1fd8ba487",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -528
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## TICKET CREATION\n**Slack comms and Monday item creation** Aca se reciben *TODOS* los payloads, incluidos los del popup del Modal Handler\n\n",
+        "height": 274,
+        "width": 1010
+      },
+      "id": "c3aea4f2-8bd1-4a64-9b4e-47f9d403d5c2",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -880
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Modal Handler\n**Lo que pasa cuando se recive el /mkt-tickets** ",
+        "height": 234,
+        "width": 830,
+        "color": 7
+      },
+      "id": "c3aca343-2879-446c-a6f2-cbd9e7b1ad71",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -1440
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "boardId": "9372827244",
+        "groupId": "={{ $('creation_f').first().json.result.monday_board_id }}",
+        "name": "={{ $('creation_f').first().json.result.ticket_title }}",
+        "additionalFields": {
+          "columnValues": "={\n  \"person\": \"{{$('creation_f').first().json.result.monday_ticket_owner}}\",\n  \"date4\": \"{{ $now.format('yyyy-MM-dd') }}\",\n  \"status\": \"New\",\n  \"color_mkrw9vbx\": \"{{$('creation_f').first().json.result.ticket_priority.toTitleCase()}}\",\n  \"color_mkrwg4n0\": \"{{$('creation_f').first().json.result.ticket_charge_level.toTitleCase()}}\",\n  \"dropdown_mkrw3a3g\": {\"ids\":[{{ $('creation_f').first().json.result.monday_piece_types }}]},\n  \"text_mkrw9hfw\": {{ JSON.stringify($('creation_f').first().json.result.piece_format) }},\n  \"text_mkrwh93m\": {{ JSON.stringify($('creation_f').first().json.result.piece_final_texts) }},\n  \"text_mkrw25re\": {{ JSON.stringify($('creation_f').first().json.result.piece_assets) }},\n  \"multiple_person_mkrw6ab5\": {{ JSON.stringify($('lookup_ids').first().json.monday_user_id) }},\n  \"date_mkrwzdy1\": \"{{ $('creation_f').first().json.result.ticket_due_date }}\",\n  \"text_mkrw6p9v\": {{JSON.stringify($('creation_f').first().json.result.piece_other_if)}}\n}"
+        }
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -768
+      ],
+      "id": "759594e0-32e6-4fca-afce-fc11c9a7b55c",
+      "name": "Monday.com",
+      "credentials": {
+        "mondayComApi": {
+          "id": "osb4QlXyLojhLsvA",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "trigger": [
+          "reaction_added"
+        ],
+        "channelId": {
+          "__rl": true,
+          "value": "C090V2SAD5Y",
+          "mode": "list",
+          "cachedResultName": "tickets-mkt-content"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1776,
+        -800
+      ],
+      "id": "bb63fe44-06ba-46c1-9001-ce659d04ce03",
+      "name": "Slack Trigger",
+      "webhookId": "20f4551e-e20c-4afb-9f9c-f549f1cc1749",
+      "credentials": {
+        "slackApi": {
+          "id": "cfWZDeNm6AKf8Kqr",
+          "name": "MKT Tickets bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE tickets_mkt\nSET \n  status = 'Done', \n  closed_at = '{{ $now.setZone('America/Lima').toISO() }}'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -16,
+        -464
+      ],
+      "id": "17dcf097-a00f-49ee-b345-f0ae0d1c96c3",
+      "name": "Postgres6",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const payload = JSON.parse($input.first().json.body.payload);\n// return {payload}\nconst monday_boards = {\n  \"U07BNHZRTNE\": \"group_mkrwb00t\", //Danixa\n  \"U07CLM1JY68\": \"group_mkrwmxz9\", //Sheila\n  \"U07BR2PEU5S\": \"group_mm06wdq0\", //Steph\n}\n\nconst monday_users = {\n  \"U07BNHZRTNE\": \"55983635\", //Danixa\n  \"U07CLM1JY68\": \"56182617\", //Sheila\n  \"U07BR2PEU5S\": \"56066741\", //Steph\n}\n\nconst monday_pieces = {\n  \"landing_page\": 1,\n  \"email\": 2,\n  \"social_media_piece\": 3,\n  \"reel_covers\": 4,\n  \"document_presentation\": 5,\n  \"message_greeting\": 6,\n  \"flyer\": 7,\n  \"website\": 8,\n  \"banner\": 9,\n  \"otros\": 10,\n  \"video\": 11, //Steph\n};\n\nconst form = payload.view.state.values;\nconst result = {\n  requester_slack_slack_id: payload.user.id,\n  requester_slack_slack_username: payload.user.name,\n  ticket_title: form.ticket_title_block.ticket_title_input.value,\n  piece_types_raw: form.piece_type_block.piece_type_input.selected_options.map(\n    (option)=> option.value\n  ),\n  piece_types: form.piece_type_block.piece_type_input.selected_options.map(\n    (option) => option.value.replaceAll(\"_\", \" \")\n      .replace(/\\b\\w/g, (l) => l.toUpperCase()),\n  ),\n  monday_piece_types: form.piece_type_block.piece_type_input.selected_options.map(\n    (option) => monday_pieces[option.value]\n  ),\n  piece_other_if: form.piece_other_block?.piece_other_input?.value ?? null,\n  piece_format: form.formats_block.formats_input.selected_option.text.text,\n  piece_dimension: form.dimensions_block?.dimensions_input?.value ?? null,\n  piece_final_texts: form.final_text_block.final_text_input.value,\n  piece_assets: form.assets_block.assets_input.value,\n  ticket_due_date: form.due_date_block.due_date_input.selected_date,\n  stakeholders: form.stakeholders_block?.stakeholders_input?.selected_users ?? [],\n  ticket_priority: form.priority_block.priority_input.selected_option.value,\n  ticket_charge_level:\n    form.charge_level_block.charge_level_input.selected_option.value,\n  ticket_owner: form.mkt_owner.mkt_owner_input.selected_option.value,\n  monday_ticket_owner: monday_users[form.mkt_owner.mkt_owner_input.selected_option.value],\n  monday_board_id : monday_boards[form.mkt_owner.mkt_owner_input.selected_option.value]\n};\nreturn { result };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -768
+      ],
+      "id": "388bdc55-a8b5-42bc-82eb-84b374c6ec4e",
+      "name": "creation_f"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tickets_mkt",
+          "mode": "list",
+          "cachedResultName": "tickets_mkt"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "monday_item_id": "={{ $('Monday.com').item.json.id }}",
+            "slack_ts_root_message": "={{ $json.message_timestamp }}",
+            "slack_requester_id": "={{ $('lookup_ids').item.json.slack_user_id }}",
+            "slack_owner_id": "={{ $('creation_f').item.json.result.ticket_owner }}",
+            "due_date": "={{ $('creation_f').item.json.result.ticket_due_date }}",
+            "ticket_title": "={{ $('creation_f').item.json.result.ticket_title }}",
+            "piece_types": "={{ $('creation_f').item.json.result.piece_types_raw }}",
+            "requested_formats": "={{ $('creation_f').item.json.result.piece_format }}",
+            "final_text_link": "={{ $('creation_f').item.json.result.piece_final_texts }}",
+            "asset_links": "={{ $('creation_f').item.json.result.piece_assets }}",
+            "priority": "={{ $('creation_f').item.json.result.ticket_priority }}",
+            "charge_level": "={{ $('creation_f').item.json.result.ticket_charge_level }}",
+            "piece_other_details": "={{ $('creation_f').item.json.result.piece_other_if }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "monday_item_id",
+              "displayName": "monday_item_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "slack_ts_root_message",
+              "displayName": "slack_ts_root_message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "slack_requester_id",
+              "displayName": "slack_requester_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "slack_owner_id",
+              "displayName": "slack_owner_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "closed_at",
+              "displayName": "closed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "due_date",
+              "displayName": "due_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "ticket_title",
+              "displayName": "ticket_title",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "piece_types",
+              "displayName": "piece_types",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "array",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "piece_other_details",
+              "displayName": "piece_other_details",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "requested_formats",
+              "displayName": "requested_formats",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "final_text_link",
+              "displayName": "final_text_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "asset_links",
+              "displayName": "asset_links",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "options",
+              "canBeUsedToMatch": true,
+              "options": [
+                {
+                  "name": "high",
+                  "value": "high"
+                },
+                {
+                  "name": "medium",
+                  "value": "medium"
+                },
+                {
+                  "name": "low",
+                  "value": "low"
+                }
+              ]
+            },
+            {
+              "id": "charge_level",
+              "displayName": "charge_level",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "options",
+              "canBeUsedToMatch": true,
+              "options": [
+                {
+                  "name": "high",
+                  "value": "high"
+                },
+                {
+                  "name": "medium",
+                  "value": "medium"
+                },
+                {
+                  "name": "low",
+                  "value": "low"
+                }
+              ]
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        0,
+        -768
+      ],
+      "id": "3cc8f3cf-0ce7-4b8a-ba57-4950631d7dee",
+      "name": "create_ticket",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C090V2SAD5Y",
+          "mode": "list",
+          "cachedResultName": "tickets-mkt-content"
+        },
+        "messageType": "block",
+        "blocksUi": "={\n\t\"blocks\": [\n\t\t{\n\t\t\t\"type\": \"header\",\n\t\t\t\"text\": {\n\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\"text\": \"📌{{ JSON.stringify($('creation_f').item.json.result.ticket_title).slice(1,-1) }}\"\n\t\t\t}\n\t\t},\n\n\t\t{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Tipo de Ticket:*\\n {{ $('creation_f').item.json.result.piece_types }}\"\n\t\t\t\t}\n\n\t\t\t]\n\t\t},\n\n\t\t{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Estimacion de carga*: {{ \n\n$('creation_f').item.json.result.ticket_charge_level === 'high' ? ':red_circle: High' : $('creation_f').item.json.result.ticket_charge_level === 'medium' ? ':large_yellow_circle: Medium' : ':large_green_circle: Low'}}\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Prioridad*: {{$('creation_f').item.json.result.ticket_priority === 'high' ? ':large_red_square: High' : $('creation_f').item.json.result.ticket_charge_level === 'medium' ? ':large_orange_square: Medium' : ':large_blue_square: Low'}}\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"type\": \"divider\"\n\t\t},\n\t\t{\n\t\t\t\"type\": \"context\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"This ticket was created by <@{{ $('creation_f').item.json.result.requester_slack_slack_id }}>\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"image\",\n\t\t\t\t\t\"image_url\": \"https://pbs.twimg.com/profile_images/625633822235693056/lNGUneLX_400x400.jpg\",\n\t\t\t\t\t\"alt_text\": \"cat\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"Responsable: <@{{ $('creation_f').item.json.result.ticket_owner }}>\"\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}",
+        "text": "New MKT Content Ticket",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        -176,
+        -768
+      ],
+      "id": "47cc3e77-773d-4d53-b80d-1ea0f77daa8a",
+      "name": "Send Root Create",
+      "webhookId": "0cddc0bb-4b57-445e-8b47-e4b76e1aa22d",
+      "credentials": {
+        "slackApi": {
+          "id": "cfWZDeNm6AKf8Kqr",
+          "name": "MKT Tickets bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "medlife_users",
+          "mode": "list",
+          "cachedResultName": "medlife_users"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "slack_user_id",
+              "value": "={{$('creation_f').first().json.result.requester_slack_slack_id}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -528,
+        -768
+      ],
+      "id": "31143035-fb20-48b4-bb3f-bb8ccfb70c95",
+      "name": "lookup_ids",
+      "credentials": {
+        "postgres": {
+          "id": "FtsLEIbT1mt4kElV",
+          "name": "Medlife IDs READ"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tickets_mkt",
+          "mode": "list",
+          "cachedResultName": "tickets_mkt"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "slack_ts_root_message",
+              "value": "={{ $('Slack Trigger').item.json.item.ts }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -640,
+        -160
+      ],
+      "id": "a1d4b027-5d04-41da-a7eb-1f109bf4eb17",
+      "name": "existing_ticket",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE tickets_mkt\nSET status = 'Stuck'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -16,
+        -64
+      ],
+      "id": "e5fb7c17-b8a0-4af1-96e5-aa8afe656309",
+      "name": "Postgres7",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE tickets_mkt\nSET status = 'On hold'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -16,
+        144
+      ],
+      "id": "29852ff5-e6a4-4ca2-9dae-557df39234c7",
+      "name": "Postgres8",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://slack.com/api/views.update",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "slackApi",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json; charset=utf-8",
+        "body": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -480,
+        -1088
+      ],
+      "id": "47b8a562-edfd-4371-94c4-d6cac8f3191a",
+      "name": "Update Modal",
+      "credentials": {
+        "slackApi": {
+          "id": "cfWZDeNm6AKf8Kqr",
+          "name": "MKT Tickets bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Modal Update\n**Lo que pasa cuando se interactúa con ciertos elementos del modal pre-submission** ",
+        "height": 234,
+        "width": 830,
+        "color": 7
+      },
+      "id": "532c2c70-9e10-46ba-8933-b5391814d230",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -720,
+        -1168
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Slack sends the payload as a URL-encoded string. We need to parse the JSON inside.\nconst payload = JSON.parse($json.body.payload);\n\nconst action = payload.actions[0]; // The action that triggered this event\nconst actionId = action.action_id;\n\nif (actionId === \"monday_button_click\" || actionId === \"C7\\/Do\"){\n  throw Error(\"No deberia estar aca\")\n}\n\n// Extract the essential data from the Slack payload\nconst viewId = payload.view.id;\nconst allBlocks = payload.view.blocks;\n\n// --- LOGIC FOR \"PIEZA A REALIZAR\" DROPDOWN ---\nif (actionId === \"piece_type_input\") {\n  const selectedOptions = action.selected_options;\n  const shouldShowOtherBlock = selectedOptions.some(\n    (option) => option.value === \"otros\",\n  );\n  const hasOtherBlock = allBlocks.some(\n    (block) => block.block_id === \"piece_other_block\",\n  );\n\n  if (shouldShowOtherBlock && !hasOtherBlock) {\n    const otherBlock = {\n      type: \"input\",\n      block_id: \"piece_other_block\",\n      label: { type: \"plain_text\", text: \"Otros - Especificar\" },\n      element: {\n        type: \"plain_text_input\",\n        action_id: \"piece_other_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: \"Describe la pieza requerida aquí.\",\n        },\n      },\n    };\n    const pieceTypeBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"piece_type_block\",\n    );\n    allBlocks.splice(pieceTypeBlockIndex + 1, 0, otherBlock);\n  } else if (!shouldShowOtherBlock && hasOtherBlock) {\n    const otherBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"piece_other_block\",\n    );\n    if (otherBlockIndex > -1) allBlocks.splice(otherBlockIndex, 1);\n  }\n}\n\n// --- LOGIC FOR \"FORMATO\" DROPDOWN ---\nif (actionId === \"formats_input\") {\n  const selectedFormat = action.selected_option.value;\n  const shouldShowDimensions = selectedFormat === \"impreso\";\n  const hasDimensionsBlock = allBlocks.some(\n    (block) => block.block_id === \"dimensions_block\",\n  );\n\n  if (shouldShowDimensions && !hasDimensionsBlock) {\n    const dimensionsBlock = {\n      type: \"input\",\n      block_id: \"dimensions_block\",\n      label: {\n        type: \"plain_text\",\n        text: \"Dimensiones (obligatorio para impresos)\",\n      },\n      element: {\n        type: \"plain_text_input\",\n        action_id: \"dimensions_input\",\n        placeholder: {\n          type: \"plain_text\",\n          text: 'Ej: \"A4\", \"8.5in x 11in\", \"10cm x 15cm\"',\n        },\n      },\n    };\n    const formatBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"formats_block\",\n    );\n    allBlocks.splice(formatBlockIndex + 1, 0, dimensionsBlock);\n  } else if (!shouldShowDimensions && hasDimensionsBlock) {\n    const dimensionsBlockIndex = allBlocks.findIndex(\n      (b) => b.block_id === \"dimensions_block\",\n    );\n    if (dimensionsBlockIndex > -1) allBlocks.splice(dimensionsBlockIndex, 1);\n  }\n}\n\n// Construct the final view object for the API call\nconst updatedView = {\n  view_id: viewId,\n  view: {\n    type: \"modal\",\n    callback_id: payload.view.callback_id,\n    title: payload.view.title,\n    submit: payload.view.submit,\n    close: payload.view.close,\n    blocks: allBlocks,\n  },\n};\n\n// Return the JSON for the next node (the HTTP Request)\nreturn {\n  json: updatedView,\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -688,
+        -1088
+      ],
+      "id": "6e4cadeb-47d3-4106-9b2c-c62636f578ea",
+      "name": "make_update"
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C090V2SAD5Y",
+          "mode": "list",
+          "cachedResultName": "tickets-mkt-content"
+        },
+        "messageType": "block",
+        "blocksUi": "={\n\t\"blocks\": [\n{\n\t\t\t\"type\": \"section\",\n\t\t\t\"fields\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Formatos:*\\n{{ $('creation_f').item.json.result.piece_format }}\\n{{ $('creation_f').item.json.result.piece_final_texts != null\n    ? $('creation_f').item.json.result.piece_final_texts.isUrl()\n      ? `*Textos finales:*\\\\n<${$('creation_f').item.json.result.piece_final_texts}|Link>`\n      : `*Textos finales:*\\\\n${JSON.stringify($('creation_f').item.json.result.piece_final_texts.slice(0, 50)).slice(1,-1)}[...]`\n    : \"-\"}}\"\n\t\t\t\t},\n{{ $('creation_f').item.json.result.piece_dimension ? `{\"type\":\"mrkdwn\",\"text\":\"*Dimensiones*:\\\\n${JSON.stringify($('creation_f').item.json.result.piece_dimension).slice(1,-1)}\"},` : '' }}\n\n{{ $('creation_f').item.json.result.piece_other_if ? `{\"type\":\"mrkdwn\",\"text\":\"*Otros details*:\\\\n${JSON.stringify($('creation_f').item.json.result.piece_other_if).slice(1,-1)}\"},` : '' }}\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Assets:*\\n{{ $('creation_f').item.json.result.piece_assets != null\n    ? $('creation_f').item.json.result.piece_assets.isUrl()\n      ? `*Recursos gráficos:*\\\\n<${$('creation_f').item.json.result.piece_assets}|Link>`\n      : `*Recursos gráficos:*\\\\n${JSON.stringify($('creation_f').item.json.result.piece_assets.slice(0, 50)).slice(1,-1)}[...]`\n    : \"-\"}}\"\n\t\t\t\t},\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"mrkdwn\",\n\t\t\t\t\t\"text\": \"*Requested Due Date:* {{ $('creation_f').item.json.result.ticket_due_date }}📅\"\n\t\t\t\t}\n\t\t\t],\n\t\t\t\"accessory\": {\n\t\t\t\t\"type\": \"image\",\n\t\t\t\t\"image_url\": \"https://api.slack.com/img/blocks/bkb_template_images/approvalsNewDevice.png\",\n\t\t\t\t\"alt_text\": \"computer thumbnail\"\n\t\t\t}\n\t\t},\n{{ $('creation_f').item.json.result.stakeholders?.length > 0 ? `{\n  \"type\": \"context\",\n  \"elements\": [\n    {\n      \"type\": \"mrkdwn\",\n      \"text\": \"cc: ${$('creation_f').item.json.result.stakeholders.map(id => '<@' + id + '>').join(' ')}\"\n    }\n  ]\n},` : '' }}\n\n\t\t{\n\t\t\t\"type\": \"actions\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"button\",\n\t\t\t\t\t\"text\": {\n\t\t\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\t\t\"emoji\": true,\n\t\t\t\t\t\t\"text\": \"Monday :monday:\"\n\t\t\t\t\t},\n\t\t\t\t\t\"style\": \"primary\",\n\t\t\t\t\t\"url\": \"https://medlifemovement-company.monday.com/boards/9372827244/pulses/{{ $json.monday_item_id }}\",\n                    \"action_id\":\"monday_button_click\"\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t{\n\t\t\t\"type\": \"context\",\n\t\t\t\"elements\": [\n\t\t\t\t{\n\t\t\t\t\t\"type\": \"plain_text\",\n\t\t\t\t\t\"text\": \"***Reply to this thread for additional details\",\n\t\t\t\t\t\"emoji\": true\n\t\t\t\t}\n\t\t\t]\n\t\t}\n\t]\n}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false,
+          "thread_ts": {
+            "replyValues": {
+              "thread_ts": "={{ $('Send Root Create').item.json.message_timestamp }}"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        160,
+        -768
+      ],
+      "id": "553f0fbf-f627-446c-95b5-7fa081d4aa71",
+      "name": "Details on Root",
+      "webhookId": "21b992e4-8098-48dd-b83c-9786a2cecd83",
+      "credentials": {
+        "slackApi": {
+          "id": "cfWZDeNm6AKf8Kqr",
+          "name": "MKT Tickets bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "boardItem",
+        "operation": "changeMultipleColumnValues",
+        "boardId": "9372827244",
+        "itemId": "={{ $('existing_ticket').item.json.monday_item_id }}",
+        "columnValues": "={\n  \"status\": \"Cancelled\"\n}\n"
+      },
+      "type": "n8n-nodes-base.mondayCom",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        336
+      ],
+      "id": "c2b158e2-9a8d-41bf-9c42-b29f0978793c",
+      "name": "Update Status5",
+      "credentials": {
+        "mondayComApi": {
+          "id": "osb4QlXyLojhLsvA",
+          "name": "Monday.com account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "UPDATE tickets_mkt\nSET status = 'Cancelled'\nWHERE id = {{ $('existing_ticket').item.json.id }};",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        -16,
+        336
+      ],
+      "id": "1d5e3627-e876-469a-b807-d092a7fef379",
+      "name": "Postgres",
+      "credentials": {
+        "postgres": {
+          "id": "1lTpy1olMqcvHZhI",
+          "name": "ticket_mkt table FULL "
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Slack Trigger": [
+      {
+        "json": {
+          "type": "reaction_added",
+          "user": "U078GKK01FC",
+          "reaction": "white_check_mark",
+          "item": {
+            "type": "message",
+            "channel": "C090V2SAD5Y",
+            "ts": "1749851930.277419"
+          },
+          "item_user": "U090NH35QBG",
+          "event_ts": "1749852586.003100"
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "12596",
+            "x-forwarded-for": "13.218.62.207",
+            "accept-encoding": "gzip, br",
+            "accept": "application/json,*/*",
+            "content-type": "application/x-www-form-urlencoded",
+            "x-slack-request-timestamp": "1770231294",
+            "cf-ray": "9c8c61176a95082c-IAD",
+            "x-slack-signature": "v0=10aa30ff0c61ad3cf68cc5a3b42606ef95ff5ea9f27f0f1b868e246bab2c565d",
+            "user-agent": "Slackbot 1.0 (+https://api.slack.com/robots)",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "13.218.62.207",
+            "cf-ipcountry": "US",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "payload": "{\"type\":\"view_submission\",\"team\":{\"id\":\"T7PV9F528\",\"domain\":\"medlifemovement\"},\"user\":{\"id\":\"U078GKK01FC\",\"username\":\"frebaza\",\"name\":\"frebaza\",\"team_id\":\"T7PV9F528\"},\"api_app_id\":\"A090E3HESAK\",\"token\":\"Efy0B2Op8t9vooRY5QHxljas\",\"trigger_id\":\"10427399304295.261995515076.8d8b9aeb8a17deff7d6aae3af5371edd\",\"view\":{\"id\":\"V0AD0QMPS3C\",\"team_id\":\"T7PV9F528\",\"type\":\"modal\",\"blocks\":[{\"type\":\"section\",\"block_id\":\"vq4DD\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"*Please fill out the details for your marketing ticket:\",\"verbatim\":false}},{\"type\":\"input\",\"block_id\":\"ticket_title_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Ticket Title\",\"emoji\":true},\"optional\":false,\"dispatch_action\":false,\"element\":{\"type\":\"plain_text_input\",\"action_id\":\"ticket_title_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"e.g., Update email for campaign X\",\"emoji\":true},\"dispatch_action_config\":{\"trigger_actions_on\":[\"on_enter_pressed\"]}}},{\"type\":\"input\",\"block_id\":\"piece_type_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Pieza a realizar (obligatorio)\",\"emoji\":true},\"optional\":false,\"dispatch_action\":true,\"element\":{\"type\":\"multi_static_select\",\"action_id\":\"piece_type_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Selecciona una o m\\u00e1s opciones\",\"emoji\":true},\"options\":[{\"text\":{\"type\":\"plain_text\",\"text\":\"Email\",\"emoji\":true},\"value\":\"email\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Video (Steph)\",\"emoji\":true},\"value\":\"video\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Landing Page\",\"emoji\":true},\"value\":\"landing_page\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Pieza para redes sociales\",\"emoji\":true},\"value\":\"social_media_piece\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Covers para reel\",\"emoji\":true},\"value\":\"reel_covers\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Doc\\/Presentaci\\u00f3n\",\"emoji\":true},\"value\":\"document_presentation\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Mensaje\\/Saludo\",\"emoji\":true},\"value\":\"message_greeting\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Flyer\",\"emoji\":true},\"value\":\"flyer\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"P\\u00e1gina web\",\"emoji\":true},\"value\":\"website\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Banner\",\"emoji\":true},\"value\":\"banner\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Otros (especificar abajo)\",\"emoji\":true},\"value\":\"otros\"}]}},{\"type\":\"input\",\"block_id\":\"formats_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Formato (obligatorio)\",\"emoji\":true},\"optional\":false,\"dispatch_action\":true,\"element\":{\"type\":\"static_select\",\"action_id\":\"formats_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Selecciona un formato\",\"emoji\":true},\"options\":[{\"text\":{\"type\":\"plain_text\",\"text\":\"Digital\",\"emoji\":true},\"value\":\"digital\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Impreso\",\"emoji\":true},\"value\":\"impreso\"}]}},{\"type\":\"input\",\"block_id\":\"final_text_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Textos finales y revisados\",\"emoji\":true},\"optional\":true,\"dispatch_action\":false,\"element\":{\"type\":\"plain_text_input\",\"action_id\":\"final_text_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Inserta un enlace a un Google Docs si es que se requiere.\",\"emoji\":true},\"multiline\":true,\"dispatch_action_config\":{\"trigger_actions_on\":[\"on_enter_pressed\"]}}},{\"type\":\"input\",\"block_id\":\"assets_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Fotos e insumos gr\\u00e1ficos (logos, referencias, etc.)\",\"emoji\":true},\"optional\":true,\"dispatch_action\":false,\"element\":{\"type\":\"plain_text_input\",\"action_id\":\"assets_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Inserta enlaces a carpetas de Google Drive, Dropbox, WeTransfer, etc.\",\"emoji\":true},\"multiline\":true,\"dispatch_action_config\":{\"trigger_actions_on\":[\"on_enter_pressed\"]}}},{\"type\":\"input\",\"block_id\":\"due_date_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Desired Due Date\",\"emoji\":true},\"optional\":false,\"dispatch_action\":false,\"element\":{\"type\":\"datepicker\",\"action_id\":\"due_date_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select a date\",\"emoji\":true}}},{\"type\":\"input\",\"block_id\":\"stakeholders_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"People involved\",\"emoji\":true},\"optional\":false,\"dispatch_action\":false,\"element\":{\"type\":\"multi_users_select\",\"action_id\":\"stakeholders_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select people to keep in the loop\",\"emoji\":true}}},{\"type\":\"input\",\"block_id\":\"priority_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Priority Level\",\"emoji\":true},\"optional\":false,\"dispatch_action\":false,\"element\":{\"type\":\"static_select\",\"action_id\":\"priority_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select a priority\",\"emoji\":true},\"options\":[{\"text\":{\"type\":\"plain_text\",\"text\":\"High\",\"emoji\":true},\"value\":\"high\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Medium\",\"emoji\":true},\"value\":\"medium\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Low\",\"emoji\":true},\"value\":\"low\"}]}},{\"type\":\"input\",\"block_id\":\"charge_level_block\",\"label\":{\"type\":\"plain_text\",\"text\":\"Estimated Charge\",\"emoji\":true},\"optional\":false,\"dispatch_action\":false,\"element\":{\"type\":\"static_select\",\"action_id\":\"charge_level_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select an estimated charge level\",\"emoji\":true},\"options\":[{\"text\":{\"type\":\"plain_text\",\"text\":\"High | M\\u00e1s de 5 piezas, campa\\u00f1as completas, materiales largos o complejos\",\"emoji\":true},\"value\":\"high\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Medium | 3\\u20135 piezas variadas\",\"emoji\":true},\"value\":\"medium\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Low | 1\\u20132 piezas simples\",\"emoji\":true},\"value\":\"low\"}]}},{\"type\":\"input\",\"block_id\":\"mkt_owner\",\"label\":{\"type\":\"plain_text\",\"text\":\"Owner\",\"emoji\":true},\"optional\":false,\"dispatch_action\":false,\"element\":{\"type\":\"static_select\",\"action_id\":\"mkt_owner_input\",\"placeholder\":{\"type\":\"plain_text\",\"text\":\"Select who will be responsible for this task\",\"emoji\":true},\"options\":[{\"text\":{\"type\":\"plain_text\",\"text\":\"Danixa\",\"emoji\":true},\"value\":\"U07BNHZRTNE\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Sheila\",\"emoji\":true},\"value\":\"U07CLM1JY68\"},{\"text\":{\"type\":\"plain_text\",\"text\":\"Stephanie\",\"emoji\":true},\"value\":\"U07BR2PEU5S\"}]}},{\"type\":\"context\",\"block_id\":\"mUBDZ\",\"elements\":[{\"type\":\"plain_text\",\"text\":\"***For additional details a thread will be created in the corresponding channel\",\"emoji\":true}]}],\"private_metadata\":\"\",\"callback_id\":\"mkt_ticket_submission_modal\",\"state\":{\"values\":{\"ticket_title_block\":{\"ticket_title_input\":{\"type\":\"plain_text_input\",\"value\":\"Test2\"}},\"piece_type_block\":{\"piece_type_input\":{\"type\":\"multi_static_select\",\"selected_options\":[{\"text\":{\"type\":\"plain_text\",\"text\":\"Video (Steph)\",\"emoji\":true},\"value\":\"video\"}]}},\"formats_block\":{\"formats_input\":{\"type\":\"static_select\",\"selected_option\":{\"text\":{\"type\":\"plain_text\",\"text\":\"Digital\",\"emoji\":true},\"value\":\"digital\"}}},\"final_text_block\":{\"final_text_input\":{\"type\":\"plain_text_input\",\"value\":\"test2\"}},\"assets_block\":{\"assets_input\":{\"type\":\"plain_text_input\",\"value\":\"test2\"}},\"due_date_block\":{\"due_date_input\":{\"type\":\"datepicker\",\"selected_date\":\"2026-02-04\"}},\"stakeholders_block\":{\"stakeholders_input\":{\"type\":\"multi_users_select\",\"selected_users\":[\"U07BNHZRTNE\",\"U07CLM1JY68\"]}},\"priority_block\":{\"priority_input\":{\"type\":\"static_select\",\"selected_option\":{\"text\":{\"type\":\"plain_text\",\"text\":\"High\",\"emoji\":true},\"value\":\"high\"}}},\"charge_level_block\":{\"charge_level_input\":{\"type\":\"static_select\",\"selected_option\":{\"text\":{\"type\":\"plain_text\",\"text\":\"High | M\\u00e1s de 5 piezas, campa\\u00f1as completas, materiales largos o complejos\",\"emoji\":true},\"value\":\"high\"}}},\"mkt_owner\":{\"mkt_owner_input\":{\"type\":\"static_select\",\"selected_option\":{\"text\":{\"type\":\"plain_text\",\"text\":\"Stephanie\",\"emoji\":true},\"value\":\"U07BR2PEU5S\"}}}}},\"hash\":\"1770231264.rJIM8yUD\",\"title\":{\"type\":\"plain_text\",\"text\":\"New MKT Ticket Request\",\"emoji\":true},\"clear_on_close\":false,\"notify_on_close\":false,\"close\":{\"type\":\"plain_text\",\"text\":\"Cancel\",\"emoji\":true},\"submit\":{\"type\":\"plain_text\",\"text\":\"Submit Ticket\",\"emoji\":true},\"previous_view_id\":null,\"root_view_id\":\"V0AD0QMPS3C\",\"app_id\":\"A090E3HESAK\",\"external_id\":\"\",\"app_installed_team_id\":\"T7PV9F528\",\"bot_id\":\"B090NH35AJ2\"},\"response_urls\":[],\"is_enterprise_install\":false,\"enterprise\":null}"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/1c8429ef-5245-4645-b432-b99c10786046",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-06-10T15:57:04.917Z",
+      "createdAt": "2025-06-10T15:57:04.917Z",
+      "role": "workflow:owner",
+      "workflowId": "KSnpeWReWQnhpRAM",
+      "projectId": "Jh2Qr9k13AXs70cH"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-02-05T17:03:17.752Z",
+      "createdAt": "2025-02-05T17:03:17.752Z",
+      "id": "XGZa3bbUWjzsThUm",
+      "name": "monday"
+    },
+    {
+      "updatedAt": "2025-02-05T17:03:16.065Z",
+      "createdAt": "2025-02-05T17:03:16.065Z",
+      "id": "gUWMNXcxX3TXCg91",
+      "name": "slack"
+    },
+    {
+      "updatedAt": "2025-01-08T16:30:09.560Z",
+      "createdAt": "2025-01-08T16:30:09.560Z",
+      "id": "ByGiBEEfze63veYx",
+      "name": "postgres"
+    }
+  ],
+  "triggerCount": 2,
+  "updatedAt": "2026-06-15T14:44:05.033Z",
+  "versionId": "d8f0d5d1-6ead-49ba-b6ba-b2858a00134b"
+}
