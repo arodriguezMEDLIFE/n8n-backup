@@ -1,0 +1,367 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-28T16:48:51.101Z",
+    "createdAt": "2025-11-28T16:48:51.101Z",
+    "versionId": "bc25dafd-acd9-4244-b6bd-3a4d39358d4b",
+    "workflowId": "kfvrh8tr8vnQ4riN",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT \n    trip_id,\n    url,\n    trip_name,\n    sku,\n    start_date,\n    end_date,\n    category,\n    type_of_slt,\n    destination  \nFROM\n    all_trips\nWHERE \n    (\n        CAST(start_date AS DATE) > CURRENT_DATE + INTERVAL '60 days'\n        AND start_date > '2025-10-01'\n        AND category = 'University'\n    )\nORDER BY \n    start_date ASC;\n",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          448,
+          0
+        ],
+        "id": "bbe9dfff-eef2-4647-bb29-dc519adc270d",
+        "name": "get_upcoming_trips",
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({ accessToken: $vars.hs_token_3 });\n\nconst objectType = \"company\";\n\nconst trips = await hubspotClient.crm.properties.coreApi.getByName(\n  objectType,\n  \"slt_destination__date_and_season\",\n  false,\n  undefined,\n);\n\nconsole.log(trips)\n\nreturn {\n  trips: trips.options\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          224,
+          0
+        ],
+        "id": "1d5eef5b-4194-442a-8626-e546bfc13ac0",
+        "name": "get_current_values"
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({ accessToken: $vars.hs_token_3 });\n\nconst trip_options = $(\"format_options\").all()[0].json;\nconst api_responses = [];\nfor (let data in trip_options) {\n  const PropertyUpdate = {\n    groupName: \"company_activity\",\n    hidden: false,\n    options: trip_options[data].options,\n    displayOrder: -1,\n    description: trip_options[data].description,\n    label: trip_options[data].label,\n    type: \"enumeration\",\n    fieldType: \"select\",\n    formField: true,\n  };\n\n  const objectType = \"company\";\n  const propertyName = trip_options[data].property_name;\n\n  const apiResponse = await hubspotClient.crm.properties.coreApi.update(\n    objectType,\n    propertyName,\n    PropertyUpdate,\n  );\n  api_responses.push(apiResponse);\n}\n\nreturn api_responses;\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1104,
+          0
+        ],
+        "id": "7526b5d8-fc75-4ce7-88b1-cd62e2748aad",
+        "name": "update_values",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "jsCode": "//Generate values for dropdown\nconst upcoming_trips = $(\"get_upcoming_trips\").all();\nconst trip_options = []\nfor(let trip of upcoming_trips){\n  trip_options.push({\n    hidden: false,\n      displayOrder: 0,\n      description: \"\",\n      label: trip.json.trip_name,\n      value: trip.json.trip_id,\n  })\n}\n\n\nreturn {trip_options:trip_options};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          672,
+          0
+        ],
+        "id": "54b0e526-5a6a-4b43-bef1-0d5879c9b201",
+        "name": "generate_values",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "jsCode": "function merge_options(new_options, current_options) {\n  const mergedArray = current_options.map((item2, index) => {\n    // Check if the value is in new_options\n    const itemInArray1 = new_options.find(\n      (item1) => item1.value === item2.value,\n    );\n\n    if (itemInArray1) {\n      // If item exists in new_options, merge and keep 'hidden' as false because it will appear on the form\n      return { ...itemInArray1, displayOrder: index }; // Copy from new_options and add displayOrder\n    } else {\n      // If item doesn't exist in new_options, set 'hidden' to true because it need to be hidden in the form\n      return { ...item2, hidden: true, displayOrder: index }; // Set hidden to true and add displayOrder\n    }\n  });\n\n  // Add the items from new_options that were not in current_options, with appropriate displayOrder\n  new_options.forEach((item1, index) => {\n    if (!mergedArray.some((item) => item.value === item1.value)) {\n      mergedArray.push({ ...item1, displayOrder: mergedArray.length });\n    }\n  });\n\n  return mergedArray;\n}\n\nconst current_values = $(\"get_current_values\").all()[0].json;\nconst new_options = $(\"generate_values\").all()[0].json;\n\nconst options = merge_options(new_options.trip_options, current_values.trips);\nreturn {\n  data: {\n    options: options,\n    label: \"SLT Destination, Date and Season\",\n    description: \"Dropdown menu with upcoming MEDLIFE Trips\",\n    property_name: \"slt_destination__date_and_season\",\n  },\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          880,
+          0
+        ],
+        "id": "54c21adc-0bbb-4be8-b771-5eac85216ab6",
+        "name": "format_options"
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "daysInterval": 2,
+                "triggerAtHour": 5
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "672ebc80-1c34-4ed4-9ed7-9ee6098bcae5",
+        "name": "Schedule Trigger"
+      }
+    ],
+    "connections": {
+      "get_upcoming_trips": {
+        "main": [
+          [
+            {
+              "node": "generate_values",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_current_values": {
+        "main": [
+          [
+            {
+              "node": "get_upcoming_trips",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "generate_values": {
+        "main": [
+          [
+            {
+              "node": "format_options",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format_options": {
+        "main": [
+          [
+            {
+              "node": "update_values",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "get_current_values",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "bc25dafd-acd9-4244-b6bd-3a4d39358d4b",
+  "connections": {
+    "get_upcoming_trips": {
+      "main": [
+        [
+          {
+            "node": "generate_values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_current_values": {
+      "main": [
+        [
+          {
+            "node": "get_upcoming_trips",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate_values": {
+      "main": [
+        [
+          {
+            "node": "format_options",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format_options": {
+      "main": [
+        [
+          {
+            "node": "update_values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "get_current_values",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-07-07T15:28:07.722Z",
+  "id": "kfvrh8tr8vnQ4riN",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Cron for Trip List in Planning Form",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT \n    trip_id,\n    url,\n    trip_name,\n    sku,\n    start_date,\n    end_date,\n    category,\n    type_of_slt,\n    destination  \nFROM\n    all_trips\nWHERE \n    (\n        CAST(start_date AS DATE) > CURRENT_DATE + INTERVAL '60 days'\n        AND start_date > '2025-10-01'\n        AND category = 'University'\n    )\nORDER BY \n    start_date ASC;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        448,
+        0
+      ],
+      "id": "bbe9dfff-eef2-4647-bb29-dc519adc270d",
+      "name": "get_upcoming_trips",
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({ accessToken: $vars.hs_token_3 });\n\nconst objectType = \"company\";\n\nconst trips = await hubspotClient.crm.properties.coreApi.getByName(\n  objectType,\n  \"slt_destination__date_and_season\",\n  false,\n  undefined,\n);\n\nconsole.log(trips)\n\nreturn {\n  trips: trips.options\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        224,
+        0
+      ],
+      "id": "1d5eef5b-4194-442a-8626-e546bfc13ac0",
+      "name": "get_current_values"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({ accessToken: $vars.hs_token_3 });\n\nconst trip_options = $(\"format_options\").all()[0].json;\nconst api_responses = [];\nfor (let data in trip_options) {\n  const PropertyUpdate = {\n    groupName: \"company_activity\",\n    hidden: false,\n    options: trip_options[data].options,\n    displayOrder: -1,\n    description: trip_options[data].description,\n    label: trip_options[data].label,\n    type: \"enumeration\",\n    fieldType: \"select\",\n    formField: true,\n  };\n\n  const objectType = \"company\";\n  const propertyName = trip_options[data].property_name;\n\n  const apiResponse = await hubspotClient.crm.properties.coreApi.update(\n    objectType,\n    propertyName,\n    PropertyUpdate,\n  );\n  api_responses.push(apiResponse);\n}\n\nreturn api_responses;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        0
+      ],
+      "id": "7526b5d8-fc75-4ce7-88b1-cd62e2748aad",
+      "name": "update_values",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "//Generate values for dropdown\nconst upcoming_trips = $(\"get_upcoming_trips\").all();\nconst trip_options = []\nfor(let trip of upcoming_trips){\n  trip_options.push({\n    hidden: false,\n      displayOrder: 0,\n      description: \"\",\n      label: trip.json.trip_name,\n      value: trip.json.trip_id,\n  })\n}\n\n\nreturn {trip_options:trip_options};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "54b0e526-5a6a-4b43-bef1-0d5879c9b201",
+      "name": "generate_values",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "function merge_options(new_options, current_options) {\n  const mergedArray = current_options.map((item2, index) => {\n    // Check if the value is in new_options\n    const itemInArray1 = new_options.find(\n      (item1) => item1.value === item2.value,\n    );\n\n    if (itemInArray1) {\n      // If item exists in new_options, merge and keep 'hidden' as false because it will appear on the form\n      return { ...itemInArray1, displayOrder: index }; // Copy from new_options and add displayOrder\n    } else {\n      // If item doesn't exist in new_options, set 'hidden' to true because it need to be hidden in the form\n      return { ...item2, hidden: true, displayOrder: index }; // Set hidden to true and add displayOrder\n    }\n  });\n\n  // Add the items from new_options that were not in current_options, with appropriate displayOrder\n  new_options.forEach((item1, index) => {\n    if (!mergedArray.some((item) => item.value === item1.value)) {\n      mergedArray.push({ ...item1, displayOrder: mergedArray.length });\n    }\n  });\n\n  return mergedArray;\n}\n\nconst current_values = $(\"get_current_values\").all()[0].json;\nconst new_options = $(\"generate_values\").all()[0].json;\n\nconst options = merge_options(new_options.trip_options, current_values.trips);\nreturn {\n  data: {\n    options: options,\n    label: \"SLT Destination, Date and Season\",\n    description: \"Dropdown menu with upcoming MEDLIFE Trips\",\n    property_name: \"slt_destination__date_and_season\",\n  },\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        880,
+        0
+      ],
+      "id": "54c21adc-0bbb-4be8-b771-5eac85216ab6",
+      "name": "format_options"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 2,
+              "triggerAtHour": 5
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "672ebc80-1c34-4ed4-9ed7-9ee6098bcae5",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-07-07T15:28:07.722Z",
+      "createdAt": "2025-07-07T15:28:07.722Z",
+      "role": "workflow:owner",
+      "workflowId": "kfvrh8tr8vnQ4riN",
+      "projectId": "Xr7Tq1f92KLz18mB"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": [
+        243
+      ]
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2024-07-17T16:06:53.644Z",
+      "createdAt": "2024-07-17T16:06:53.644Z",
+      "id": "wQigXdeZ5QeUfh2m",
+      "name": "hubspot"
+    },
+    {
+      "updatedAt": "2025-01-08T16:30:09.560Z",
+      "createdAt": "2025-01-08T16:30:09.560Z",
+      "id": "ByGiBEEfze63veYx",
+      "name": "postgres"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2025-09-17T19:37:54.673Z",
+  "versionId": "bc25dafd-acd9-4244-b6bd-3a4d39358d4b"
+}
