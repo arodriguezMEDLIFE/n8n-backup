@@ -1,0 +1,801 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-28T16:48:51.101Z",
+    "createdAt": "2025-11-28T16:48:51.101Z",
+    "versionId": "f5ea5966-6f32-4dc5-9ccc-975add56a9c7",
+    "workflowId": "1rYaE8viYPlH4OvO",
+    "nodes": [
+      {
+        "parameters": {
+          "authentication": "basicAuth",
+          "path": "a397472e-0117-42b4-9f31-2ef9992d3fdf",
+          "formTitle": "Add Chapter to Impact Tracker",
+          "formDescription": "This form is used to create the username and password for a new Chapter in the Impact Tracker",
+          "formFields": {
+            "values": [
+              {
+                "fieldLabel": "username",
+                "requiredField": true
+              },
+              {
+                "fieldLabel": "HubSpot ID",
+                "requiredField": true
+              }
+            ]
+          },
+          "responseMode": "responseNode",
+          "options": {
+            "ignoreBots": true
+          }
+        },
+        "id": "8f3071e2-aff4-4f21-a856-f2e08718a147",
+        "name": "n8n Form Trigger",
+        "type": "n8n-nodes-base.formTrigger",
+        "typeVersion": 2.1,
+        "position": [
+          800,
+          -200
+        ],
+        "webhookId": "a397472e-0117-42b4-9f31-2ef9992d3fdf",
+        "credentials": {
+          "httpBasicAuth": {
+            "id": "TPNhYuH9yrGX1uVf",
+            "name": "MEDLIFE Auth Forms"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "insert",
+          "collection": "ChapterUser",
+          "fields": "=username,hubspotId,salt,password",
+          "options": {}
+        },
+        "id": "26618b50-4ec1-4978-ba14-b3e92dafd633",
+        "name": "add_data_mongo",
+        "type": "n8n-nodes-base.mongoDb",
+        "typeVersion": 1.1,
+        "position": [
+          1960,
+          320
+        ],
+        "credentials": {
+          "mongoDb": {
+            "id": "4piZfHRKudVhXwAk",
+            "name": "MongoDB account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "action": "generate",
+          "dataPropertyName": "salt",
+          "encodingType": "hex",
+          "stringLength": 16
+        },
+        "id": "dcb4bf8d-0432-4475-a9a0-4dd57493b7d0",
+        "name": "generate_salt",
+        "type": "n8n-nodes-base.crypto",
+        "typeVersion": 1,
+        "position": [
+          1100,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "action": "generate",
+          "dataPropertyName": "password",
+          "encodingType": "base64",
+          "stringLength": 10
+        },
+        "id": "18cd8d4d-87a6-422d-87e1-b7f4e7eb9c8f",
+        "name": "generate_password",
+        "type": "n8n-nodes-base.crypto",
+        "typeVersion": 1,
+        "position": [
+          720,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "a15a86e8-78d6-48e5-bf09-15c859c89690",
+                "name": "username",
+                "value": "={{ $json.username }}",
+                "type": "string"
+              },
+              {
+                "id": "c6a4b1ee-7bca-423d-950c-9b335ee2729e",
+                "name": "hubspotId",
+                "value": "={{ $json.hubspotId }}",
+                "type": "string"
+              },
+              {
+                "id": "87bb7e9b-72f1-42e9-aef6-5586be23794c",
+                "name": "password",
+                "value": "={{ $json.salted_password }}",
+                "type": "string"
+              },
+              {
+                "id": "1d741aeb-62af-4bdf-b83e-98ad7a26999b",
+                "name": "salt",
+                "value": "={{ $json.salt }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "dac6a0f5-368c-4ae8-b967-6bad575347d1",
+        "name": "Set",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          1760,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\nconst data = $('hash_password_and_salt').all()[0].json\n\nconst properties = {\n  chapter_username : data.username,\n  chapter_password : data.password\n}\n\nconst apiResponse = await hubspotClient.crm.companies.basicApi.update(data.hubspotId,{properties})\n\nreturn apiResponse"
+        },
+        "id": "aa6c1a1d-235f-460d-b8b3-1b52de3c5cea",
+        "name": "update_company",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2160,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "type": "SHA256",
+          "value": "={{ $json.hashed_password }}{{ $json.salt }}",
+          "dataPropertyName": "salted_password"
+        },
+        "id": "c13bedff-cfc5-49d0-9add-438a0770a3c9",
+        "name": "hash_password_and_salt",
+        "type": "n8n-nodes-base.crypto",
+        "typeVersion": 1,
+        "position": [
+          1520,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "type": "SHA256",
+          "value": "={{ $json.password }}",
+          "dataPropertyName": "hashed_password"
+        },
+        "id": "0283f22b-cb83-4ca3-8c72-cac4d5d956db",
+        "name": "hash_password",
+        "type": "n8n-nodes-base.crypto",
+        "typeVersion": 1,
+        "position": [
+          1280,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "639426d3-ce8a-4d2e-8bbf-973426f45e3f",
+                "name": "password",
+                "value": "={{ $json.password}}",
+                "type": "string"
+              },
+              {
+                "id": "bb7de3a9-468c-4f50-bcef-f87a9ebffbc5",
+                "name": "hubspotId",
+                "value": "={{ $json.body.hs_id }}",
+                "type": "string"
+              },
+              {
+                "id": "7bd51ba9-7924-4053-b43b-4ad1ca53dc2c",
+                "name": "username",
+                "value": "={{ $json.body.username.toLowerCase() }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "3e156468-0e1c-4118-ab85-cef83ee67b44",
+        "name": "set_lowercase",
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          940,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={\n  \"response\": \"New username: {{ $json.properties.chapter_username }} \\nNew Password: {{ $json.properties.chapter_password }}\"\n}",
+          "options": {}
+        },
+        "id": "0ae1afc3-6f17-44ec-abda-c655ffeee850",
+        "name": "Respond to Webhook",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          2380,
+          320
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "e51e7f48-73e9-4efb-905e-f2ac5a1c4d3e",
+          "authentication": "headerAuth",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "1611db25-9ff8-4633-a51d-0397d68012c4",
+        "name": "Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          520,
+          320
+        ],
+        "webhookId": "e51e7f48-73e9-4efb-905e-f2ac5a1c4d3e",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "KVLrY3SSujijqMNB",
+            "name": "Medlife Internal Forms Auth"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "n8n Form Trigger": {
+        "main": [
+          []
+        ]
+      },
+      "add_data_mongo": {
+        "main": [
+          [
+            {
+              "node": "update_company",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "generate_salt": {
+        "main": [
+          [
+            {
+              "node": "hash_password",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "generate_password": {
+        "main": [
+          [
+            {
+              "node": "set_lowercase",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set": {
+        "main": [
+          [
+            {
+              "node": "add_data_mongo",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "hash_password_and_salt": {
+        "main": [
+          [
+            {
+              "node": "Set",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "hash_password": {
+        "main": [
+          [
+            {
+              "node": "hash_password_and_salt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "set_lowercase": {
+        "main": [
+          [
+            {
+              "node": "generate_salt",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_company": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "generate_password",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "f5ea5966-6f32-4dc5-9ccc-975add56a9c7",
+  "connections": {
+    "n8n Form Trigger": {
+      "main": [
+        []
+      ]
+    },
+    "add_data_mongo": {
+      "main": [
+        [
+          {
+            "node": "update_company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate_salt": {
+      "main": [
+        [
+          {
+            "node": "hash_password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate_password": {
+      "main": [
+        [
+          {
+            "node": "set_lowercase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set": {
+      "main": [
+        [
+          {
+            "node": "add_data_mongo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "hash_password_and_salt": {
+      "main": [
+        [
+          {
+            "node": "Set",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "hash_password": {
+      "main": [
+        [
+          {
+            "node": "hash_password_and_salt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "set_lowercase": {
+      "main": [
+        [
+          {
+            "node": "generate_salt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_company": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "generate_password",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-11-13T19:47:45.185Z",
+  "id": "1rYaE8viYPlH4OvO",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Generate user and password for Impact Tracker",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "basicAuth",
+        "path": "a397472e-0117-42b4-9f31-2ef9992d3fdf",
+        "formTitle": "Add Chapter to Impact Tracker",
+        "formDescription": "This form is used to create the username and password for a new Chapter in the Impact Tracker",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "username",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "HubSpot ID",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "responseNode",
+        "options": {
+          "ignoreBots": true
+        }
+      },
+      "id": "8f3071e2-aff4-4f21-a856-f2e08718a147",
+      "name": "n8n Form Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.1,
+      "position": [
+        800,
+        -200
+      ],
+      "webhookId": "a397472e-0117-42b4-9f31-2ef9992d3fdf",
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "TPNhYuH9yrGX1uVf",
+          "name": "MEDLIFE Auth Forms"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "insert",
+        "collection": "ChapterUser",
+        "fields": "=username,hubspotId,salt,password",
+        "options": {}
+      },
+      "id": "26618b50-4ec1-4978-ba14-b3e92dafd633",
+      "name": "add_data_mongo",
+      "type": "n8n-nodes-base.mongoDb",
+      "typeVersion": 1.1,
+      "position": [
+        1960,
+        320
+      ],
+      "credentials": {
+        "mongoDb": {
+          "id": "4piZfHRKudVhXwAk",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "salt",
+        "encodingType": "hex",
+        "stringLength": 16
+      },
+      "id": "dcb4bf8d-0432-4475-a9a0-4dd57493b7d0",
+      "name": "generate_salt",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        1100,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "password",
+        "encodingType": "base64",
+        "stringLength": 10
+      },
+      "id": "18cd8d4d-87a6-422d-87e1-b7f4e7eb9c8f",
+      "name": "generate_password",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        720,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a15a86e8-78d6-48e5-bf09-15c859c89690",
+              "name": "username",
+              "value": "={{ $json.username }}",
+              "type": "string"
+            },
+            {
+              "id": "c6a4b1ee-7bca-423d-950c-9b335ee2729e",
+              "name": "hubspotId",
+              "value": "={{ $json.hubspotId }}",
+              "type": "string"
+            },
+            {
+              "id": "87bb7e9b-72f1-42e9-aef6-5586be23794c",
+              "name": "password",
+              "value": "={{ $json.salted_password }}",
+              "type": "string"
+            },
+            {
+              "id": "1d741aeb-62af-4bdf-b83e-98ad7a26999b",
+              "name": "salt",
+              "value": "={{ $json.salt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "dac6a0f5-368c-4ae8-b967-6bad575347d1",
+      "name": "Set",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\nconst data = $('hash_password_and_salt').all()[0].json\n\nconst properties = {\n  chapter_username : data.username,\n  chapter_password : data.password\n}\n\nconst apiResponse = await hubspotClient.crm.companies.basicApi.update(data.hubspotId,{properties})\n\nreturn apiResponse"
+      },
+      "id": "aa6c1a1d-235f-460d-b8b3-1b52de3c5cea",
+      "name": "update_company",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2160,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "value": "={{ $json.hashed_password }}{{ $json.salt }}",
+        "dataPropertyName": "salted_password"
+      },
+      "id": "c13bedff-cfc5-49d0-9add-438a0770a3c9",
+      "name": "hash_password_and_salt",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        1520,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "type": "SHA256",
+        "value": "={{ $json.password }}",
+        "dataPropertyName": "hashed_password"
+      },
+      "id": "0283f22b-cb83-4ca3-8c72-cac4d5d956db",
+      "name": "hash_password",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "639426d3-ce8a-4d2e-8bbf-973426f45e3f",
+              "name": "password",
+              "value": "={{ $json.password}}",
+              "type": "string"
+            },
+            {
+              "id": "bb7de3a9-468c-4f50-bcef-f87a9ebffbc5",
+              "name": "hubspotId",
+              "value": "={{ $json.body.hs_id }}",
+              "type": "string"
+            },
+            {
+              "id": "7bd51ba9-7924-4053-b43b-4ad1ca53dc2c",
+              "name": "username",
+              "value": "={{ $json.body.username.toLowerCase() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3e156468-0e1c-4118-ab85-cef83ee67b44",
+      "name": "set_lowercase",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        940,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"response\": \"New username: {{ $json.properties.chapter_username }} \\nNew Password: {{ $json.properties.chapter_password }}\"\n}",
+        "options": {}
+      },
+      "id": "0ae1afc3-6f17-44ec-abda-c655ffeee850",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        2380,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "e51e7f48-73e9-4efb-905e-f2ac5a1c4d3e",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1611db25-9ff8-4633-a51d-0397d68012c4",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        520,
+        320
+      ],
+      "webhookId": "e51e7f48-73e9-4efb-905e-f2ac5a1c4d3e",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "KVLrY3SSujijqMNB",
+          "name": "Medlife Internal Forms Auth"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "107",
+            "x-forwarded-for": "38.25.28.34",
+            "accept": "*/*",
+            "accept-language": "*",
+            "accept-encoding": "gzip, br",
+            "user-agent": "node",
+            "cf-ray": "9237020cfe5b6b08-GRU",
+            "sec-fetch-mode": "cors",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "content-type": "application/json",
+            "x-med-key": "WnE3rBNAscSbeXJhxexU",
+            "medlife-requested-by": "aavalo@medlifemovement.org",
+            "x-forwarded-proto": "https",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "38.25.28.34",
+            "cf-ipcountry": "PE"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "hs_id": "15427833122",
+            "username": "trentsu"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/12f19470-c3a6-41d2-8479-e236173caef3",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2024-11-13T19:47:45.185Z",
+      "createdAt": "2024-11-13T19:47:45.185Z",
+      "role": "workflow:owner",
+      "workflowId": "1rYaE8viYPlH4OvO",
+      "projectId": "wkaaqWEwkqI65Kns"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2024-12-13T16:10:24.146Z",
+      "createdAt": "2024-12-13T16:10:24.146Z",
+      "id": "NQUOJDlfOl6DjyC0",
+      "name": "internal-form"
+    }
+  ],
+  "triggerCount": 2,
+  "updatedAt": "2025-03-20T20:17:27.541Z",
+  "versionId": "f5ea5966-6f32-4dc5-9ccc-975add56a9c7"
+}
