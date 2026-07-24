@@ -1,0 +1,1910 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-08T21:10:09.632Z",
+    "createdAt": "2026-06-08T21:10:09.632Z",
+    "versionId": "62548e7f-6a18-44a6-9e9f-d7ee28c3efab",
+    "workflowId": "FNOm71TNjQmrETAD",
+    "nodes": [
+      {
+        "parameters": {
+          "sendTo": "staff@medlifemovement.org",
+          "subject": "={{ $json.trip_name }}  {{ $json.arrivals }} arrivals",
+          "message": "=<!-- MEDLIFE Staff Update Email (n8n) -->\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0; padding:0; width:100%; background-color:#f4f6f8;\">\n  <tr>\n    <td align=\"center\" style=\"padding:24px 12px;\">\n      \n      <!-- Container -->\n      <table role=\"presentation\" width=\"640\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:640px; max-width:640px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.08);\">\n        \n        <!-- Header -->\n        <tr>\n          <td style=\"background-color:#263746; padding:18px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td align=\"left\" valign=\"middle\" style=\"padding-right:12px;\">\n                  <img\n                    src=\"https://www.medlifemovement.org/wp-content/themes/medlife-market/dist/images/logo-2019-glow.png\"\n                    width=\"140\"\n                    alt=\"MEDLIFE\"\n                    style=\"display:block; border:0; outline:none; text-decoration:none; width:140px; height:auto;\"\n                  />\n                </td>\n                <td align=\"right\" valign=\"middle\">\n                  <span style=\"display:inline-block; font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1; color:#ffffff; background-color:#B31E2C; padding:8px 10px; border-radius:999px; font-weight:700;\">\n                    ARRIVAL UPDATE ✅\n                  </span>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Hero -->\n        <tr>\n          <td style=\"padding:0;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td style=\"padding:22px 22px 12px 22px; background: linear-gradient(135deg, #263746 0%, #1f2d38 55%, #B31E2C 100%);\">\n                  <div style=\"font-family: Arial, Helvetica, sans-serif; color:#ffffff;\">\n                    <div style=\"font-size:18px; font-weight:700; letter-spacing:0.2px;\">\n                      Dear team,\n                    </div>\n                    <div style=\"margin-top:8px; font-size:14px; line-height:1.6; color:#e9eef2;\">\n                      A quick message to let you know that <strong>all {{ $json[\"arrivals\"] }} volunteers</strong> participating in the\n                      <strong>{{ $json[\"trip_name\"] }}</strong> have arrived safely.\n                    </div>\n\n                    <!-- Divider accent -->\n                    <div style=\"margin-top:14px; height:4px; width:72px; background-color:#F2B233; border-radius:999px;\"></div>\n                  </div>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Body -->\n        <tr>\n          <td style=\"padding:18px 22px 10px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              \n              <!-- Key info cards -->\n              <tr>\n                <td style=\"padding:0 0 14px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#f7f9fb; border:1px solid #e6edf2; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#6b7b86;\">\n                            Status\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            ✅ Volunteers are on the ground and completed their <strong>welcome meeting</strong> today.\n                            They’re excited for the week ahead.\n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Comments / Notes -->\n              <tr>\n                <td style=\"padding:0 0 16px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#fff4f5; border:1px solid #f2c7cc; border-left:6px solid #B31E2C; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#8a2a33;\">\n                            Comments\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            {{ $json[\"comms\"] }}\n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Optional small visual strip -->\n              <tr>\n                <td style=\"padding:0 0 10px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#263746; border-radius:14px; padding:12px 14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#ffffff;\">\n                          🌎 Thank you for supporting the team on the ground — let’s keep things moving smoothly this week.\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n            </table>\n          </td>\n        </tr>\n\n        <!-- Signature -->\n        <tr>\n          <td style=\"padding:10px 22px 22px 22px;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:1.7; color:#263746;\">\n              Best,<br/>\n              <strong>{{ $json[\"owner\"] }}</strong>\n            </div>\n          </td>\n        </tr>\n\n        <!-- Footer -->\n        <tr>\n          <td style=\"background-color:#f7f9fb; padding:14px 22px; border-top:1px solid #e6edf2;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#6b7b86;\">\n              This is an internal staff update. If you need to share externally, please follow standard comms guidelines.\n            </div>\n          </td>\n        </tr>\n\n      </table>\n      <!-- /Container -->\n\n    </td>\n  </tr>\n</table>\n",
+          "options": {}
+        },
+        "id": "b2eebfda-1a5e-4fd7-b626-bdc1373b43a2",
+        "name": "Gmail",
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.1,
+        "position": [
+          688,
+          -64
+        ],
+        "webhookId": "df82dade-c2d5-4224-911b-9e93b6625ecc",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "IryVelZDdBywYPW7",
+            "name": "Gmail account medlife-automation"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $('Webhook').all()[0].json.body\nconst owners = {\n  250420805:\"Rodrigo Cortes\",\n  166784385:\"Alberto Paredes\",\n  168858041:\"Gabriela Cavero\",\n  78951241:\"Ana Rivera\",\n  84795944:\"Marilia Mayhuire\",\n  734240095:\"Nayhua Gomez\",\n  170703239:\"Jhon Mejia\",\n  1823226965: \"Nataly Vera\",\n  759864730:\"Ana Lucía Aponte\"\n}\n\nconst data = {\n  type: body.type,\n  comms: body.comms,\n  arrivals: body.arrivals,\n  trip_name:body.trip_name,\n  destination:body.trip_destination,\n  owner:owners[body.owner_id]    \n}\n\nreturn data"
+        },
+        "id": "f3967fc4-37a7-418d-b175-b26b7e043a8b",
+        "name": "format_body_arrivals",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          -64
+        ]
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "C7PTQAGEN",
+            "mode": "list",
+            "cachedResultName": "general"
+          },
+          "messageType": "=block",
+          "text": "=A quick message to let you know that all *{{ $('format_body_arrivals').item.json[\"arrivals\"] }}* volunteers participating in the *{{ $('format_body_arrivals').item.json[\"trip_name\"]  }}* have arrived. \nComments about it: *{{ $('format_body_arrivals').item.json[\"comms\"] }}*\nToday they had their welcome meeting and are excited about the activities of the week.\n \n{{ $('format_body_arrivals').item.json[\"owner\"] }}\n\n_Automated message sent by the Data Solutions team_",
+          "blocksUi": "=[\n  {\n    \"type\": \"header\",\n    \"text\": {\n      \"type\": \"plain_text\",\n      \"text\": \"Arrival Update ✅\",\n      \"emoji\": true\n    }\n  },\n  {\n    \"type\": \"section\",\n    \"text\": {\n      \"type\": \"mrkdwn\",\n      \"text\": \"Quick update: all *{{ $('format_body_arrivals').item.json[\"arrivals\"] }}* volunteers participating in *{{ $('format_body_arrivals').item.json[\"trip_name\"] }}* have *arrived safely*.\"\n    }\n  },\n  {\n    \"type\": \"section\",\n    \"text\": {\n      \"type\": \"mrkdwn\",\n      \"text\": \"*📝 Comments / Notes*\\n{{ $('format_body_arrivals').item.json[\"comms\"] }}\"\n    }\n  },\n  {\n    \"type\": \"section\",\n    \"text\": {\n      \"type\": \"mrkdwn\",\n      \"text\": \"🤝 Today they had their welcome meeting and are excited about the activities of the week.\"\n    }\n  },\n  {\n    \"type\": \"context\",\n    \"elements\": [\n      {\n        \"type\": \"mrkdwn\",\n        \"text\": \"— *{{ $('format_body_arrivals').item.json[\"owner\"] }}*\"\n      },\n      {\n        \"type\": \"mrkdwn\",\n        \"text\": \"_🤖 Automated message sent by the Data Solutions team_\"\n      }\n    ]\n  }\n]\n",
+          "attachments": [],
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "f5c1af29-d42e-4955-ac26-bf7173f5eea4",
+        "name": "Slack",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          928,
+          -64
+        ],
+        "webhookId": "23e1d9ae-d48a-4258-8053-e391622463bd",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## Arrivals comms\n**Comms to staff about arrivals** [HubSpot wf](https://app.hubspot.com/workflows/21548837/platform/flow/1605584985/edit/actions/1/webhook)",
+          "height": 293.7754646859438,
+          "width": 670
+        },
+        "id": "75b3b577-b126-4c61-8aee-97806afdf6b7",
+        "name": "Sticky Note",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          400,
+          -176
+        ]
+      },
+      {
+        "parameters": {
+          "sendTo": "staff@medlifemovement.org",
+          "subject": "={{ $json.trip_name }}  {{ $json.departures }} departures",
+          "message": "=<!-- MEDLIFE Staff Update Email (n8n) -->\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0; padding:0; width:100%; background-color:#f4f6f8;\">\n  <tr>\n    <td align=\"center\" style=\"padding:24px 12px;\">\n      \n      <!-- Container -->\n      <table role=\"presentation\" width=\"640\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:640px; max-width:640px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.08);\">\n        \n        <!-- Header -->\n        <tr>\n          <td style=\"background-color:#263746; padding:18px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td align=\"left\" valign=\"middle\" style=\"padding-right:12px;\">\n                  <img\n                    src=\"https://www.medlifemovement.org/wp-content/themes/medlife-market/dist/images/logo-2019-glow.png\"\n                    width=\"140\"\n                    alt=\"MEDLIFE\"\n                    style=\"display:block; border:0; outline:none; text-decoration:none; width:140px; height:auto;\"\n                  />\n                </td>\n                <td align=\"right\" valign=\"middle\">\n                  <span style=\"display:inline-block; font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1; color:#ffffff; background-color:#B31E2C; padding:8px 10px; border-radius:999px; font-weight:700;\">\n                    DEPARTURE UPDATE ✅\n                  </span>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Hero -->\n        <tr>\n          <td style=\"padding:0;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td style=\"padding:22px 22px 12px 22px; background: linear-gradient(135deg, #263746 0%, #1f2d38 55%, #B31E2C 100%);\">\n                  <div style=\"font-family: Arial, Helvetica, sans-serif; color:#ffffff;\">\n                    <div style=\"font-size:18px; font-weight:700; letter-spacing:0.2px;\">\n                      Dear team,\n                    </div>\n                    <div style=\"margin-top:8px; font-size:14px; line-height:1.6; color:#e9eef2;\">\n                      A quick message to let you know that <strong>all {{ $json[\"departures\"] }} volunteers</strong> participating in the\n                      <strong>{{ $json[\"trip_name\"] }}</strong> have departed.\n                    </div>\n\n                    <!-- Divider accent -->\n                    <div style=\"margin-top:14px; height:4px; width:72px; background-color:#F2B233; border-radius:999px;\"></div>\n                  </div>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Body -->\n        <tr>\n          <td style=\"padding:18px 22px 10px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              \n              <!-- Key info cards -->\n              <tr>\n                <td style=\"padding:0 0 14px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#f7f9fb; border:1px solid #e6edf2; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#6b7b86;\">\n                            Status\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            ✅ The volunteers have successfully participated in the SLT.\n                            \n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Comments / Notes -->\n              <tr>\n                <td style=\"padding:0 0 16px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#fff4f5; border:1px solid #f2c7cc; border-left:6px solid #B31E2C; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#8a2a33;\">\n                            Comments\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            {{ $json[\"comms2\"] }}\n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Optional small visual strip -->\n              <tr>\n                <td style=\"padding:0 0 10px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#263746; border-radius:14px; padding:12px 14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#ffffff;\">\n                          🌎 Thank you for supporting the team on the ground — let’s keep things moving smoothly this week.\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n            </table>\n          </td>\n        </tr>\n\n        <!-- Signature -->\n        <tr>\n          <td style=\"padding:10px 22px 22px 22px;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:1.7; color:#263746;\">\n              Best,<br/>\n              <strong>{{ $json[\"owner\"] }}</strong>\n            </div>\n          </td>\n        </tr>\n\n        <!-- Footer -->\n        <tr>\n          <td style=\"background-color:#f7f9fb; padding:14px 22px; border-top:1px solid #e6edf2;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#6b7b86;\">\n              This is an internal staff update. If you need to share externally, please follow standard comms guidelines.\n            </div>\n          </td>\n        </tr>\n\n      </table>\n      <!-- /Container -->\n\n    </td>\n  </tr>\n</table>\n\n",
+          "options": {}
+        },
+        "id": "cd5e91a7-92fd-4f58-84f6-19a8691bf5b5",
+        "name": "Gmail1",
+        "type": "n8n-nodes-base.gmail",
+        "typeVersion": 2.1,
+        "position": [
+          688,
+          240
+        ],
+        "webhookId": "c3d3a8a5-7732-4d0f-ae0a-9785ff2b1a05",
+        "credentials": {
+          "gmailOAuth2": {
+            "id": "IryVelZDdBywYPW7",
+            "name": "Gmail account medlife-automation"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "channel",
+          "channelId": {
+            "__rl": true,
+            "value": "C7PTQAGEN",
+            "mode": "list",
+            "cachedResultName": "general"
+          },
+          "messageType": "block",
+          "blocksUi": "={\n  \"text\": \"Departure Update ✅ Quick update: all {{ $('format_body_departures').item.json.departures }} volunteers participating in {{ $('format_body_departures').item.json.trip_name }} have departed safely.\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": {\n        \"type\": \"plain_text\",\n        \"text\": \"Departure Update ✅\",\n        \"emoji\": true\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"Quick update: all *{{ $('format_body_departures').item.json.departures }}* volunteers participating in *{{ $('format_body_departures').item.json.trip_name }}* have *departed safely*.\"\n      }\n    },\n    {\n      \"type\": \"context\",\n      \"elements\": [\n        { \"type\": \"mrkdwn\", \"text\": \"— *Best*\" },\n        { \"type\": \"mrkdwn\", \"text\": \"_🤖 Automated message sent by the Data Solutions team_\" }\n      ]\n    }\n  ]\n}\n",
+          "text": "=",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "63ffe05f-1097-4a8f-b14f-da7cd293ae03",
+        "name": "Slack1",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          928,
+          240
+        ],
+        "webhookId": "307f4ce9-375f-41fa-8a30-04cb343f94bc",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## Departures comms\n**Comms to staff about departures** [HubSpot wf](https://app.hubspot.com/workflows/21548837/platform/flow/1606316635/edit?panel-open=review)",
+          "height": 275,
+          "width": 670,
+          "color": 4
+        },
+        "id": "2c57ae4e-0604-4442-bd3e-2ecf55dbbe73",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          400,
+          144
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $('Webhook').all()[0].json.body\nconst owners = {\n  250420805:\"Rodrigo Cortes\",\n  166784385:\"Alberto Paredes\",\n  168858041:\"Gabriela Cavero\",\n  78951241:\"Ana Rivera\",\n  84795944:\"Marilia Mayhuire\",\n  734240095:\"Nayhua Gomez\",\n  170703239:\"Jhon Mejia\",\n  1823226965: \"Nataly Vera\",\n  759864730:\"Ana Lucía Aponte\"\n}\n\nconst data = {\n  type: body.type,\n  comms2: body.comms2,\n  departures: body.departures,\n  trip_name:body.trip_name,\n  destination:body.trip_destination,\n  owner:owners[body.owner_id]    \n}\n\nreturn data"
+        },
+        "id": "abf873e0-1614-470c-8b9d-b44b68e900db",
+        "name": "format_body_departures",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          240
+        ]
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.start_date).getTime() - (60 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "23a2e672-b6ba-4c9b-afc9-31a1115330ac",
+        "name": "Wait 60 days",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          800,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.start_date).getTime() - (45 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "ef20c184-bad7-4c6a-ae1a-e016addc0ded",
+        "name": "Wait 45 days",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1152,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.start_date).getTime() - (30 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "84a168a1-b6b0-4516-b565-bbef284a45ad",
+        "name": "Wait 30 days",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1472,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _Expenses made_\n2. _Trip Leader_\n3. _Payments Done_ *(Lima, Riobamba, Tena, Kilimanjaro, Cusco (Winter & Spring), Antigua)*\n\nKind Regards,\n\n\n\n_Automated message sent by the Data Solutions team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "c485d4e2-0c10-4174-a103-17d0538cad1a",
+        "name": "Slack 45 days",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          1312,
+          560
+        ],
+        "webhookId": "3079f5a2-220a-4fd9-ba1e-576ee818783d",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _# participantes reviewed_\n2. _Flights information_\n3. _Trip Leader_\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "bc7cdbbd-1436-4ba6-bff5-2628493de71a",
+        "name": "Slack 30 days",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          1632,
+          560
+        ],
+        "webhookId": "46cc5d4f-9796-4372-819a-fddff9c2a553",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.start_date).getTime() - (10 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "c1bc3632-3575-4134-b514-d4d8a46e77c7",
+        "name": "Wait 10 days",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1792,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _MP Confirmation_\n2. _Insurence check_\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "bf03ae99-a338-4c6e-aaa2-8c81642a5205",
+        "name": "Slack 10 days",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          1952,
+          560
+        ],
+        "webhookId": "473fccfa-1c3e-46d5-8175-e1820ebec704",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.start_date).getTime() - (7 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "fb3a39c6-db5d-426b-acea-efa0bb5893e6",
+        "name": "Wait 7 days",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2112,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _Tasks Completed_\n2. _# of participants check_\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "fc1560d0-1f68-4911-9d67-620f71ded800",
+        "name": "Slack 10 days1",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          2272,
+          560
+        ],
+        "webhookId": "90e169b2-f8ad-433e-9d17-a4dc7ac59a9d",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.start_date).getTime() + (1 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "3a86430e-e558-4438-8d8b-18448dce8606",
+        "name": "Wait 1 day after",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2432,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _# of arrivals_\n2. _Comms about arrivals_\n3. _Date to send reminder date_\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "ce9a8901-e601-4b56-9842-21c242244cf5",
+        "name": "Slack 1day after",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          2592,
+          560
+        ],
+        "webhookId": "3d330d79-f787-42da-bfe7-1b674a549368",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, this property need to be updated:\n\n1. _# of transfer out_\n\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "d1db7f64-e0e6-4015-885a-08ca3d20516a",
+        "name": "Slack 1day after1",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          2912,
+          560
+        ],
+        "webhookId": "f85420a0-661f-4048-908a-7226c0d0a3fd",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": "={{ new Date($json.end_date).getTime() + (1 * 24 * 60 * 60 * 1000) }}\n",
+          "unit": "days"
+        },
+        "id": "9e9be0f9-4489-4da9-8554-3c2e7f3321b2",
+        "name": "Wait 1 day after end",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2752,
+          560
+        ],
+        "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+      },
+      {
+        "parameters": {
+          "content": "## Departures comms\n**Reminders to ops team to change stages** [HubSpot wf](https://app.hubspot.com/workflows/21548837/platform/flow/1607108242/edit)",
+          "height": 275,
+          "width": 2757.868315816934,
+          "color": 5
+        },
+        "id": "787067d2-e0bb-4bd6-8ab7-8844b7139052",
+        "name": "Sticky Note4",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          400,
+          464
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const body = $('Webhook').all()[0].json.body\nconst owners = {\n  250420805:\"Rodrigo Cortes\",\n  166784385:\"Alberto Paredes\",\n  168858041:\"Gabriela Cavero\",\n  168843584:\"Heidy Aspilcueta\",\n  168858116:\"Perla Sanchez\",\n  734240095:\"Nayhua Gomez\",\n  1895216535:\"Karol Segura\"\n}\n\nconst data = {\n  type: body.type,\n  trip_name:body.trip_name,\n  destination:body.trip_destination,\n  start_date: body.start_date,\n  end_date: body.end_date,\n  owner:owners[body.owner_id]    \n}\n\nreturn data"
+        },
+        "id": "15336cdd-97a7-4be8-b2e9-6d53f29f99e4",
+        "name": "format_body_comms",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          464,
+          560
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "a085ad9c-21c1-4f3e-a05b-10d73dce28a6",
+          "authentication": "headerAuth",
+          "options": {}
+        },
+        "id": "9e6cfb9d-ddf2-4ab6-8cff-6916a45b3d4e",
+        "name": "Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -64,
+          352
+        ],
+        "webhookId": "a085ad9c-21c1-4f3e-a05b-10d73dce28a6",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "sLDI6xWinSvJZhNc",
+            "name": "HubSpot Webhook Header Auth"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to apply the manual discounts to the volunteers on this view:\n\n\n[LINK](https://app.hubspot.com/contacts/21548837/objects/0-1/views/38975602)\n\nKind Regards,\n\n_Automated message sent by the Data Solutions team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "034fb8de-f23e-416b-833b-58ea5f39eeed",
+        "name": "Slack 65 days",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          640,
+          560
+        ],
+        "webhookId": "210e7f68-f9f7-48fb-83b2-cc3ee9c4e59c",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U078GKJV9M0",
+            "mode": "list",
+            "cachedResultName": "afigueroa"
+          },
+          "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n1.  _MC Name_\n2. _Owner_\n3. _Payments Done_ *(San Jose, Tamarindo, Cusco (Summer))*\n\nKind Regards,\n\n\n\n_Automated message sent by the Data Solutions team_",
+          "otherOptions": {
+            "includeLinkToWorkflow": false
+          }
+        },
+        "id": "0f99fa27-09f2-4ee5-a21a-3449abfba151",
+        "name": "Slack 60 days",
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.2,
+        "position": [
+          992,
+          560
+        ],
+        "webhookId": "b50846b5-5008-4454-a327-b6117b796eb0",
+        "credentials": {
+          "slackOAuth2Api": {
+            "id": "Vyc62VWRotnR7iQo",
+            "name": "Medlife-Automations / BI Team Bot"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.body.type }}",
+                      "rightValue": "arrivals",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Arrivals"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "da90cc7c-0b5e-43eb-9f12-9eee1c99607a",
+                      "leftValue": "={{ $json.body.type }}",
+                      "rightValue": "departures",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Departures"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "c504cbea-7277-45be-9bb9-b570904825ad",
+                      "leftValue": "={{ $json.body.type }}",
+                      "rightValue": "comms",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Comms"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "eb25595b-850e-4666-9131-7066144b49c0",
+        "name": "Switch",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3,
+        "position": [
+          160,
+          352
+        ]
+      }
+    ],
+    "connections": {
+      "format_body_arrivals": {
+        "main": [
+          [
+            {
+              "node": "Gmail",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gmail": {
+        "main": [
+          [
+            {
+              "node": "Slack",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Gmail1": {
+        "main": [
+          [
+            {
+              "node": "Slack1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format_body_departures": {
+        "main": [
+          [
+            {
+              "node": "Gmail1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 60 days": {
+        "main": [
+          [
+            {
+              "node": "Slack 60 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 45 days": {
+        "main": [
+          [
+            {
+              "node": "Slack 45 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 30 days": {
+        "main": [
+          [
+            {
+              "node": "Slack 30 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 45 days": {
+        "main": [
+          [
+            {
+              "node": "Wait 30 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 30 days": {
+        "main": [
+          [
+            {
+              "node": "Wait 10 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 10 days": {
+        "main": [
+          [
+            {
+              "node": "Slack 10 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 10 days": {
+        "main": [
+          [
+            {
+              "node": "Wait 7 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 10 days1": {
+        "main": [
+          [
+            {
+              "node": "Wait 1 day after",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 7 days": {
+        "main": [
+          [
+            {
+              "node": "Slack 10 days1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 1 day after": {
+        "main": [
+          [
+            {
+              "node": "Slack 1day after",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 1day after": {
+        "main": [
+          [
+            {
+              "node": "Wait 1 day after end",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait 1 day after end": {
+        "main": [
+          [
+            {
+              "node": "Slack 1day after1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format_body_comms": {
+        "main": [
+          [
+            {
+              "node": "Slack 65 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 65 days": {
+        "main": [
+          [
+            {
+              "node": "Wait 60 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Slack 60 days": {
+        "main": [
+          [
+            {
+              "node": "Wait 45 days",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "format_body_arrivals",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "format_body_departures",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alonso Avalo",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "62548e7f-6a18-44a6-9e9f-d7ee28c3efab",
+  "connections": {
+    "format_body_arrivals": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail1": {
+      "main": [
+        [
+          {
+            "node": "Slack1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format_body_departures": {
+      "main": [
+        [
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 60 days": {
+      "main": [
+        [
+          {
+            "node": "Slack 60 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 45 days": {
+      "main": [
+        [
+          {
+            "node": "Slack 45 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 days": {
+      "main": [
+        [
+          {
+            "node": "Slack 30 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 45 days": {
+      "main": [
+        [
+          {
+            "node": "Wait 30 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 30 days": {
+      "main": [
+        [
+          {
+            "node": "Wait 10 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 10 days": {
+      "main": [
+        [
+          {
+            "node": "Slack 10 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 10 days": {
+      "main": [
+        [
+          {
+            "node": "Wait 7 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 10 days1": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 day after",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 7 days": {
+      "main": [
+        [
+          {
+            "node": "Slack 10 days1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 day after": {
+      "main": [
+        [
+          {
+            "node": "Slack 1day after",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 1day after": {
+      "main": [
+        [
+          {
+            "node": "Wait 1 day after end",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 1 day after end": {
+      "main": [
+        [
+          {
+            "node": "Slack 1day after1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format_body_comms": {
+      "main": [
+        [
+          {
+            "node": "Slack 65 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 65 days": {
+      "main": [
+        [
+          {
+            "node": "Wait 60 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack 60 days": {
+      "main": [
+        [
+          {
+            "node": "Wait 45 days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "format_body_arrivals",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "format_body_departures",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-11-06T18:47:19.563Z",
+  "id": "FNOm71TNjQmrETAD",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "HubSpot Trips Communications",
+  "nodes": [
+    {
+      "parameters": {
+        "sendTo": "staff@medlifemovement.org",
+        "subject": "={{ $json.trip_name }}  {{ $json.arrivals }} arrivals",
+        "message": "=<!-- MEDLIFE Staff Update Email (n8n) -->\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0; padding:0; width:100%; background-color:#f4f6f8;\">\n  <tr>\n    <td align=\"center\" style=\"padding:24px 12px;\">\n      \n      <!-- Container -->\n      <table role=\"presentation\" width=\"640\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:640px; max-width:640px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.08);\">\n        \n        <!-- Header -->\n        <tr>\n          <td style=\"background-color:#263746; padding:18px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td align=\"left\" valign=\"middle\" style=\"padding-right:12px;\">\n                  <img\n                    src=\"https://www.medlifemovement.org/wp-content/themes/medlife-market/dist/images/logo-2019-glow.png\"\n                    width=\"140\"\n                    alt=\"MEDLIFE\"\n                    style=\"display:block; border:0; outline:none; text-decoration:none; width:140px; height:auto;\"\n                  />\n                </td>\n                <td align=\"right\" valign=\"middle\">\n                  <span style=\"display:inline-block; font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1; color:#ffffff; background-color:#B31E2C; padding:8px 10px; border-radius:999px; font-weight:700;\">\n                    ARRIVAL UPDATE ✅\n                  </span>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Hero -->\n        <tr>\n          <td style=\"padding:0;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td style=\"padding:22px 22px 12px 22px; background: linear-gradient(135deg, #263746 0%, #1f2d38 55%, #B31E2C 100%);\">\n                  <div style=\"font-family: Arial, Helvetica, sans-serif; color:#ffffff;\">\n                    <div style=\"font-size:18px; font-weight:700; letter-spacing:0.2px;\">\n                      Dear team,\n                    </div>\n                    <div style=\"margin-top:8px; font-size:14px; line-height:1.6; color:#e9eef2;\">\n                      A quick message to let you know that <strong>all {{ $json[\"arrivals\"] }} volunteers</strong> participating in the\n                      <strong>{{ $json[\"trip_name\"] }}</strong> have arrived safely.\n                    </div>\n\n                    <!-- Divider accent -->\n                    <div style=\"margin-top:14px; height:4px; width:72px; background-color:#F2B233; border-radius:999px;\"></div>\n                  </div>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Body -->\n        <tr>\n          <td style=\"padding:18px 22px 10px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              \n              <!-- Key info cards -->\n              <tr>\n                <td style=\"padding:0 0 14px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#f7f9fb; border:1px solid #e6edf2; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#6b7b86;\">\n                            Status\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            ✅ Volunteers are on the ground and completed their <strong>welcome meeting</strong> today.\n                            They’re excited for the week ahead.\n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Comments / Notes -->\n              <tr>\n                <td style=\"padding:0 0 16px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#fff4f5; border:1px solid #f2c7cc; border-left:6px solid #B31E2C; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#8a2a33;\">\n                            Comments\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            {{ $json[\"comms\"] }}\n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Optional small visual strip -->\n              <tr>\n                <td style=\"padding:0 0 10px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#263746; border-radius:14px; padding:12px 14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#ffffff;\">\n                          🌎 Thank you for supporting the team on the ground — let’s keep things moving smoothly this week.\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n            </table>\n          </td>\n        </tr>\n\n        <!-- Signature -->\n        <tr>\n          <td style=\"padding:10px 22px 22px 22px;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:1.7; color:#263746;\">\n              Best,<br/>\n              <strong>{{ $json[\"owner\"] }}</strong>\n            </div>\n          </td>\n        </tr>\n\n        <!-- Footer -->\n        <tr>\n          <td style=\"background-color:#f7f9fb; padding:14px 22px; border-top:1px solid #e6edf2;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#6b7b86;\">\n              This is an internal staff update. If you need to share externally, please follow standard comms guidelines.\n            </div>\n          </td>\n        </tr>\n\n      </table>\n      <!-- /Container -->\n\n    </td>\n  </tr>\n</table>\n",
+        "options": {}
+      },
+      "id": "b2eebfda-1a5e-4fd7-b626-bdc1373b43a2",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        -64
+      ],
+      "webhookId": "df82dade-c2d5-4224-911b-9e93b6625ecc",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IryVelZDdBywYPW7",
+          "name": "Gmail account medlife-automation"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Webhook').all()[0].json.body\nconst owners = {\n  250420805:\"Rodrigo Cortes\",\n  166784385:\"Alberto Paredes\",\n  168858041:\"Gabriela Cavero\",\n  78951241:\"Ana Rivera\",\n  84795944:\"Marilia Mayhuire\",\n  734240095:\"Nayhua Gomez\",\n  170703239:\"Jhon Mejia\",\n  1823226965: \"Nataly Vera\",\n  759864730:\"Ana Lucía Aponte\"\n}\n\nconst data = {\n  type: body.type,\n  comms: body.comms,\n  arrivals: body.arrivals,\n  trip_name:body.trip_name,\n  destination:body.trip_destination,\n  owner:owners[body.owner_id]    \n}\n\nreturn data"
+      },
+      "id": "f3967fc4-37a7-418d-b175-b26b7e043a8b",
+      "name": "format_body_arrivals",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        -64
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C7PTQAGEN",
+          "mode": "list",
+          "cachedResultName": "general"
+        },
+        "messageType": "=block",
+        "text": "=A quick message to let you know that all *{{ $('format_body_arrivals').item.json[\"arrivals\"] }}* volunteers participating in the *{{ $('format_body_arrivals').item.json[\"trip_name\"]  }}* have arrived. \nComments about it: *{{ $('format_body_arrivals').item.json[\"comms\"] }}*\nToday they had their welcome meeting and are excited about the activities of the week.\n \n{{ $('format_body_arrivals').item.json[\"owner\"] }}\n\n_Automated message sent by the Data Solutions team_",
+        "blocksUi": "=[\n  {\n    \"type\": \"header\",\n    \"text\": {\n      \"type\": \"plain_text\",\n      \"text\": \"Arrival Update ✅\",\n      \"emoji\": true\n    }\n  },\n  {\n    \"type\": \"section\",\n    \"text\": {\n      \"type\": \"mrkdwn\",\n      \"text\": \"Quick update: all *{{ $('format_body_arrivals').item.json[\"arrivals\"] }}* volunteers participating in *{{ $('format_body_arrivals').item.json[\"trip_name\"] }}* have *arrived safely*.\"\n    }\n  },\n  {\n    \"type\": \"section\",\n    \"text\": {\n      \"type\": \"mrkdwn\",\n      \"text\": \"*📝 Comments / Notes*\\n{{ $('format_body_arrivals').item.json[\"comms\"] }}\"\n    }\n  },\n  {\n    \"type\": \"section\",\n    \"text\": {\n      \"type\": \"mrkdwn\",\n      \"text\": \"🤝 Today they had their welcome meeting and are excited about the activities of the week.\"\n    }\n  },\n  {\n    \"type\": \"context\",\n    \"elements\": [\n      {\n        \"type\": \"mrkdwn\",\n        \"text\": \"— *{{ $('format_body_arrivals').item.json[\"owner\"] }}*\"\n      },\n      {\n        \"type\": \"mrkdwn\",\n        \"text\": \"_🤖 Automated message sent by the Data Solutions team_\"\n      }\n    ]\n  }\n]\n",
+        "attachments": [],
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "f5c1af29-d42e-4955-ac26-bf7173f5eea4",
+      "name": "Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        928,
+        -64
+      ],
+      "webhookId": "23e1d9ae-d48a-4258-8053-e391622463bd",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Arrivals comms\n**Comms to staff about arrivals** [HubSpot wf](https://app.hubspot.com/workflows/21548837/platform/flow/1605584985/edit/actions/1/webhook)",
+        "height": 293.7754646859438,
+        "width": 670
+      },
+      "id": "75b3b577-b126-4c61-8aee-97806afdf6b7",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        -176
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "staff@medlifemovement.org",
+        "subject": "={{ $json.trip_name }}  {{ $json.departures }} departures",
+        "message": "=<!-- MEDLIFE Staff Update Email (n8n) -->\n<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"margin:0; padding:0; width:100%; background-color:#f4f6f8;\">\n  <tr>\n    <td align=\"center\" style=\"padding:24px 12px;\">\n      \n      <!-- Container -->\n      <table role=\"presentation\" width=\"640\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\" style=\"width:640px; max-width:640px; background-color:#ffffff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.08);\">\n        \n        <!-- Header -->\n        <tr>\n          <td style=\"background-color:#263746; padding:18px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td align=\"left\" valign=\"middle\" style=\"padding-right:12px;\">\n                  <img\n                    src=\"https://www.medlifemovement.org/wp-content/themes/medlife-market/dist/images/logo-2019-glow.png\"\n                    width=\"140\"\n                    alt=\"MEDLIFE\"\n                    style=\"display:block; border:0; outline:none; text-decoration:none; width:140px; height:auto;\"\n                  />\n                </td>\n                <td align=\"right\" valign=\"middle\">\n                  <span style=\"display:inline-block; font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1; color:#ffffff; background-color:#B31E2C; padding:8px 10px; border-radius:999px; font-weight:700;\">\n                    DEPARTURE UPDATE ✅\n                  </span>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Hero -->\n        <tr>\n          <td style=\"padding:0;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              <tr>\n                <td style=\"padding:22px 22px 12px 22px; background: linear-gradient(135deg, #263746 0%, #1f2d38 55%, #B31E2C 100%);\">\n                  <div style=\"font-family: Arial, Helvetica, sans-serif; color:#ffffff;\">\n                    <div style=\"font-size:18px; font-weight:700; letter-spacing:0.2px;\">\n                      Dear team,\n                    </div>\n                    <div style=\"margin-top:8px; font-size:14px; line-height:1.6; color:#e9eef2;\">\n                      A quick message to let you know that <strong>all {{ $json[\"departures\"] }} volunteers</strong> participating in the\n                      <strong>{{ $json[\"trip_name\"] }}</strong> have departed.\n                    </div>\n\n                    <!-- Divider accent -->\n                    <div style=\"margin-top:14px; height:4px; width:72px; background-color:#F2B233; border-radius:999px;\"></div>\n                  </div>\n                </td>\n              </tr>\n            </table>\n          </td>\n        </tr>\n\n        <!-- Body -->\n        <tr>\n          <td style=\"padding:18px 22px 10px 22px;\">\n            <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n              \n              <!-- Key info cards -->\n              <tr>\n                <td style=\"padding:0 0 14px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#f7f9fb; border:1px solid #e6edf2; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#6b7b86;\">\n                            Status\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            ✅ The volunteers have successfully participated in the SLT.\n                            \n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Comments / Notes -->\n              <tr>\n                <td style=\"padding:0 0 16px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#fff4f5; border:1px solid #f2c7cc; border-left:6px solid #B31E2C; border-radius:14px; padding:14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; color:#263746;\">\n                          <div style=\"font-size:12px; font-weight:700; letter-spacing:0.6px; text-transform:uppercase; color:#8a2a33;\">\n                            Comments\n                          </div>\n                          <div style=\"margin-top:6px; font-size:14px; line-height:1.6;\">\n                            {{ $json[\"comms2\"] }}\n                          </div>\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n              <!-- Optional small visual strip -->\n              <tr>\n                <td style=\"padding:0 0 10px 0;\">\n                  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" border=\"0\">\n                    <tr>\n                      <td style=\"background-color:#263746; border-radius:14px; padding:12px 14px;\">\n                        <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:13px; line-height:1.6; color:#ffffff;\">\n                          🌎 Thank you for supporting the team on the ground — let’s keep things moving smoothly this week.\n                        </div>\n                      </td>\n                    </tr>\n                  </table>\n                </td>\n              </tr>\n\n            </table>\n          </td>\n        </tr>\n\n        <!-- Signature -->\n        <tr>\n          <td style=\"padding:10px 22px 22px 22px;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:14px; line-height:1.7; color:#263746;\">\n              Best,<br/>\n              <strong>{{ $json[\"owner\"] }}</strong>\n            </div>\n          </td>\n        </tr>\n\n        <!-- Footer -->\n        <tr>\n          <td style=\"background-color:#f7f9fb; padding:14px 22px; border-top:1px solid #e6edf2;\">\n            <div style=\"font-family: Arial, Helvetica, sans-serif; font-size:12px; line-height:1.6; color:#6b7b86;\">\n              This is an internal staff update. If you need to share externally, please follow standard comms guidelines.\n            </div>\n          </td>\n        </tr>\n\n      </table>\n      <!-- /Container -->\n\n    </td>\n  </tr>\n</table>\n\n",
+        "options": {}
+      },
+      "id": "cd5e91a7-92fd-4f58-84f6-19a8691bf5b5",
+      "name": "Gmail1",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        688,
+        240
+      ],
+      "webhookId": "c3d3a8a5-7732-4d0f-ae0a-9785ff2b1a05",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IryVelZDdBywYPW7",
+          "name": "Gmail account medlife-automation"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C7PTQAGEN",
+          "mode": "list",
+          "cachedResultName": "general"
+        },
+        "messageType": "block",
+        "blocksUi": "={\n  \"text\": \"Departure Update ✅ Quick update: all {{ $('format_body_departures').item.json.departures }} volunteers participating in {{ $('format_body_departures').item.json.trip_name }} have departed safely.\",\n  \"blocks\": [\n    {\n      \"type\": \"header\",\n      \"text\": {\n        \"type\": \"plain_text\",\n        \"text\": \"Departure Update ✅\",\n        \"emoji\": true\n      }\n    },\n    {\n      \"type\": \"section\",\n      \"text\": {\n        \"type\": \"mrkdwn\",\n        \"text\": \"Quick update: all *{{ $('format_body_departures').item.json.departures }}* volunteers participating in *{{ $('format_body_departures').item.json.trip_name }}* have *departed safely*.\"\n      }\n    },\n    {\n      \"type\": \"context\",\n      \"elements\": [\n        { \"type\": \"mrkdwn\", \"text\": \"— *Best*\" },\n        { \"type\": \"mrkdwn\", \"text\": \"_🤖 Automated message sent by the Data Solutions team_\" }\n      ]\n    }\n  ]\n}\n",
+        "text": "=",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "63ffe05f-1097-4a8f-b14f-da7cd293ae03",
+      "name": "Slack1",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        928,
+        240
+      ],
+      "webhookId": "307f4ce9-375f-41fa-8a30-04cb343f94bc",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Departures comms\n**Comms to staff about departures** [HubSpot wf](https://app.hubspot.com/workflows/21548837/platform/flow/1606316635/edit?panel-open=review)",
+        "height": 275,
+        "width": 670,
+        "color": 4
+      },
+      "id": "2c57ae4e-0604-4442-bd3e-2ecf55dbbe73",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        144
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Webhook').all()[0].json.body\nconst owners = {\n  250420805:\"Rodrigo Cortes\",\n  166784385:\"Alberto Paredes\",\n  168858041:\"Gabriela Cavero\",\n  78951241:\"Ana Rivera\",\n  84795944:\"Marilia Mayhuire\",\n  734240095:\"Nayhua Gomez\",\n  170703239:\"Jhon Mejia\",\n  1823226965: \"Nataly Vera\",\n  759864730:\"Ana Lucía Aponte\"\n}\n\nconst data = {\n  type: body.type,\n  comms2: body.comms2,\n  departures: body.departures,\n  trip_name:body.trip_name,\n  destination:body.trip_destination,\n  owner:owners[body.owner_id]    \n}\n\nreturn data"
+      },
+      "id": "abf873e0-1614-470c-8b9d-b44b68e900db",
+      "name": "format_body_departures",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.start_date).getTime() - (60 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "23a2e672-b6ba-4c9b-afc9-31a1115330ac",
+      "name": "Wait 60 days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        800,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.start_date).getTime() - (45 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "ef20c184-bad7-4c6a-ae1a-e016addc0ded",
+      "name": "Wait 45 days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1152,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.start_date).getTime() - (30 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "84a168a1-b6b0-4516-b565-bbef284a45ad",
+      "name": "Wait 30 days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1472,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _Expenses made_\n2. _Trip Leader_\n3. _Payments Done_ *(Lima, Riobamba, Tena, Kilimanjaro, Cusco (Winter & Spring), Antigua)*\n\nKind Regards,\n\n\n\n_Automated message sent by the Data Solutions team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "c485d4e2-0c10-4174-a103-17d0538cad1a",
+      "name": "Slack 45 days",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1312,
+        560
+      ],
+      "webhookId": "3079f5a2-220a-4fd9-ba1e-576ee818783d",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _# participantes reviewed_\n2. _Flights information_\n3. _Trip Leader_\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "bc7cdbbd-1436-4ba6-bff5-2628493de71a",
+      "name": "Slack 30 days",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1632,
+        560
+      ],
+      "webhookId": "46cc5d4f-9796-4372-819a-fddff9c2a553",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.start_date).getTime() - (10 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "c1bc3632-3575-4134-b514-d4d8a46e77c7",
+      "name": "Wait 10 days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1792,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _MP Confirmation_\n2. _Insurence check_\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "bf03ae99-a338-4c6e-aaa2-8c81642a5205",
+      "name": "Slack 10 days",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1952,
+        560
+      ],
+      "webhookId": "473fccfa-1c3e-46d5-8175-e1820ebec704",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.start_date).getTime() - (7 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "fb3a39c6-db5d-426b-acea-efa0bb5893e6",
+      "name": "Wait 7 days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2112,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _Tasks Completed_\n2. _# of participants check_\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "fc1560d0-1f68-4911-9d67-620f71ded800",
+      "name": "Slack 10 days1",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        2272,
+        560
+      ],
+      "webhookId": "90e169b2-f8ad-433e-9d17-a4dc7ac59a9d",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.start_date).getTime() + (1 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "3a86430e-e558-4438-8d8b-18448dce8606",
+      "name": "Wait 1 day after",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2432,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n\n1. _# of arrivals_\n2. _Comms about arrivals_\n3. _Date to send reminder date_\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "ce9a8901-e601-4b56-9842-21c242244cf5",
+      "name": "Slack 1day after",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        2592,
+        560
+      ],
+      "webhookId": "3d330d79-f787-42da-bfe7-1b674a549368",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, this property need to be updated:\n\n1. _# of transfer out_\n\n\n\nKind Regards,\n\n\n\n_Automated message sent by the BI team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "d1db7f64-e0e6-4015-885a-08ca3d20516a",
+      "name": "Slack 1day after1",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        2912,
+        560
+      ],
+      "webhookId": "f85420a0-661f-4048-908a-7226c0d0a3fd",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "={{ new Date($json.end_date).getTime() + (1 * 24 * 60 * 60 * 1000) }}\n",
+        "unit": "days"
+      },
+      "id": "9e9be0f9-4489-4da9-8554-3c2e7f3321b2",
+      "name": "Wait 1 day after end",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2752,
+        560
+      ],
+      "webhookId": "0772c270-9328-4df0-a054-7e46c18905f7"
+    },
+    {
+      "parameters": {
+        "content": "## Departures comms\n**Reminders to ops team to change stages** [HubSpot wf](https://app.hubspot.com/workflows/21548837/platform/flow/1607108242/edit)",
+        "height": 275,
+        "width": 2757.868315816934,
+        "color": 5
+      },
+      "id": "787067d2-e0bb-4bd6-8ab7-8844b7139052",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Webhook').all()[0].json.body\nconst owners = {\n  250420805:\"Rodrigo Cortes\",\n  166784385:\"Alberto Paredes\",\n  168858041:\"Gabriela Cavero\",\n  168843584:\"Heidy Aspilcueta\",\n  168858116:\"Perla Sanchez\",\n  734240095:\"Nayhua Gomez\",\n  1895216535:\"Karol Segura\"\n}\n\nconst data = {\n  type: body.type,\n  trip_name:body.trip_name,\n  destination:body.trip_destination,\n  start_date: body.start_date,\n  end_date: body.end_date,\n  owner:owners[body.owner_id]    \n}\n\nreturn data"
+      },
+      "id": "15336cdd-97a7-4be8-b2e9-6d53f29f99e4",
+      "name": "format_body_comms",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        464,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "a085ad9c-21c1-4f3e-a05b-10d73dce28a6",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "id": "9e6cfb9d-ddf2-4ab6-8cff-6916a45b3d4e",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        352
+      ],
+      "webhookId": "a085ad9c-21c1-4f3e-a05b-10d73dce28a6",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "sLDI6xWinSvJZhNc",
+          "name": "HubSpot Webhook Header Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to apply the manual discounts to the volunteers on this view:\n\n\n[LINK](https://app.hubspot.com/contacts/21548837/objects/0-1/views/38975602)\n\nKind Regards,\n\n_Automated message sent by the Data Solutions team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "034fb8de-f23e-416b-833b-58ea5f39eeed",
+      "name": "Slack 65 days",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        640,
+        560
+      ],
+      "webhookId": "210e7f68-f9f7-48fb-83b2-cc3ee9c4e59c",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U078GKJV9M0",
+          "mode": "list",
+          "cachedResultName": "afigueroa"
+        },
+        "text": "=Hello Team,\n\nThis email is to remind you to move the {{ $body.trip_name }} in Trips Pipeline, these properties need to be updated:\n1.  _MC Name_\n2. _Owner_\n3. _Payments Done_ *(San Jose, Tamarindo, Cusco (Summer))*\n\nKind Regards,\n\n\n\n_Automated message sent by the Data Solutions team_",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "0f99fa27-09f2-4ee5-a21a-3449abfba151",
+      "name": "Slack 60 days",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        992,
+        560
+      ],
+      "webhookId": "b50846b5-5008-4454-a327-b6117b796eb0",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "Vyc62VWRotnR7iQo",
+          "name": "Medlife-Automations / BI Team Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "arrivals",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Arrivals"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "da90cc7c-0b5e-43eb-9f12-9eee1c99607a",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "departures",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Departures"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "c504cbea-7277-45be-9bb9-b570904825ad",
+                    "leftValue": "={{ $json.body.type }}",
+                    "rightValue": "comms",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Comms"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eb25595b-850e-4666-9131-7066144b49c0",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        160,
+        352
+      ]
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "709",
+            "x-forwarded-for": "54.174.62.185",
+            "x-hubspot-origin-hublet": "na1",
+            "x-hubspot-correlation-id": "019ea907-1510-70e1-ae14-fb7f8c62ff2c",
+            "x-hubspot-timeout-millis": "44971",
+            "user-agent": "HubSpot Connect 2.0 (http://dev.hubspot.com/) (namespace: WebhooksPlatformExecution) - AutomationActionsExecutionService-web",
+            "cf-ray": "a08acfc1f9c9c9a8-IAD",
+            "authorization": "Bearer e5362baf-c777-4d57-a609-6eaf1f9e87f6",
+            "accept-encoding": "gzip, br",
+            "content-type": "application/json",
+            "accept": "application/json",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "54.174.62.185",
+            "cf-ipcountry": "US",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "type": "departures",
+            "comms2": "1. La estudiante Dorsa no contaba con una visa de tránsito para poder viajar de regreso a su país y su vuelo pasaba por Colombia. Lamentablemente, ella tuvo que quedarse porque no la dejaron subir al vuelo. Su familia fue informada y le compró nuevo vuelo Cuz - Lim - Montreal. El segundo vuelo directo, solo había dispo el día miércoles por lo cual estará hasta esa fecha en Cusco. Volvió al hotel y se quedará 3 noches más para esperar su nuevo vuelo. \n2. Estudiante Sarah Lywood, se quedó con su papá por unos días más en Cusco. ",
+            "owner_id": 84795944,
+            "trip_name": "Summer - Cusco SLT Mobile Clinic - May 30 - June 07",
+            "departures": 59,
+            "trip_destination": "Cusco"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/a085ad9c-21c1-4f3e-a05b-10d73dce28a6",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2024-11-06T18:47:19.563Z",
+      "createdAt": "2024-11-06T18:47:19.563Z",
+      "role": "workflow:owner",
+      "workflowId": "FNOm71TNjQmrETAD",
+      "projectId": "wkaaqWEwkqI65Kns"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2024-07-17T16:06:53.644Z",
+      "createdAt": "2024-07-17T16:06:53.644Z",
+      "id": "wQigXdeZ5QeUfh2m",
+      "name": "hubspot"
+    },
+    {
+      "updatedAt": "2025-02-07T17:04:19.563Z",
+      "createdAt": "2025-02-07T17:04:19.563Z",
+      "id": "OgI2E1IL71q7bFnu",
+      "name": "gmail"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-08T21:10:09.630Z",
+  "versionId": "62548e7f-6a18-44a6-9e9f-d7ee28c3efab"
+}
