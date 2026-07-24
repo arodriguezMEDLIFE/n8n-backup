@@ -1,0 +1,2977 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-11-28T16:48:51.101Z",
+    "createdAt": "2025-11-28T16:48:51.101Z",
+    "versionId": "568f51e7-6a65-49dd-9aac-c5e207acdcea",
+    "workflowId": "h9YfezoORmoRENpr",
+    "nodes": [
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict"
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Webhook').item.json.body.update }}",
+                      "rightValue": "full_day_date",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "full date sale update"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict"
+                  },
+                  "conditions": [
+                    {
+                      "id": "e8e8ec0c-f6f5-4b43-8fc9-19a2ecd737a4",
+                      "leftValue": "={{ $('Webhook').item.json.body.update }}",
+                      "rightValue": "chapter",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Chapter name Update"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "0fec571f-cebe-483f-8808-61b3ad1d2c3b",
+        "name": "type_of_update",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3,
+        "position": [
+          1540,
+          360
+        ]
+      },
+      {
+        "parameters": {
+          "authentication": "appToken",
+          "resource": "deal",
+          "operation": "search",
+          "filterGroupsUi": {
+            "filterGroupsValues": [
+              {
+                "filtersUi": {
+                  "filterValues": [
+                    {
+                      "propertyName": "hs_object_id",
+                      "value": "={{ $json.body.record_id }}"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "additionalFields": {
+            "properties": [
+              "cs__booking_id",
+              "cs__date_of_fullday_sale"
+            ]
+          }
+        },
+        "id": "496ae650-851e-44d8-b476-2f72dfa2c084",
+        "name": "get_deal_data",
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 2.1,
+        "position": [
+          1840,
+          80
+        ],
+        "credentials": {
+          "hubspotAppToken": {
+            "id": "9oj690lgP8DPP84x",
+            "name": "HubSpot App Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "master_sheet",
+            "mode": "list",
+            "cachedResultName": "master_sheet"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "full_day_sale": "={{ $json.properties.cs__date_of_fullday_sale }}",
+              "booking_id": "={{ $json.properties.cs__booking_id }}"
+            },
+            "matchingColumns": [
+              "booking_id"
+            ],
+            "schema": [
+              {
+                "id": "booking_id",
+                "displayName": "booking_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "first_name",
+                "displayName": "first_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "last_name",
+                "displayName": "last_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "email",
+                "displayName": "email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "chapter_name",
+                "displayName": "chapter_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "phone",
+                "displayName": "phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "address",
+                "displayName": "address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "city",
+                "displayName": "city",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "state_or_prov",
+                "displayName": "state_or_prov",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "country",
+                "displayName": "country",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "postal_or_zip",
+                "displayName": "postal_or_zip",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "items",
+                "displayName": "items",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_paid",
+                "displayName": "amount_paid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_total",
+                "displayName": "amount_total",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "discount_code",
+                "displayName": "discount_code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "booking_created_at",
+                "displayName": "booking_created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "date_of_birth",
+                "displayName": "date_of_birth",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "gender",
+                "displayName": "gender",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "nationality",
+                "displayName": "nationality",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tshirt",
+                "displayName": "tshirt",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "diet",
+                "displayName": "diet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "medical_notes",
+                "displayName": "medical_notes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "traveled_before",
+                "displayName": "traveled_before",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "passport_number",
+                "displayName": "passport_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "passport_expiry_date",
+                "displayName": "passport_expiry_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "passport_image",
+                "displayName": "passport_image",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_arrival_date",
+                "displayName": "flight_arrival_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_arrival_airline_and_number",
+                "displayName": "flight_arrival_airline_and_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_arrival_arrival_time",
+                "displayName": "flight_arrival_arrival_time",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_departure_date",
+                "displayName": "flight_departure_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_departure_airline_and_number",
+                "displayName": "flight_departure_airline_and_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_departure_arrival_time",
+                "displayName": "flight_departure_arrival_time",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emergency_contact_name",
+                "displayName": "emergency_contact_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emergency_contact_phone_number",
+                "displayName": "emergency_contact_phone_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emergency_contact_email",
+                "displayName": "emergency_contact_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "parent_or_guardian_first_name",
+                "displayName": "parent_or_guardian_first_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "parent_or_guardian_email",
+                "displayName": "parent_or_guardian_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "parent_or_guardian_phone_number",
+                "displayName": "parent_or_guardian_phone_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "are_you_a_parent_or_a_teacher",
+                "displayName": "are_you_a_parent_or_a_teacher",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_pending",
+                "displayName": "amount_pending",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_refunded",
+                "displayName": "amount_refunded",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "trip_id",
+                "displayName": "trip_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "full_day_sale",
+                "displayName": "full_day_sale",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "1233cbf3-f696-4b84-9208-7e4a974efb20",
+        "name": "update_fullday_sale",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          2080,
+          80
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "authentication": "appToken",
+          "operation": "search",
+          "limit": 10,
+          "filterGroupsUi": {
+            "filterGroupsValues": [
+              {
+                "filtersUi": {
+                  "filterValues": [
+                    {
+                      "propertyName": "hs_object_id|number",
+                      "value": "={{ $json.body.contact_record_id }}"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "additionalFields": {
+            "properties": [
+              "firstname",
+              "lastname",
+              "email",
+              "school",
+              "high_school_or_university_name"
+            ]
+          }
+        },
+        "id": "09af6f64-c098-4fda-be6f-88e48f1fbd08",
+        "name": "get_contact_data",
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 2.1,
+        "position": [
+          1840,
+          380
+        ],
+        "credentials": {
+          "hubspotAppToken": {
+            "id": "9oj690lgP8DPP84x",
+            "name": "HubSpot App Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "master_sheet",
+            "mode": "list",
+            "cachedResultName": "master_sheet"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "booking_id": "={{ $('get_deal_data2').item.json.properties.cs__booking_id }}",
+              "chapter_name": "={{ $json.chapter }}"
+            },
+            "matchingColumns": [
+              "booking_id"
+            ],
+            "schema": [
+              {
+                "id": "booking_id",
+                "displayName": "booking_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "first_name",
+                "displayName": "first_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "last_name",
+                "displayName": "last_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "email",
+                "displayName": "email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "chapter_name",
+                "displayName": "chapter_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "phone",
+                "displayName": "phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "address",
+                "displayName": "address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "city",
+                "displayName": "city",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "state_or_prov",
+                "displayName": "state_or_prov",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "country",
+                "displayName": "country",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "postal_or_zip",
+                "displayName": "postal_or_zip",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "items",
+                "displayName": "items",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_paid",
+                "displayName": "amount_paid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_total",
+                "displayName": "amount_total",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "discount_code",
+                "displayName": "discount_code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "booking_created_at",
+                "displayName": "booking_created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "date_of_birth",
+                "displayName": "date_of_birth",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "gender",
+                "displayName": "gender",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "nationality",
+                "displayName": "nationality",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "tshirt",
+                "displayName": "tshirt",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "diet",
+                "displayName": "diet",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "medical_notes",
+                "displayName": "medical_notes",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "traveled_before",
+                "displayName": "traveled_before",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "passport_number",
+                "displayName": "passport_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "passport_expiry_date",
+                "displayName": "passport_expiry_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "passport_image",
+                "displayName": "passport_image",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_arrival_date",
+                "displayName": "flight_arrival_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_arrival_airline_and_number",
+                "displayName": "flight_arrival_airline_and_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_arrival_arrival_time",
+                "displayName": "flight_arrival_arrival_time",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_departure_date",
+                "displayName": "flight_departure_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_departure_airline_and_number",
+                "displayName": "flight_departure_airline_and_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "flight_departure_arrival_time",
+                "displayName": "flight_departure_arrival_time",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emergency_contact_name",
+                "displayName": "emergency_contact_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emergency_contact_phone_number",
+                "displayName": "emergency_contact_phone_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "emergency_contact_email",
+                "displayName": "emergency_contact_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "parent_or_guardian_first_name",
+                "displayName": "parent_or_guardian_first_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "parent_or_guardian_email",
+                "displayName": "parent_or_guardian_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "parent_or_guardian_phone_number",
+                "displayName": "parent_or_guardian_phone_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "are_you_a_parent_or_a_teacher",
+                "displayName": "are_you_a_parent_or_a_teacher",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_pending",
+                "displayName": "amount_pending",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "amount_refunded",
+                "displayName": "amount_refunded",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "trip_id",
+                "displayName": "trip_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "full_day_sale",
+                "displayName": "full_day_sale",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "18138560-26fc-4126-881e-1fd12e465701",
+        "name": "update_chapter",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          2600,
+          380
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const contact_properties = $('get_contact_data').all()[0].json.properties\n\nconst chapter = contact_properties.high_school_or_university_name == \"No Chapter\" ? contact_properties.school : contact_properties.high_school_or_university_name\n\nreturn {chapter : chapter}"
+        },
+        "id": "f9b14d33-cb77-436d-a6ea-7d764f932205",
+        "name": "return_chapter",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2360,
+          380
+        ]
+      },
+      {
+        "parameters": {
+          "authentication": "appToken",
+          "resource": "deal",
+          "operation": "search",
+          "filterGroupsUi": {
+            "filterGroupsValues": [
+              {
+                "filtersUi": {
+                  "filterValues": [
+                    {
+                      "propertyName": "hs_object_id",
+                      "value": "={{ $('Webhook').item.json.body.deal_record_id }}"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          "additionalFields": {
+            "properties": [
+              "cs__booking_id",
+              "hubspot_owner_id"
+            ]
+          }
+        },
+        "id": "d219352b-1ba0-4a7a-8ec5-e47d63484a0a",
+        "name": "get_deal_data2",
+        "type": "n8n-nodes-base.hubspot",
+        "typeVersion": 2.1,
+        "position": [
+          2140,
+          380
+        ],
+        "credentials": {
+          "hubspotAppToken": {
+            "id": "9oj690lgP8DPP84x",
+            "name": "HubSpot App Token account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\nconst contact_properties = $('get_contact_data').all()[0].json.properties\nconst deal_properties = $('get_deal_data2').all()[0].json.properties\n\n    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: $('return_chapter').all()[0].json.chapter,\n              propertyName: 'name',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [\"hubspot_owner_id\", \"name\"],\n      limit: 1,\n      after: 0\n    })\n    if (searchResponse.results.length > 0) {\n      return searchResponse.results[0]\n    } else {\n      return {}\n    }"
+        },
+        "id": "0b474e2a-e073-474b-a210-7526f4477515",
+        "name": "find_company",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2820,
+          380
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key });\nconst status = { Paid: 180, Deposit: 176, Cancelled: 178, Pending: 242 };\nconst contact_properties = $('get_contact_data').all()[0].json.properties\nconst company_properties = $('find_company').all()[0].json.properties\n\nconst objectType = \"company\";\nconst objectId = company_properties.hs_object_id;\nconst toObjectType = \"contact\";\nconst toObjectId = contact_properties.hs_object_id;\nconst AssociationSpec = [\n  {\n    // Primary company association\n    associationTypeId: 2,\n    associationCategory: \"HUBSPOT_DEFINED\",\n  },\n];\n\nconst apiResponse = await hubspotClient.crm.associations.v4.basicApi.create(\n  objectType,\n  objectId,\n  toObjectType,\n  toObjectId,\n  AssociationSpec\n);\nreturn apiResponse;\n"
+        },
+        "id": "94c014bf-2de0-4ab2-8cc1-787c0c8e4d86",
+        "name": "company_to_contact",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3340,
+          180
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "31698ff1-bd91-4e2c-9d7f-05f899c039e6",
+          "authentication": "headerAuth",
+          "options": {
+            "rawBody": false
+          }
+        },
+        "id": "8efa33ed-744b-4c94-99d1-2cc65eda40d7",
+        "name": "Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          1140,
+          360
+        ],
+        "webhookId": "31698ff1-bd91-4e2c-9d7f-05f899c039e6",
+        "credentials": {
+          "httpHeaderAuth": {
+            "id": "sLDI6xWinSvJZhNc",
+            "name": "HubSpot Webhook Header Auth"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "a2867430-232d-4b87-915a-9209f883a46f",
+                "leftValue": "={{ $('get_deal_data2').item.json.properties.hubspot_owner_id }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              },
+              {
+                "id": "fc8ca856-93e5-4e15-8f61-3f17082d63e4",
+                "leftValue": "={{ $('get_deal_data2').item.json.properties.hubspot_owner_id }}",
+                "rightValue": "={{ null }}",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "or"
+          },
+          "options": {}
+        },
+        "id": "0adb9519-6635-4322-ac79-bd3932ad13cc",
+        "name": "no_previous_owner",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          3580,
+          180
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict"
+            },
+            "conditions": [
+              {
+                "id": "38e4a67d-2677-4af6-a1f6-912bae335466",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "513a79ee-eb4e-418d-a7e5-8c0e5eeaa07f",
+        "name": "identified_company?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          3040,
+          380
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst company_properties = $('find_company').all()[0].json.properties\nconst deal_properties = $('get_deal_data2').all()[0].json.properties\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key });\nconst properties = {\n  hubspot_owner_id: company_properties.hubspot_owner_id\n}\n\nconst apiResponse = await hubspotClient.crm.deals.basicApi.update(deal_properties.hs_object_id, { properties });\nreturn apiResponse"
+        },
+        "id": "d9fe96a5-eae0-4beb-9336-61788e69c451",
+        "name": "update_deal_owner",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3900,
+          -60
+        ]
+      }
+    ],
+    "connections": {
+      "type_of_update": {
+        "main": [
+          [
+            {
+              "node": "get_deal_data",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "get_contact_data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_deal_data": {
+        "main": [
+          [
+            {
+              "node": "update_fullday_sale",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_contact_data": {
+        "main": [
+          [
+            {
+              "node": "get_deal_data2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "return_chapter": {
+        "main": [
+          [
+            {
+              "node": "update_chapter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_chapter": {
+        "main": [
+          [
+            {
+              "node": "find_company",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_deal_data2": {
+        "main": [
+          [
+            {
+              "node": "return_chapter",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "find_company": {
+        "main": [
+          [
+            {
+              "node": "identified_company?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "type_of_update",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "company_to_contact": {
+        "main": [
+          [
+            {
+              "node": "no_previous_owner",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "identified_company?": {
+        "main": [
+          [
+            {
+              "node": "company_to_contact",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "no_previous_owner": {
+        "main": [
+          [
+            {
+              "node": "update_deal_owner",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "system migration",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "568f51e7-6a65-49dd-9aac-c5e207acdcea",
+  "connections": {
+    "type_of_update": {
+      "main": [
+        [
+          {
+            "node": "get_deal_data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get_contact_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_deal_data": {
+      "main": [
+        [
+          {
+            "node": "update_fullday_sale",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_contact_data": {
+      "main": [
+        [
+          {
+            "node": "get_deal_data2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "return_chapter": {
+      "main": [
+        [
+          {
+            "node": "update_chapter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_chapter": {
+      "main": [
+        [
+          {
+            "node": "find_company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_deal_data2": {
+      "main": [
+        [
+          {
+            "node": "return_chapter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "find_company": {
+      "main": [
+        [
+          {
+            "node": "identified_company?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "type_of_update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "company_to_contact": {
+      "main": [
+        [
+          {
+            "node": "no_previous_owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "identified_company?": {
+      "main": [
+        [
+          {
+            "node": "company_to_contact",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "no_previous_owner": {
+      "main": [
+        [
+          {
+            "node": "update_deal_owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-08-20T21:38:58.378Z",
+  "id": "h9YfezoORmoRENpr",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Register HubSpot data in Master Sheet",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Webhook').item.json.body.update }}",
+                    "rightValue": "full_day_date",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "full date sale update"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "e8e8ec0c-f6f5-4b43-8fc9-19a2ecd737a4",
+                    "leftValue": "={{ $('Webhook').item.json.body.update }}",
+                    "rightValue": "chapter",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Chapter name Update"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0fec571f-cebe-483f-8808-61b3ad1d2c3b",
+      "name": "type_of_update",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        1540,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "resource": "deal",
+        "operation": "search",
+        "filterGroupsUi": {
+          "filterGroupsValues": [
+            {
+              "filtersUi": {
+                "filterValues": [
+                  {
+                    "propertyName": "hs_object_id",
+                    "value": "={{ $json.body.record_id }}"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "properties": [
+            "cs__booking_id",
+            "cs__date_of_fullday_sale"
+          ]
+        }
+      },
+      "id": "496ae650-851e-44d8-b476-2f72dfa2c084",
+      "name": "get_deal_data",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.1,
+      "position": [
+        1840,
+        80
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9oj690lgP8DPP84x",
+          "name": "HubSpot App Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "master_sheet",
+          "mode": "list",
+          "cachedResultName": "master_sheet"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "full_day_sale": "={{ $json.properties.cs__date_of_fullday_sale }}",
+            "booking_id": "={{ $json.properties.cs__booking_id }}"
+          },
+          "matchingColumns": [
+            "booking_id"
+          ],
+          "schema": [
+            {
+              "id": "booking_id",
+              "displayName": "booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chapter_name",
+              "displayName": "chapter_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "state_or_prov",
+              "displayName": "state_or_prov",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "postal_or_zip",
+              "displayName": "postal_or_zip",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "items",
+              "displayName": "items",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_paid",
+              "displayName": "amount_paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_total",
+              "displayName": "amount_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "discount_code",
+              "displayName": "discount_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "booking_created_at",
+              "displayName": "booking_created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "date_of_birth",
+              "displayName": "date_of_birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "nationality",
+              "displayName": "nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tshirt",
+              "displayName": "tshirt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "diet",
+              "displayName": "diet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "medical_notes",
+              "displayName": "medical_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "traveled_before",
+              "displayName": "traveled_before",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "passport_number",
+              "displayName": "passport_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "passport_expiry_date",
+              "displayName": "passport_expiry_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "passport_image",
+              "displayName": "passport_image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_arrival_date",
+              "displayName": "flight_arrival_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_arrival_airline_and_number",
+              "displayName": "flight_arrival_airline_and_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_arrival_arrival_time",
+              "displayName": "flight_arrival_arrival_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_departure_date",
+              "displayName": "flight_departure_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_departure_airline_and_number",
+              "displayName": "flight_departure_airline_and_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_departure_arrival_time",
+              "displayName": "flight_departure_arrival_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emergency_contact_name",
+              "displayName": "emergency_contact_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emergency_contact_phone_number",
+              "displayName": "emergency_contact_phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emergency_contact_email",
+              "displayName": "emergency_contact_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "parent_or_guardian_first_name",
+              "displayName": "parent_or_guardian_first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "parent_or_guardian_email",
+              "displayName": "parent_or_guardian_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "parent_or_guardian_phone_number",
+              "displayName": "parent_or_guardian_phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "are_you_a_parent_or_a_teacher",
+              "displayName": "are_you_a_parent_or_a_teacher",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_pending",
+              "displayName": "amount_pending",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_refunded",
+              "displayName": "amount_refunded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "trip_id",
+              "displayName": "trip_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "full_day_sale",
+              "displayName": "full_day_sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1233cbf3-f696-4b84-9208-7e4a974efb20",
+      "name": "update_fullday_sale",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        2080,
+        80
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "operation": "search",
+        "limit": 10,
+        "filterGroupsUi": {
+          "filterGroupsValues": [
+            {
+              "filtersUi": {
+                "filterValues": [
+                  {
+                    "propertyName": "hs_object_id|number",
+                    "value": "={{ $json.body.contact_record_id }}"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "properties": [
+            "firstname",
+            "lastname",
+            "email",
+            "school",
+            "high_school_or_university_name"
+          ]
+        }
+      },
+      "id": "09af6f64-c098-4fda-be6f-88e48f1fbd08",
+      "name": "get_contact_data",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.1,
+      "position": [
+        1840,
+        380
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9oj690lgP8DPP84x",
+          "name": "HubSpot App Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "master_sheet",
+          "mode": "list",
+          "cachedResultName": "master_sheet"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "booking_id": "={{ $('get_deal_data2').item.json.properties.cs__booking_id }}",
+            "chapter_name": "={{ $json.chapter }}"
+          },
+          "matchingColumns": [
+            "booking_id"
+          ],
+          "schema": [
+            {
+              "id": "booking_id",
+              "displayName": "booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chapter_name",
+              "displayName": "chapter_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "address",
+              "displayName": "address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "city",
+              "displayName": "city",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "state_or_prov",
+              "displayName": "state_or_prov",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "country",
+              "displayName": "country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "postal_or_zip",
+              "displayName": "postal_or_zip",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "items",
+              "displayName": "items",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_paid",
+              "displayName": "amount_paid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_total",
+              "displayName": "amount_total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "discount_code",
+              "displayName": "discount_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "booking_created_at",
+              "displayName": "booking_created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "date_of_birth",
+              "displayName": "date_of_birth",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "gender",
+              "displayName": "gender",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "nationality",
+              "displayName": "nationality",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "tshirt",
+              "displayName": "tshirt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "diet",
+              "displayName": "diet",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "medical_notes",
+              "displayName": "medical_notes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "traveled_before",
+              "displayName": "traveled_before",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "passport_number",
+              "displayName": "passport_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "passport_expiry_date",
+              "displayName": "passport_expiry_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "passport_image",
+              "displayName": "passport_image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_arrival_date",
+              "displayName": "flight_arrival_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_arrival_airline_and_number",
+              "displayName": "flight_arrival_airline_and_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_arrival_arrival_time",
+              "displayName": "flight_arrival_arrival_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_departure_date",
+              "displayName": "flight_departure_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_departure_airline_and_number",
+              "displayName": "flight_departure_airline_and_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "flight_departure_arrival_time",
+              "displayName": "flight_departure_arrival_time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emergency_contact_name",
+              "displayName": "emergency_contact_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emergency_contact_phone_number",
+              "displayName": "emergency_contact_phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "emergency_contact_email",
+              "displayName": "emergency_contact_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "parent_or_guardian_first_name",
+              "displayName": "parent_or_guardian_first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "parent_or_guardian_email",
+              "displayName": "parent_or_guardian_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "parent_or_guardian_phone_number",
+              "displayName": "parent_or_guardian_phone_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "are_you_a_parent_or_a_teacher",
+              "displayName": "are_you_a_parent_or_a_teacher",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_pending",
+              "displayName": "amount_pending",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "amount_refunded",
+              "displayName": "amount_refunded",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "trip_id",
+              "displayName": "trip_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "full_day_sale",
+              "displayName": "full_day_sale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "18138560-26fc-4126-881e-1fd12e465701",
+      "name": "update_chapter",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        2600,
+        380
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const contact_properties = $('get_contact_data').all()[0].json.properties\n\nconst chapter = contact_properties.high_school_or_university_name == \"No Chapter\" ? contact_properties.school : contact_properties.high_school_or_university_name\n\nreturn {chapter : chapter}"
+      },
+      "id": "f9b14d33-cb77-436d-a6ea-7d764f932205",
+      "name": "return_chapter",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2360,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "resource": "deal",
+        "operation": "search",
+        "filterGroupsUi": {
+          "filterGroupsValues": [
+            {
+              "filtersUi": {
+                "filterValues": [
+                  {
+                    "propertyName": "hs_object_id",
+                    "value": "={{ $('Webhook').item.json.body.deal_record_id }}"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "additionalFields": {
+          "properties": [
+            "cs__booking_id",
+            "hubspot_owner_id"
+          ]
+        }
+      },
+      "id": "d219352b-1ba0-4a7a-8ec5-e47d63484a0a",
+      "name": "get_deal_data2",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.1,
+      "position": [
+        2140,
+        380
+      ],
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "9oj690lgP8DPP84x",
+          "name": "HubSpot App Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\nconst contact_properties = $('get_contact_data').all()[0].json.properties\nconst deal_properties = $('get_deal_data2').all()[0].json.properties\n\n    const searchResponse = await hubspotClient.crm.companies.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: $('return_chapter').all()[0].json.chapter,\n              propertyName: 'name',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [\"hubspot_owner_id\", \"name\"],\n      limit: 1,\n      after: 0\n    })\n    if (searchResponse.results.length > 0) {\n      return searchResponse.results[0]\n    } else {\n      return {}\n    }"
+      },
+      "id": "0b474e2a-e073-474b-a210-7526f4477515",
+      "name": "find_company",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2820,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key });\nconst status = { Paid: 180, Deposit: 176, Cancelled: 178, Pending: 242 };\nconst contact_properties = $('get_contact_data').all()[0].json.properties\nconst company_properties = $('find_company').all()[0].json.properties\n\nconst objectType = \"company\";\nconst objectId = company_properties.hs_object_id;\nconst toObjectType = \"contact\";\nconst toObjectId = contact_properties.hs_object_id;\nconst AssociationSpec = [\n  {\n    // Primary company association\n    associationTypeId: 2,\n    associationCategory: \"HUBSPOT_DEFINED\",\n  },\n];\n\nconst apiResponse = await hubspotClient.crm.associations.v4.basicApi.create(\n  objectType,\n  objectId,\n  toObjectType,\n  toObjectId,\n  AssociationSpec\n);\nreturn apiResponse;\n"
+      },
+      "id": "94c014bf-2de0-4ab2-8cc1-787c0c8e4d86",
+      "name": "company_to_contact",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3340,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "31698ff1-bd91-4e2c-9d7f-05f899c039e6",
+        "authentication": "headerAuth",
+        "options": {
+          "rawBody": false
+        }
+      },
+      "id": "8efa33ed-744b-4c94-99d1-2cc65eda40d7",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        360
+      ],
+      "webhookId": "31698ff1-bd91-4e2c-9d7f-05f899c039e6",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "sLDI6xWinSvJZhNc",
+          "name": "HubSpot Webhook Header Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "a2867430-232d-4b87-915a-9209f883a46f",
+              "leftValue": "={{ $('get_deal_data2').item.json.properties.hubspot_owner_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "fc8ca856-93e5-4e15-8f61-3f17082d63e4",
+              "leftValue": "={{ $('get_deal_data2').item.json.properties.hubspot_owner_id }}",
+              "rightValue": "={{ null }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "id": "0adb9519-6635-4322-ac79-bd3932ad13cc",
+      "name": "no_previous_owner",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3580,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "38e4a67d-2677-4af6-a1f6-912bae335466",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "513a79ee-eb4e-418d-a7e5-8c0e5eeaa07f",
+      "name": "identified_company?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3040,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst company_properties = $('find_company').all()[0].json.properties\nconst deal_properties = $('get_deal_data2').all()[0].json.properties\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key });\nconst properties = {\n  hubspot_owner_id: company_properties.hubspot_owner_id\n}\n\nconst apiResponse = await hubspotClient.crm.deals.basicApi.update(deal_properties.hs_object_id, { properties });\nreturn apiResponse"
+      },
+      "id": "d9fe96a5-eae0-4beb-9336-61788e69c451",
+      "name": "update_deal_owner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3900,
+        -60
+      ]
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "81",
+            "accept-encoding": "gzip, br",
+            "x-forwarded-for": "54.174.62.181",
+            "cf-ray": "8c10c35a2b565992-IAD",
+            "x-forwarded-proto": "https",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-hs-user-request": "1",
+            "x-hs-internal-user-request": "0",
+            "x-hs-internal-request": "0",
+            "x-hubspot-correlation-id": "dd27b3dd-29fe-4cb1-b6de-07e209516843",
+            "authorization": "Bearer e5362baf-c777-4d57-a609-6eaf1f9e87f6",
+            "user-agent": "HubSpot Connect 2.0 (http://dev.hubspot.com/) (namespace: WebhooksPlatformExecution) - WebhooksPlatformService-userweb",
+            "x-hubspot-timeout-millis": "29962",
+            "x-trace": "",
+            "cf-connecting-ip": "54.174.62.181",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-ipcountry": "US"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "update": "chapter",
+            "deal_record_id": 21135506321,
+            "contact_record_id": 47093477657
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/31698ff1-bd91-4e2c-9d7f-05f899c039e6",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2024-08-20T21:38:58.378Z",
+      "createdAt": "2024-08-20T21:38:58.378Z",
+      "role": "workflow:owner",
+      "workflowId": "h9YfezoORmoRENpr",
+      "projectId": "wkaaqWEwkqI65Kns"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2024-08-16T17:29:44.643Z",
+      "createdAt": "2024-08-16T17:29:44.643Z",
+      "id": "ulwUXi6PxfNLvHGI",
+      "name": "reporting"
+    },
+    {
+      "updatedAt": "2024-07-17T16:06:53.644Z",
+      "createdAt": "2024-07-17T16:06:53.644Z",
+      "id": "wQigXdeZ5QeUfh2m",
+      "name": "hubspot"
+    },
+    {
+      "updatedAt": "2024-07-17T16:00:42.675Z",
+      "createdAt": "2024-07-17T16:00:42.675Z",
+      "id": "Qur7bH3bxKERAV3l",
+      "name": "wetravel"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2024-11-11T20:28:34.092Z",
+  "versionId": "568f51e7-6a65-49dd-9aac-c5e207acdcea"
+}
