@@ -1,0 +1,511 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-05-18T16:31:46.411Z",
+    "createdAt": "2026-05-18T16:31:46.411Z",
+    "versionId": "e89200aa-b239-4ed3-bfc2-462c675fdc09",
+    "workflowId": "Ag5thPJXx3934wJE",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "f7ac749c-20be-451f-b96c-e948c4477ace",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -400,
+          0
+        ],
+        "id": "333976a5-8009-4cda-ac3a-5abc9f573e77",
+        "name": "Webhook",
+        "webhookId": "f7ac749c-20be-451f-b96c-e948c4477ace"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "WITH inputs AS (\n  SELECT\n    (t.elem->>'firstName')::text AS first_name,\n    (t.elem->>'lastName')::text  AS last_name,\n    (t.elem->>'fullName')::text  AS full_name,\n    (t.elem->>'email')::text     AS email,\n    (t.ordinality - 1)::int      AS input_index\n  FROM jsonb_array_elements($1::jsonb) WITH ORDINALITY AS t(elem, ordinality)\n),\ncandidates AS (\n  SELECT\n    i.input_index,\n    ms.participant_id, ms.buyer_id, ms.trip_id,\n    ms.first_name, ms.last_name, ms.email, ms.chapter_name, ms.status,\n    at.trip_name, at.destination, at.start_date, at.end_date,\n    CASE\n      WHEN NULLIF(i.email, '') IS NOT NULL THEN\n        CASE\n          WHEN LOWER(ms.email) = LOWER(i.email) THEN 1.0\n          ELSE similarity(\n            LOWER(split_part(ms.email, '@', 1)),\n            LOWER(split_part(i.email, '@', 1))\n          )\n        END\n      WHEN NULLIF(i.full_name, '') IS NOT NULL THEN\n        similarity(\n          LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n          LOWER(i.full_name)\n        )\n      ELSE NULL\n    END AS match_score\n  FROM inputs i\n  JOIN master_sheet ms ON\n    ms.status <> 'Cancelled'\n    AND (\n      NULLIF(i.email, '') IS NULL\n      OR LOWER(ms.email) = LOWER(i.email)\n      OR (\n        -- Domain-pinned fuzzy fallback for typo'd emails (e.g. missing 1-2 chars)\n        LOWER(split_part(ms.email, '@', 2)) = LOWER(split_part(i.email, '@', 2))\n        AND similarity(\n          LOWER(split_part(ms.email, '@', 1)),\n          LOWER(split_part(i.email, '@', 1))\n        ) > 0.5\n      )\n    )\n    AND (NULLIF(i.first_name, '') IS NULL OR ms.first_name ILIKE '%' || i.first_name || '%')\n    AND (NULLIF(i.last_name,  '') IS NULL OR ms.last_name  ILIKE '%' || i.last_name  || '%')\n    AND (\n      NULLIF(i.full_name, '') IS NULL\n      OR LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, ''))\n         ILIKE '%' || LOWER(i.full_name) || '%'\n      OR similarity(\n        LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n        LOWER(i.full_name)\n      ) > 0.3\n    )\n  LEFT JOIN all_trips at ON ms.trip_id = at.trip_id\n),\nranked AS (\n  SELECT\n    *,\n    ROW_NUMBER() OVER (\n      PARTITION BY input_index\n      ORDER BY COALESCE(match_score, 0) DESC, last_name NULLS LAST, first_name NULLS LAST\n    ) AS rn\n  FROM candidates\n)\nSELECT\n  input_index    AS \"inputIndex\",\n  participant_id AS \"participantId\",\n  buyer_id       AS \"buyerId\",\n  trip_id        AS \"tripId\",\n  first_name     AS \"firstName\",\n  last_name      AS \"lastName\",\n  email,\n  chapter_name   AS \"chapterName\",\n  status,\n  trip_name      AS \"tripName\",\n  destination,\n  start_date     AS \"startDate\",\n  end_date       AS \"endDate\",\n  match_score    AS \"matchScore\"\nFROM ranked\nWHERE rn <= 20\nORDER BY input_index, COALESCE(match_score, 0) DESC, last_name NULLS LAST, first_name NULLS LAST",
+          "options": {
+            "queryReplacement": "={{ JSON.stringify($input.first().json.body.participants) }}"
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "alwaysOutputData": true,
+        "position": [
+          -112,
+          0
+        ],
+        "id": "a07d9bba-4936-456a-ad82-0de64bf1eca5",
+        "name": "Search Participants",
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const rows = $input.all()\n  .map((i) => i.json)\n  .filter((r) => r && r.participantId != null);\nconst inputs = $('Webhook').first().json.body.participants || [];\nconst grouped = new Map();\nfor (const row of rows) {\n  const idx = row.inputIndex;\n  if (!grouped.has(idx)) grouped.set(idx, []);\n  const { inputIndex, ...rest } = row;\n  grouped.get(idx).push(rest);\n}\nconst results = inputs.map((input, i) => ({\n  inputIndex: i,\n  input,\n  matches: grouped.get(i) ?? [],\n}));\nreturn [{ json: { results } }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          144,
+          0
+        ],
+        "id": "e33a47e1-cb18-40a4-ac76-1d9a252f18f5",
+        "name": "Wrap Matches"
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ $json }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          336,
+          0
+        ],
+        "id": "bfca51d1-094c-4bd1-bf86-7c020569d2d7",
+        "name": "Respond"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "WITH q AS (\n  SELECT TRIM($1::text) AS query_text\n),\ndeduped AS (\n  SELECT DISTINCT ON (LOWER(ms.email))\n    ms.participant_id,\n    ms.buyer_id,\n    ms.trip_id,\n    ms.first_name,\n    ms.last_name,\n    ms.email,\n    ms.chapter_name,\n    ms.status,\n    GREATEST(\n      similarity(\n        LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n        LOWER((SELECT query_text FROM q))\n      ),\n      similarity(LOWER(ms.email), LOWER((SELECT query_text FROM q)))\n    ) AS match_score\n  FROM master_sheet ms, q\n  WHERE ms.status <> 'Cancelled'\n    AND ms.email IS NOT NULL AND ms.email <> ''\n    AND ms.trip_id IS NOT NULL AND ms.trip_id <> ''\n    AND ms.buyer_id IS NOT NULL AND ms.buyer_id <> ''\n    AND length(q.query_text) >= 2\n    AND (\n      LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, ''))\n        ILIKE '%' || LOWER(q.query_text) || '%'\n      OR LOWER(ms.email) ILIKE '%' || LOWER(q.query_text) || '%'\n      OR similarity(\n           LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n           LOWER(q.query_text)\n         ) > 0.3\n    )\n  ORDER BY\n    LOWER(ms.email),\n    GREATEST(\n      similarity(\n        LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n        LOWER(q.query_text)\n      ),\n      similarity(LOWER(ms.email), LOWER(q.query_text))\n    ) DESC NULLS LAST\n)\nSELECT\n  participant_id AS \"participantId\",\n  buyer_id       AS \"buyerId\",\n  trip_id        AS \"tripId\",\n  first_name     AS \"firstName\",\n  last_name      AS \"lastName\",\n  email,\n  chapter_name   AS \"chapterName\",\n  match_score    AS \"matchScore\"\nFROM deduped\nORDER BY match_score DESC NULLS LAST, last_name NULLS LAST, first_name NULLS LAST\nLIMIT 20",
+          "options": {
+            "queryReplacement": "={{ ($input.first().json.body.query || '').toString() }}"
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "alwaysOutputData": true,
+        "position": [
+          -128,
+          -192
+        ],
+        "id": "ff1cf068-51d0-4084-ab61-a28ca78e16a2",
+        "name": "Search Candidates",
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "mapi-participant-search",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "id": "bc8b187c-ee7e-4173-9b69-3a1059608f19",
+        "name": "Webhook Search",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -400,
+          -192
+        ],
+        "webhookId": "mapi-participant-search"
+      },
+      {
+        "parameters": {
+          "jsCode": "const rows = $input.all()\n  .map((i) => i.json)\n  .filter((r) => r && r.email && r.tripId && r.buyerId);\n\nconst candidates = rows.slice(0, 20).map((r) => {\n  const fullName = [r.firstName, r.lastName].filter(Boolean).join(' ').trim();\n  const candidate = {\n    name: fullName || r.email,\n    email: r.email,\n  };\n  if (r.chapterName) candidate.school = r.chapterName;\n  return candidate;\n});\n\nreturn [{ json: { candidates } }];\n"
+        },
+        "id": "c0483252-3ee1-400b-bda1-2ec74cbb0102",
+        "name": "Format candidates",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          128,
+          -192
+        ]
+      },
+      {
+        "parameters": {
+          "respondWith": "json",
+          "responseBody": "={{ JSON.stringify($json) }}",
+          "options": {}
+        },
+        "id": "1f3fb8a7-c5e0-4e66-8762-89efbba832be",
+        "name": "Respond1",
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.1,
+        "position": [
+          320,
+          -192
+        ]
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Search Participants",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Participants": {
+        "main": [
+          [
+            {
+              "node": "Wrap Matches",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wrap Matches": {
+        "main": [
+          [
+            {
+              "node": "Respond",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Search Candidates": {
+        "main": [
+          [
+            {
+              "node": "Format candidates",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook Search": {
+        "main": [
+          [
+            {
+              "node": "Search Candidates",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Format candidates": {
+        "main": [
+          [
+            {
+              "node": "Respond1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Franz Rebaza",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "e89200aa-b239-4ed3-bfc2-462c675fdc09",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Search Participants",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Participants": {
+      "main": [
+        [
+          {
+            "node": "Wrap Matches",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrap Matches": {
+      "main": [
+        [
+          {
+            "node": "Respond",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Candidates": {
+      "main": [
+        [
+          {
+            "node": "Format candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Search": {
+      "main": [
+        [
+          {
+            "node": "Search Candidates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format candidates": {
+      "main": [
+        [
+          {
+            "node": "Respond1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-07T00:40:09.372Z",
+  "id": "Ag5thPJXx3934wJE",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "MaPi Participant Search",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f7ac749c-20be-451f-b96c-e948c4477ace",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -400,
+        0
+      ],
+      "id": "333976a5-8009-4cda-ac3a-5abc9f573e77",
+      "name": "Webhook",
+      "webhookId": "f7ac749c-20be-451f-b96c-e948c4477ace"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH inputs AS (\n  SELECT\n    (t.elem->>'firstName')::text AS first_name,\n    (t.elem->>'lastName')::text  AS last_name,\n    (t.elem->>'fullName')::text  AS full_name,\n    (t.elem->>'email')::text     AS email,\n    (t.ordinality - 1)::int      AS input_index\n  FROM jsonb_array_elements($1::jsonb) WITH ORDINALITY AS t(elem, ordinality)\n),\ncandidates AS (\n  SELECT\n    i.input_index,\n    ms.participant_id, ms.buyer_id, ms.trip_id,\n    ms.first_name, ms.last_name, ms.email, ms.chapter_name, ms.status,\n    at.trip_name, at.destination, at.start_date, at.end_date,\n    CASE\n      WHEN NULLIF(i.email, '') IS NOT NULL THEN\n        CASE\n          WHEN LOWER(ms.email) = LOWER(i.email) THEN 1.0\n          ELSE similarity(\n            LOWER(split_part(ms.email, '@', 1)),\n            LOWER(split_part(i.email, '@', 1))\n          )\n        END\n      WHEN NULLIF(i.full_name, '') IS NOT NULL THEN\n        similarity(\n          LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n          LOWER(i.full_name)\n        )\n      ELSE NULL\n    END AS match_score\n  FROM inputs i\n  JOIN master_sheet ms ON\n    ms.status <> 'Cancelled'\n    AND (\n      NULLIF(i.email, '') IS NULL\n      OR LOWER(ms.email) = LOWER(i.email)\n      OR (\n        -- Domain-pinned fuzzy fallback for typo'd emails (e.g. missing 1-2 chars)\n        LOWER(split_part(ms.email, '@', 2)) = LOWER(split_part(i.email, '@', 2))\n        AND similarity(\n          LOWER(split_part(ms.email, '@', 1)),\n          LOWER(split_part(i.email, '@', 1))\n        ) > 0.5\n      )\n    )\n    AND (NULLIF(i.first_name, '') IS NULL OR ms.first_name ILIKE '%' || i.first_name || '%')\n    AND (NULLIF(i.last_name,  '') IS NULL OR ms.last_name  ILIKE '%' || i.last_name  || '%')\n    AND (\n      NULLIF(i.full_name, '') IS NULL\n      OR LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, ''))\n         ILIKE '%' || LOWER(i.full_name) || '%'\n      OR similarity(\n        LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n        LOWER(i.full_name)\n      ) > 0.3\n    )\n  LEFT JOIN all_trips at ON ms.trip_id = at.trip_id\n),\nranked AS (\n  SELECT\n    *,\n    ROW_NUMBER() OVER (\n      PARTITION BY input_index\n      ORDER BY COALESCE(match_score, 0) DESC, last_name NULLS LAST, first_name NULLS LAST\n    ) AS rn\n  FROM candidates\n)\nSELECT\n  input_index    AS \"inputIndex\",\n  participant_id AS \"participantId\",\n  buyer_id       AS \"buyerId\",\n  trip_id        AS \"tripId\",\n  first_name     AS \"firstName\",\n  last_name      AS \"lastName\",\n  email,\n  chapter_name   AS \"chapterName\",\n  status,\n  trip_name      AS \"tripName\",\n  destination,\n  start_date     AS \"startDate\",\n  end_date       AS \"endDate\",\n  match_score    AS \"matchScore\"\nFROM ranked\nWHERE rn <= 20\nORDER BY input_index, COALESCE(match_score, 0) DESC, last_name NULLS LAST, first_name NULLS LAST",
+        "options": {
+          "queryReplacement": "={{ JSON.stringify($input.first().json.body.participants) }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "alwaysOutputData": true,
+      "position": [
+        -112,
+        0
+      ],
+      "id": "a07d9bba-4936-456a-ad82-0de64bf1eca5",
+      "name": "Search Participants",
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all()\n  .map((i) => i.json)\n  .filter((r) => r && r.participantId != null);\nconst inputs = $('Webhook').first().json.body.participants || [];\nconst grouped = new Map();\nfor (const row of rows) {\n  const idx = row.inputIndex;\n  if (!grouped.has(idx)) grouped.set(idx, []);\n  const { inputIndex, ...rest } = row;\n  grouped.get(idx).push(rest);\n}\nconst results = inputs.map((input, i) => ({\n  inputIndex: i,\n  input,\n  matches: grouped.get(i) ?? [],\n}));\nreturn [{ json: { results } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        144,
+        0
+      ],
+      "id": "e33a47e1-cb18-40a4-ac76-1d9a252f18f5",
+      "name": "Wrap Matches"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        336,
+        0
+      ],
+      "id": "bfca51d1-094c-4bd1-bf86-7c020569d2d7",
+      "name": "Respond"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH q AS (\n  SELECT TRIM($1::text) AS query_text\n),\ndeduped AS (\n  SELECT DISTINCT ON (LOWER(ms.email))\n    ms.participant_id,\n    ms.buyer_id,\n    ms.trip_id,\n    ms.first_name,\n    ms.last_name,\n    ms.email,\n    ms.chapter_name,\n    ms.status,\n    GREATEST(\n      similarity(\n        LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n        LOWER((SELECT query_text FROM q))\n      ),\n      similarity(LOWER(ms.email), LOWER((SELECT query_text FROM q)))\n    ) AS match_score\n  FROM master_sheet ms, q\n  WHERE ms.status <> 'Cancelled'\n    AND ms.email IS NOT NULL AND ms.email <> ''\n    AND ms.trip_id IS NOT NULL AND ms.trip_id <> ''\n    AND ms.buyer_id IS NOT NULL AND ms.buyer_id <> ''\n    AND length(q.query_text) >= 2\n    AND (\n      LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, ''))\n        ILIKE '%' || LOWER(q.query_text) || '%'\n      OR LOWER(ms.email) ILIKE '%' || LOWER(q.query_text) || '%'\n      OR similarity(\n           LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n           LOWER(q.query_text)\n         ) > 0.3\n    )\n  ORDER BY\n    LOWER(ms.email),\n    GREATEST(\n      similarity(\n        LOWER(COALESCE(ms.first_name, '') || ' ' || COALESCE(ms.last_name, '')),\n        LOWER(q.query_text)\n      ),\n      similarity(LOWER(ms.email), LOWER(q.query_text))\n    ) DESC NULLS LAST\n)\nSELECT\n  participant_id AS \"participantId\",\n  buyer_id       AS \"buyerId\",\n  trip_id        AS \"tripId\",\n  first_name     AS \"firstName\",\n  last_name      AS \"lastName\",\n  email,\n  chapter_name   AS \"chapterName\",\n  match_score    AS \"matchScore\"\nFROM deduped\nORDER BY match_score DESC NULLS LAST, last_name NULLS LAST, first_name NULLS LAST\nLIMIT 20",
+        "options": {
+          "queryReplacement": "={{ ($input.first().json.body.query || '').toString() }}"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "alwaysOutputData": true,
+      "position": [
+        -128,
+        -192
+      ],
+      "id": "ff1cf068-51d0-4084-ab61-a28ca78e16a2",
+      "name": "Search Candidates",
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mapi-participant-search",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "bc8b187c-ee7e-4173-9b69-3a1059608f19",
+      "name": "Webhook Search",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        -192
+      ],
+      "webhookId": "mapi-participant-search"
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all()\n  .map((i) => i.json)\n  .filter((r) => r && r.email && r.tripId && r.buyerId);\n\nconst candidates = rows.slice(0, 20).map((r) => {\n  const fullName = [r.firstName, r.lastName].filter(Boolean).join(' ').trim();\n  const candidate = {\n    name: fullName || r.email,\n    email: r.email,\n  };\n  if (r.chapterName) candidate.school = r.chapterName;\n  return candidate;\n});\n\nreturn [{ json: { candidates } }];\n"
+      },
+      "id": "c0483252-3ee1-400b-bda1-2ec74cbb0102",
+      "name": "Format candidates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        128,
+        -192
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "1f3fb8a7-c5e0-4e66-8762-89efbba832be",
+      "name": "Respond1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        -192
+      ]
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "149",
+            "x-forwarded-for": "38.25.28.108",
+            "content-type": "application/json",
+            "accept-encoding": "gzip, br",
+            "accept": "*/*",
+            "cf-ray": "9f7ca3ddffb8adae-EZE",
+            "user-agent": "Bun/1.3.5",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "38.25.28.108",
+            "cf-ipcountry": "PE",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "participants": [
+              {
+                "fullName": "Nesrine Khier"
+              },
+              {
+                "fullName": "Sophie Guzman-Pinzon"
+              },
+              {
+                "fullName": "Laeticia Tétreau"
+              },
+              {
+                "email": "joannaoiza@gmail.com"
+              }
+            ]
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/f7ac749c-20be-451f-b96c-e948c4477ace",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-07T00:40:09.372Z",
+      "createdAt": "2026-05-07T00:40:09.372Z",
+      "role": "workflow:owner",
+      "workflowId": "Ag5thPJXx3934wJE",
+      "projectId": "Xr7Tq1f92KLz18mB"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-01-08T16:30:09.560Z",
+      "createdAt": "2025-01-08T16:30:09.560Z",
+      "id": "ByGiBEEfze63veYx",
+      "name": "postgres"
+    }
+  ],
+  "triggerCount": 2,
+  "updatedAt": "2026-05-18T16:31:46.402Z",
+  "versionId": "e89200aa-b239-4ed3-bfc2-462c675fdc09"
+}
