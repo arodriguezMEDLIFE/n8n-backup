@@ -1,0 +1,1389 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-12T22:20:25.945Z",
+    "createdAt": "2026-06-12T22:20:25.945Z",
+    "versionId": "1dec52f3-b3d7-4035-8a9b-28279c59a9f2",
+    "workflowId": "H6VMVGk1lSeyNAgp",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "minutes",
+                "minutesInterval": 10
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -1168,
+          240
+        ],
+        "id": "f0eca1f8-86b1-4fba-91a6-98972eaae5cc",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "bbs_users",
+            "mode": "list",
+            "cachedResultName": "bbs_users"
+          },
+          "where": {
+            "values": [
+              {
+                "column": "status",
+                "value": "\"awaiting_processing\""
+              },
+              {
+                "column": "status",
+                "value": "awaiting_processing"
+              }
+            ]
+          },
+          "combineConditions": "OR",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -944,
+          240
+        ],
+        "id": "3bb72c97-8f24-40c2-86b6-8ee02194c6a2",
+        "name": "Select rows from a table",
+        "credentials": {
+          "postgres": {
+            "id": "HrjPwXbCSjXnq2mx",
+            "name": "BBS user"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          -720,
+          240
+        ],
+        "id": "974b3055-fe6b-447a-8462-60cdc5f70ba8",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT first_name, last_name, email, chapter_name, phone from master_sheet where phone LIKE '%{{ $json.phone_number }}%' LIMIT 1;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          -496,
+          0
+        ],
+        "id": "03789ebd-1774-4bf5-9d60-cb61af01f588",
+        "name": "mastersheet_lookup",
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "HrjPwXbCSjXnq2mx",
+            "name": "BBS user"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "b490dcd1-16c8-4e82-ab0e-2f4e5f0226c1",
+                "leftValue": "={{ $json }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "empty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -272,
+          0
+        ],
+        "id": "7ac60af7-b86e-413a-9349-ac5435fb482e",
+        "name": "is_empty?"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "bbs_users",
+            "mode": "list",
+            "cachedResultName": "bbs_users"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "phone_number": "={{ $('Loop Over Items').item.json.phone_number }}",
+              "email": "={{ $('mastersheet_lookup').item.json.email }}",
+              "name": "={{ $('mastersheet_lookup').item.json.first_name }} {{ $('mastersheet_lookup').item.json.last_name }}",
+              "chapter": "={{ $('mastersheet_lookup').item.json.chapter_name }}",
+              "status": "processed",
+              "avatar": "={{ $json.tags }}",
+              "coach": "={{ $('avatar_lookup').item.json.owner }}"
+            },
+            "matchingColumns": [
+              "phone_number"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "email",
+                "displayName": "email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "phone_number",
+                "displayName": "phone_number",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "last_video_date",
+                "displayName": "last_video_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "chapter",
+                "displayName": "chapter",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "consent",
+                "displayName": "consent",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "avatar",
+                "displayName": "avatar",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "coach",
+                "displayName": "coach",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          400,
+          96
+        ],
+        "id": "804e323a-1642-4fa3-b2be-e7ae30191820",
+        "name": "update_user",
+        "credentials": {
+          "postgres": {
+            "id": "HrjPwXbCSjXnq2mx",
+            "name": "BBS user"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({\n  accessToken: $vars.discount_generator_apikey,\n});\nconst email = $(\"is_empty?\").all()[0].json.email;\nlet contact_data;\nlet company_data;\nowners = {\n  190043241: \"Alejandro Beoutis\",\n  168849498: \"Alesandra Zegarra\",\n  881523891: \"Mhairi Macleod\",\n  1599694573: \"Isabella Albarrán\",\n  86664709: \"Federico Rivadeneira\",\n  77676408: \"Victoria Córdova\",\n  168843586: \"Martha Kennedy\",\n  231227222: \"Lorena Muñoz\",\n  79261135: \"Enya Solmaz\",\n  166784099: \"Jennifer Aranguren\",\n  333845834: \"Camila Gutierrez\",\n  168858112: \"Ricardo Soltero\",\n  87653375: \"Mariajose Hernandez\",\n};\n//contact data\ncontact_data = await hubspotClient.crm.contacts.searchApi.doSearch({\n  filterGroups: [\n    {\n      filters: [\n        {\n          value: email,\n          propertyName: \"hs_additional_emails\",\n          operator: \"CONTAINS_TOKEN\",\n        },\n      ],\n    },\n    {\n      filters: [\n        {\n          value: email,\n          propertyName: \"email\",\n          operator: \"EQ\",\n        },\n      ],\n    },\n  ],\n  sorts: [],\n  properties: [\n    \"hubspot_owner_id\",\n    \"type_of_contact\",\n    \"contact_position__c\",\n    \"times_traveled\",\n    \"founder_member\",\n    \"type_of_involvement\",\n  ],\n  limit: 1,\n  after: 0,\n});\n\nif (contact_data.results.length > 0) {\n  company_data = await hubspotClient.crm.companies.searchApi.doSearch({\n    filterGroups: [\n      {\n        filters: [\n          {\n            value: contact_data.results[0].id,\n            propertyName: \"associations.contact\",\n            operator: \"EQ\",\n          },\n        ],\n      },\n    ],\n    sorts: [],\n    properties: [\"name\", \"school_type__c\", \"lifecyclestage\"],\n    limit: 1,\n    after: 0,\n  });\n}\n\nreturn {\n  positon: contact_data?.results[0]?.properties.contact_position__c || null,\n  owner: owners[contact_data?.results[0]?.properties.hubspot_owner_id] || null,\n  times_traveled: contact_data?.results[0]?.properties.times_traveled || null,\n  type_of_contact: contact_data?.results[0]?.properties.type_of_contact || null,\n  founder_member: contact_data?.results[0]?.properties.founder_member || null,\n  type_of_involvement:\n    contact_data?.results[0]?.properties.type_of_involvement || null,\n  type_of_company: company_data?.results[0]?.properties.school_type__c || null,\n  chapter_name: company_data?.results[0]?.properties.name || null,\n  company_lifecycle:\n    company_data?.results[0]?.properties.lifecyclestage || null,\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          96
+        ],
+        "id": "ed92bcda-461a-4a49-bb2f-750f485c1971",
+        "name": "avatar_lookup"
+      },
+      {
+        "parameters": {
+          "jsCode": "const data = $(\"avatar_lookup\").all()[0].json;\nconst tags = [];\nconst lifecycle_stages = {\n  23878512: true,\n  23925576: true,\n  23925577: true,\n  23926968: true,\n};\n//Check for position\nif (data.positon) {\n  if (data.positon.includes(\"President\")) {\n    tags.push(\"Chapter President\");\n  }\n  tags.push(\"E-boarder\");\n} else {\n  if (data.company_lifecycle) {\n    if (lifecycle_stages[data.company_lifecycle] || false) {\n      tags.push(\"General Member\");\n    }\n  }\n}\n\n//Check for type of contact\nif (data.type_of_contact) {\n  if (data.type_of_contact.includes(\"College Student\"))\n    tags.push(\"College Student\");\n  if (data.type_of_contact.includes(\"High School Student\"))\n    tags.push(\"High School Student\");\n  if (data.type_of_contact.includes(\"Parent\")) tags.push(\"Parent\");\n  if (data.type_of_contact.includes(\"Professor\")) tags.push(\"Professor\");\n  if (data.type_of_contact.includes(\"Graduate\")) tags.push(\"Alumni\");\n} else {\n  if (data.type_of_company) {\n    if (\n      data.type_of_company.includes(\"University\") ||\n      data.type_of_company.includes(\"Community College\") ||\n      data.type_of_company.includes(\"CGEP\")\n    )\n      tags.push(\"College Unknown\");\n    if (data.type_of_company.includes(\"High School\"))\n      tags.push(\"High School Unknown\");\n  }\n}\n\n//Check for times traveled\nif (data.times_traveled > 0) tags.push(\"SLT Traveler\");\nif (data.times_traveled > 1) tags.push(\"Recurring Traveler\");\n\n//Check for expansion founder\nif (data.founder_member > 0) tags.push(\"Chapter Founder\");\n\n//Check for donations\nif (data.type_of_involvement) {\n  if (data.type_of_involvement.includes(\"donor\")) tags.push(\"Donor\");\n}\nreturn { tags: tags.join() };\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          176,
+          96
+        ],
+        "id": "75fb71cb-f70e-45d6-af52-d6913ab1378c",
+        "name": "return_avatar"
+      },
+      {
+        "parameters": {
+          "amount": 10
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          624,
+          272
+        ],
+        "id": "ee109532-1337-4530-b2a5-73f8d3275419",
+        "name": "Wait",
+        "webhookId": "ddf56133-de89-42f9-bfc2-806e83f14f6a"
+      },
+      {
+        "parameters": {
+          "jsCode": "const data = $(\"hubspot_lookup\").all()[0].json;\nconst tags = [];\nconst lifecycle_stages = {\n  23878512: true,\n  23925576: true,\n  23925577: true,\n  23926968: true,\n};\n//Check for position\nif (data.positon) {\n  if (data.positon.includes(\"President\")) {\n    tags.push(\"Chapter President\");\n  }\n  tags.push(\"E-boarder\");\n} else {\n  if (data.company_lifecycle) {\n    if (lifecycle_stages[data.company_lifecycle] || false) {\n      tags.push(\"General Member\");\n    }\n  }\n}\n\n//Check for type of contact\nif (data.type_of_contact) {\n  if (data.type_of_contact.includes(\"College Student\"))\n    tags.push(\"College Student\");\n  if (data.type_of_contact.includes(\"High School Student\"))\n    tags.push(\"High School Student\");\n  if (data.type_of_contact.includes(\"Parent\")) tags.push(\"Parent\");\n  if (data.type_of_contact.includes(\"Professor\")) tags.push(\"Professor\");\n  if (data.type_of_contact.includes(\"Graduate\")) tags.push(\"Alumni\");\n} else {\n  if (data.type_of_company) {\n    if (\n      data.type_of_company.includes(\"University\") ||\n      data.type_of_company.includes(\"Community College\") ||\n      data.type_of_company.includes(\"CGEP\")\n    )\n      tags.push(\"College Unknown\");\n    if (data.type_of_company.includes(\"High School\"))\n      tags.push(\"High School Unknown\");\n  }\n}\n\n//Check for times traveled\nif (data.times_traveled > 0) tags.push(\"SLT Traveler\");\nif (data.times_traveled > 1) tags.push(\"Recurring Traveler\");\n\n//Check for expansion founder\nif (data.founder_member > 0) tags.push(\"Chapter Founder\");\n\n//Check for donations\nif (data.type_of_involvement) {\n  if (data.type_of_involvement.includes(\"donor\")) tags.push(\"Donor\");\n}\nreturn { tags: tags.join() };\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          176,
+          -96
+        ],
+        "id": "1ec5d761-4410-4a58-8e2d-8bccd1b55e9b",
+        "name": "return_avatar1"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "bbs_users",
+            "mode": "list",
+            "cachedResultName": "bbs_users"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "phone_number": "={{ $('Loop Over Items').item.json.phone_number }}",
+              "email": "={{ $('hubspot_lookup').item.json.email }}",
+              "name": "={{ $('hubspot_lookup').item.json.name }} {{ $('hubspot_lookup').item.json.lastname }}",
+              "chapter": "={{ $('hubspot_lookup').item.json.chapter_name }}",
+              "status": "processed",
+              "avatar": "={{ $json.tags }}",
+              "coach": "={{ $('hubspot_lookup').item.json.owner }}"
+            },
+            "matchingColumns": [
+              "phone_number"
+            ],
+            "schema": [
+              {
+                "id": "id",
+                "displayName": "id",
+                "required": false,
+                "defaultMatch": true,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "email",
+                "displayName": "email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "phone_number",
+                "displayName": "phone_number",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "last_video_date",
+                "displayName": "last_video_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "chapter",
+                "displayName": "chapter",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "consent",
+                "displayName": "consent",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "avatar",
+                "displayName": "avatar",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "coach",
+                "displayName": "coach",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          400,
+          -96
+        ],
+        "id": "09cdae8e-daa7-4a97-b22a-379b43f8845b",
+        "name": "update_user2",
+        "credentials": {
+          "postgres": {
+            "id": "HrjPwXbCSjXnq2mx",
+            "name": "BBS user"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          624,
+          80
+        ],
+        "id": "c66f8404-bd69-4f3a-a009-cbcaff6360ce",
+        "name": "Wait1",
+        "webhookId": "ea7efcdf-49f6-4ad1-8e3e-45572d3fb392"
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({\n  accessToken: $vars.discount_generator_apikey,\n});\n\nowners = {\n  190043241: \"Alejandro Beoutis\",\n  168849498: \"Alesandra Zegarra\",\n  881523891: \"Mhairi Macleod\",\n  1599694573: \"Isabella Albarrán\",\n  86664709: \"Federico Rivadeneira\",\n  77676408: \"Victoria Córdova\",\n  168843586: \"Martha Kennedy\",\n  231227222: \"Lorena Muñoz\",\n  79261135: \"Enya Solmaz\",\n  166784099: \"Jennifer Aranguren\",\n  333845834: \"Camila Gutierrez\",\n  168858112: \"Ricardo Soltero\",\n  87653375: \"Mariajose Hernandez\",\n};\n\nconst phone_number = $(\"Loop Over Items\").first().json.phone_number;\nlet contact_data;\nlet company_data;\n//contact data\ncontact_data = await hubspotClient.crm.contacts.searchApi.doSearch({\n  filterGroups: [\n    {\n      filters: [\n        {\n          value: phone_number,\n          propertyName: \"phone\",\n          operator: \"CONTAINS_TOKEN\",\n        },\n      ],\n    },\n  ],\n  sorts: [],\n  properties: [\n    \"hubspot_owner_id\",\n    \"email\",\n    \"name\",\n    \"lastname\",\n    \"type_of_contact\",\n    \"contact_position__c\",\n    \"times_traveled\",\n    \"founder_member\",\n    \"type_of_involvement\",\n  ],\n  limit: 1,\n  after: 0,\n});\n\nif (contact_data.results.length > 0) {\n  company_data = await hubspotClient.crm.companies.searchApi.doSearch({\n    filterGroups: [\n      {\n        filters: [\n          {\n            value: contact_data.results[0].id,\n            propertyName: \"associations.contact\",\n            operator: \"EQ\",\n          },\n        ],\n      },\n    ],\n    sorts: [],\n    properties: [\"name\", \"school_type__c\", \"lifecyclestage\"],\n    limit: 1,\n    after: 0,\n  });\n}\n\nreturn {\n  name: contact_data?.results[0]?.properties.name || null,\n  lastname: contact_data?.results[0]?.properties.lastname || null,\n  email: contact_data?.results[0]?.properties.email || null,\n  owner: owners[contact_data?.results[0]?.properties.hubspot_owner_id] || null,\n  positon: contact_data?.results[0]?.properties.contact_position__c || null,\n  times_traveled: contact_data?.results[0]?.properties.times_traveled || null,\n  type_of_contact: contact_data?.results[0]?.properties.type_of_contact || null,\n  founder_member: contact_data?.results[0]?.properties.founder_member || null,\n  type_of_involvement:\n    contact_data?.results[0]?.properties.type_of_involvement || null,\n  type_of_company: company_data?.results[0]?.properties.school_type__c || null,\n  chapter_name: company_data?.results[0]?.properties.name || null,\n  company_lifecycle:\n    company_data?.results[0]?.properties.lifecyclestage || null,\n};\n"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -48,
+          -96
+        ],
+        "id": "b8096eb0-a69c-418c-8054-c9c0bb2c404a",
+        "name": "hubspot_lookup"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Select rows from a table",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Select rows from a table": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "mastersheet_lookup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "mastersheet_lookup": {
+        "main": [
+          [
+            {
+              "node": "is_empty?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "is_empty?": {
+        "main": [
+          [
+            {
+              "node": "hubspot_lookup",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "avatar_lookup",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_user": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "avatar_lookup": {
+        "main": [
+          [
+            {
+              "node": "return_avatar",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "return_avatar": {
+        "main": [
+          [
+            {
+              "node": "update_user",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "return_avatar1": {
+        "main": [
+          [
+            {
+              "node": "update_user2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_user2": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "hubspot_lookup": {
+        "main": [
+          [
+            {
+              "node": "return_avatar1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alonso Avalo",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "1dec52f3-b3d7-4035-8a9b-28279c59a9f2",
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Select rows from a table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select rows from a table": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "mastersheet_lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mastersheet_lookup": {
+      "main": [
+        [
+          {
+            "node": "is_empty?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is_empty?": {
+      "main": [
+        [
+          {
+            "node": "hubspot_lookup",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "avatar_lookup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_user": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "avatar_lookup": {
+      "main": [
+        [
+          {
+            "node": "return_avatar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "return_avatar": {
+      "main": [
+        [
+          {
+            "node": "update_user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "return_avatar1": {
+      "main": [
+        [
+          {
+            "node": "update_user2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_user2": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "hubspot_lookup": {
+      "main": [
+        [
+          {
+            "node": "return_avatar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-29T20:31:04.857Z",
+  "id": "H6VMVGk1lSeyNAgp",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "BBS - Process Users",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1168,
+        240
+      ],
+      "id": "f0eca1f8-86b1-4fba-91a6-98972eaae5cc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bbs_users",
+          "mode": "list",
+          "cachedResultName": "bbs_users"
+        },
+        "where": {
+          "values": [
+            {
+              "column": "status",
+              "value": "\"awaiting_processing\""
+            },
+            {
+              "column": "status",
+              "value": "awaiting_processing"
+            }
+          ]
+        },
+        "combineConditions": "OR",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -944,
+        240
+      ],
+      "id": "3bb72c97-8f24-40c2-86b6-8ee02194c6a2",
+      "name": "Select rows from a table",
+      "credentials": {
+        "postgres": {
+          "id": "HrjPwXbCSjXnq2mx",
+          "name": "BBS user"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -720,
+        240
+      ],
+      "id": "974b3055-fe6b-447a-8462-60cdc5f70ba8",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT first_name, last_name, email, chapter_name, phone from master_sheet where phone LIKE '%{{ $json.phone_number }}%' LIMIT 1;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -496,
+        0
+      ],
+      "id": "03789ebd-1774-4bf5-9d60-cb61af01f588",
+      "name": "mastersheet_lookup",
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "HrjPwXbCSjXnq2mx",
+          "name": "BBS user"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b490dcd1-16c8-4e82-ab0e-2f4e5f0226c1",
+              "leftValue": "={{ $json }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -272,
+        0
+      ],
+      "id": "7ac60af7-b86e-413a-9349-ac5435fb482e",
+      "name": "is_empty?"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bbs_users",
+          "mode": "list",
+          "cachedResultName": "bbs_users"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "phone_number": "={{ $('Loop Over Items').item.json.phone_number }}",
+            "email": "={{ $('mastersheet_lookup').item.json.email }}",
+            "name": "={{ $('mastersheet_lookup').item.json.first_name }} {{ $('mastersheet_lookup').item.json.last_name }}",
+            "chapter": "={{ $('mastersheet_lookup').item.json.chapter_name }}",
+            "status": "processed",
+            "avatar": "={{ $json.tags }}",
+            "coach": "={{ $('avatar_lookup').item.json.owner }}"
+          },
+          "matchingColumns": [
+            "phone_number"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_video_date",
+              "displayName": "last_video_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chapter",
+              "displayName": "chapter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consent",
+              "displayName": "consent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "avatar",
+              "displayName": "avatar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "coach",
+              "displayName": "coach",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        400,
+        96
+      ],
+      "id": "804e323a-1642-4fa3-b2be-e7ae30191820",
+      "name": "update_user",
+      "credentials": {
+        "postgres": {
+          "id": "HrjPwXbCSjXnq2mx",
+          "name": "BBS user"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({\n  accessToken: $vars.discount_generator_apikey,\n});\nconst email = $(\"is_empty?\").all()[0].json.email;\nlet contact_data;\nlet company_data;\nowners = {\n  190043241: \"Alejandro Beoutis\",\n  168849498: \"Alesandra Zegarra\",\n  881523891: \"Mhairi Macleod\",\n  1599694573: \"Isabella Albarrán\",\n  86664709: \"Federico Rivadeneira\",\n  77676408: \"Victoria Córdova\",\n  168843586: \"Martha Kennedy\",\n  231227222: \"Lorena Muñoz\",\n  79261135: \"Enya Solmaz\",\n  166784099: \"Jennifer Aranguren\",\n  333845834: \"Camila Gutierrez\",\n  168858112: \"Ricardo Soltero\",\n  87653375: \"Mariajose Hernandez\",\n};\n//contact data\ncontact_data = await hubspotClient.crm.contacts.searchApi.doSearch({\n  filterGroups: [\n    {\n      filters: [\n        {\n          value: email,\n          propertyName: \"hs_additional_emails\",\n          operator: \"CONTAINS_TOKEN\",\n        },\n      ],\n    },\n    {\n      filters: [\n        {\n          value: email,\n          propertyName: \"email\",\n          operator: \"EQ\",\n        },\n      ],\n    },\n  ],\n  sorts: [],\n  properties: [\n    \"hubspot_owner_id\",\n    \"type_of_contact\",\n    \"contact_position__c\",\n    \"times_traveled\",\n    \"founder_member\",\n    \"type_of_involvement\",\n  ],\n  limit: 1,\n  after: 0,\n});\n\nif (contact_data.results.length > 0) {\n  company_data = await hubspotClient.crm.companies.searchApi.doSearch({\n    filterGroups: [\n      {\n        filters: [\n          {\n            value: contact_data.results[0].id,\n            propertyName: \"associations.contact\",\n            operator: \"EQ\",\n          },\n        ],\n      },\n    ],\n    sorts: [],\n    properties: [\"name\", \"school_type__c\", \"lifecyclestage\"],\n    limit: 1,\n    after: 0,\n  });\n}\n\nreturn {\n  positon: contact_data?.results[0]?.properties.contact_position__c || null,\n  owner: owners[contact_data?.results[0]?.properties.hubspot_owner_id] || null,\n  times_traveled: contact_data?.results[0]?.properties.times_traveled || null,\n  type_of_contact: contact_data?.results[0]?.properties.type_of_contact || null,\n  founder_member: contact_data?.results[0]?.properties.founder_member || null,\n  type_of_involvement:\n    contact_data?.results[0]?.properties.type_of_involvement || null,\n  type_of_company: company_data?.results[0]?.properties.school_type__c || null,\n  chapter_name: company_data?.results[0]?.properties.name || null,\n  company_lifecycle:\n    company_data?.results[0]?.properties.lifecyclestage || null,\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        96
+      ],
+      "id": "ed92bcda-461a-4a49-bb2f-750f485c1971",
+      "name": "avatar_lookup"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $(\"avatar_lookup\").all()[0].json;\nconst tags = [];\nconst lifecycle_stages = {\n  23878512: true,\n  23925576: true,\n  23925577: true,\n  23926968: true,\n};\n//Check for position\nif (data.positon) {\n  if (data.positon.includes(\"President\")) {\n    tags.push(\"Chapter President\");\n  }\n  tags.push(\"E-boarder\");\n} else {\n  if (data.company_lifecycle) {\n    if (lifecycle_stages[data.company_lifecycle] || false) {\n      tags.push(\"General Member\");\n    }\n  }\n}\n\n//Check for type of contact\nif (data.type_of_contact) {\n  if (data.type_of_contact.includes(\"College Student\"))\n    tags.push(\"College Student\");\n  if (data.type_of_contact.includes(\"High School Student\"))\n    tags.push(\"High School Student\");\n  if (data.type_of_contact.includes(\"Parent\")) tags.push(\"Parent\");\n  if (data.type_of_contact.includes(\"Professor\")) tags.push(\"Professor\");\n  if (data.type_of_contact.includes(\"Graduate\")) tags.push(\"Alumni\");\n} else {\n  if (data.type_of_company) {\n    if (\n      data.type_of_company.includes(\"University\") ||\n      data.type_of_company.includes(\"Community College\") ||\n      data.type_of_company.includes(\"CGEP\")\n    )\n      tags.push(\"College Unknown\");\n    if (data.type_of_company.includes(\"High School\"))\n      tags.push(\"High School Unknown\");\n  }\n}\n\n//Check for times traveled\nif (data.times_traveled > 0) tags.push(\"SLT Traveler\");\nif (data.times_traveled > 1) tags.push(\"Recurring Traveler\");\n\n//Check for expansion founder\nif (data.founder_member > 0) tags.push(\"Chapter Founder\");\n\n//Check for donations\nif (data.type_of_involvement) {\n  if (data.type_of_involvement.includes(\"donor\")) tags.push(\"Donor\");\n}\nreturn { tags: tags.join() };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        96
+      ],
+      "id": "75fb71cb-f70e-45d6-af52-d6913ab1378c",
+      "name": "return_avatar"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        272
+      ],
+      "id": "ee109532-1337-4530-b2a5-73f8d3275419",
+      "name": "Wait",
+      "webhookId": "ddf56133-de89-42f9-bfc2-806e83f14f6a"
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $(\"hubspot_lookup\").all()[0].json;\nconst tags = [];\nconst lifecycle_stages = {\n  23878512: true,\n  23925576: true,\n  23925577: true,\n  23926968: true,\n};\n//Check for position\nif (data.positon) {\n  if (data.positon.includes(\"President\")) {\n    tags.push(\"Chapter President\");\n  }\n  tags.push(\"E-boarder\");\n} else {\n  if (data.company_lifecycle) {\n    if (lifecycle_stages[data.company_lifecycle] || false) {\n      tags.push(\"General Member\");\n    }\n  }\n}\n\n//Check for type of contact\nif (data.type_of_contact) {\n  if (data.type_of_contact.includes(\"College Student\"))\n    tags.push(\"College Student\");\n  if (data.type_of_contact.includes(\"High School Student\"))\n    tags.push(\"High School Student\");\n  if (data.type_of_contact.includes(\"Parent\")) tags.push(\"Parent\");\n  if (data.type_of_contact.includes(\"Professor\")) tags.push(\"Professor\");\n  if (data.type_of_contact.includes(\"Graduate\")) tags.push(\"Alumni\");\n} else {\n  if (data.type_of_company) {\n    if (\n      data.type_of_company.includes(\"University\") ||\n      data.type_of_company.includes(\"Community College\") ||\n      data.type_of_company.includes(\"CGEP\")\n    )\n      tags.push(\"College Unknown\");\n    if (data.type_of_company.includes(\"High School\"))\n      tags.push(\"High School Unknown\");\n  }\n}\n\n//Check for times traveled\nif (data.times_traveled > 0) tags.push(\"SLT Traveler\");\nif (data.times_traveled > 1) tags.push(\"Recurring Traveler\");\n\n//Check for expansion founder\nif (data.founder_member > 0) tags.push(\"Chapter Founder\");\n\n//Check for donations\nif (data.type_of_involvement) {\n  if (data.type_of_involvement.includes(\"donor\")) tags.push(\"Donor\");\n}\nreturn { tags: tags.join() };\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        176,
+        -96
+      ],
+      "id": "1ec5d761-4410-4a58-8e2d-8bccd1b55e9b",
+      "name": "return_avatar1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "bbs_users",
+          "mode": "list",
+          "cachedResultName": "bbs_users"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "phone_number": "={{ $('Loop Over Items').item.json.phone_number }}",
+            "email": "={{ $('hubspot_lookup').item.json.email }}",
+            "name": "={{ $('hubspot_lookup').item.json.name }} {{ $('hubspot_lookup').item.json.lastname }}",
+            "chapter": "={{ $('hubspot_lookup').item.json.chapter_name }}",
+            "status": "processed",
+            "avatar": "={{ $json.tags }}",
+            "coach": "={{ $('hubspot_lookup').item.json.owner }}"
+          },
+          "matchingColumns": [
+            "phone_number"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone_number",
+              "displayName": "phone_number",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_video_date",
+              "displayName": "last_video_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "chapter",
+              "displayName": "chapter",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "consent",
+              "displayName": "consent",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "avatar",
+              "displayName": "avatar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "coach",
+              "displayName": "coach",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        400,
+        -96
+      ],
+      "id": "09cdae8e-daa7-4a97-b22a-379b43f8845b",
+      "name": "update_user2",
+      "credentials": {
+        "postgres": {
+          "id": "HrjPwXbCSjXnq2mx",
+          "name": "BBS user"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        624,
+        80
+      ],
+      "id": "c66f8404-bd69-4f3a-a009-cbcaff6360ce",
+      "name": "Wait1",
+      "webhookId": "ea7efcdf-49f6-4ad1-8e3e-45572d3fb392"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({\n  accessToken: $vars.discount_generator_apikey,\n});\n\nowners = {\n  190043241: \"Alejandro Beoutis\",\n  168849498: \"Alesandra Zegarra\",\n  881523891: \"Mhairi Macleod\",\n  1599694573: \"Isabella Albarrán\",\n  86664709: \"Federico Rivadeneira\",\n  77676408: \"Victoria Córdova\",\n  168843586: \"Martha Kennedy\",\n  231227222: \"Lorena Muñoz\",\n  79261135: \"Enya Solmaz\",\n  166784099: \"Jennifer Aranguren\",\n  333845834: \"Camila Gutierrez\",\n  168858112: \"Ricardo Soltero\",\n  87653375: \"Mariajose Hernandez\",\n};\n\nconst phone_number = $(\"Loop Over Items\").first().json.phone_number;\nlet contact_data;\nlet company_data;\n//contact data\ncontact_data = await hubspotClient.crm.contacts.searchApi.doSearch({\n  filterGroups: [\n    {\n      filters: [\n        {\n          value: phone_number,\n          propertyName: \"phone\",\n          operator: \"CONTAINS_TOKEN\",\n        },\n      ],\n    },\n  ],\n  sorts: [],\n  properties: [\n    \"hubspot_owner_id\",\n    \"email\",\n    \"name\",\n    \"lastname\",\n    \"type_of_contact\",\n    \"contact_position__c\",\n    \"times_traveled\",\n    \"founder_member\",\n    \"type_of_involvement\",\n  ],\n  limit: 1,\n  after: 0,\n});\n\nif (contact_data.results.length > 0) {\n  company_data = await hubspotClient.crm.companies.searchApi.doSearch({\n    filterGroups: [\n      {\n        filters: [\n          {\n            value: contact_data.results[0].id,\n            propertyName: \"associations.contact\",\n            operator: \"EQ\",\n          },\n        ],\n      },\n    ],\n    sorts: [],\n    properties: [\"name\", \"school_type__c\", \"lifecyclestage\"],\n    limit: 1,\n    after: 0,\n  });\n}\n\nreturn {\n  name: contact_data?.results[0]?.properties.name || null,\n  lastname: contact_data?.results[0]?.properties.lastname || null,\n  email: contact_data?.results[0]?.properties.email || null,\n  owner: owners[contact_data?.results[0]?.properties.hubspot_owner_id] || null,\n  positon: contact_data?.results[0]?.properties.contact_position__c || null,\n  times_traveled: contact_data?.results[0]?.properties.times_traveled || null,\n  type_of_contact: contact_data?.results[0]?.properties.type_of_contact || null,\n  founder_member: contact_data?.results[0]?.properties.founder_member || null,\n  type_of_involvement:\n    contact_data?.results[0]?.properties.type_of_involvement || null,\n  type_of_company: company_data?.results[0]?.properties.school_type__c || null,\n  chapter_name: company_data?.results[0]?.properties.name || null,\n  company_lifecycle:\n    company_data?.results[0]?.properties.lifecyclestage || null,\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -96
+      ],
+      "id": "b8096eb0-a69c-418c-8054-c9c0bb2c404a",
+      "name": "hubspot_lookup"
+    }
+  ],
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2026-06-12T17:10:02.003-05:00",
+          "Readable date": "June 12th 2026, 5:10:02 pm",
+          "Readable time": "5:10:02 pm",
+          "Day of week": "Friday",
+          "Year": "2026",
+          "Month": "June",
+          "Day of month": "12",
+          "Hour": "17",
+          "Minute": "10",
+          "Second": "02",
+          "Timezone": "America/Bogota (UTC-05:00)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-29T20:31:04.857Z",
+      "createdAt": "2026-05-29T20:31:04.857Z",
+      "role": "workflow:owner",
+      "workflowId": "H6VMVGk1lSeyNAgp",
+      "projectId": "Jh2Qr9k13AXs70cH"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-12T22:20:27.438Z",
+  "versionId": "1dec52f3-b3d7-4035-8a9b-28279c59a9f2"
+}
