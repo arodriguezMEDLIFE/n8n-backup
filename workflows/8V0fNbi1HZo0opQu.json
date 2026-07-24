@@ -1,0 +1,692 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-30T16:08:16.139Z",
+    "createdAt": "2026-06-30T16:08:16.139Z",
+    "versionId": "0fdd3212-d8b5-4fa9-a56d-7731b5b338b0",
+    "workflowId": "8V0fNbi1HZo0opQu",
+    "nodes": [
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "cronExpression",
+                "expression": "*/5 7-20 * * *"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -112,
+          368
+        ],
+        "id": "019659d6-1293-4690-bacc-d8a8b6c7796d",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "WITH updated AS (\n  UPDATE maytapi_bbs_messages\n  SET status = 'processing'\n  WHERE status = 'pending'\n    AND (\n      message_type = 'video'\n      OR (\n        message_type = 'text'\n        AND media_url ~* 'https?://(?:www\\.)?loom\\.com/share/[a-f0-9]{32}(\\?[^\\s]*)?'\n      )\n    )\n    AND muLtiple_participants is FALSE\n  RETURNING *\n)\nSELECT *\nFROM updated\nORDER BY timestamp ASC;",
+          "options": {
+            "queryBatching": "single"
+          }
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          112,
+          368
+        ],
+        "id": "a975f8f7-54ed-4937-87cb-c2d6c2eb71cc",
+        "name": "Get pending video messages",
+        "alwaysOutputData": false,
+        "credentials": {
+          "postgres": {
+            "id": "HrjPwXbCSjXnq2mx",
+            "name": "BBS user"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "assignments": {
+            "assignments": [
+              {
+                "id": "7dff997a-76f2-4f8a-889e-a3b01495dfdc",
+                "name": "msg_id",
+                "value": "={{ $json.id }}",
+                "type": "string"
+              },
+              {
+                "id": "6093b6b7-d527-42b1-ae63-4640c7c78b8d",
+                "name": "msg_media_url",
+                "value": "={{ $json.media_url }}",
+                "type": "string"
+              },
+              {
+                "id": "706a81b1-2eb4-428b-b644-bd4557cedaf2",
+                "name": "team",
+                "value": "={{ $json.origin_team.toLowerCase() }}",
+                "type": "string"
+              },
+              {
+                "id": "13303d0f-55c7-4cd6-953a-7dcc8f7d08af",
+                "name": "source",
+                "value": "={{ $json.channel }}",
+                "type": "string"
+              },
+              {
+                "id": "ab8727b1-0385-4fff-b403-77eeb8215649",
+                "name": "name",
+                "value": "={{ $json.name }}",
+                "type": "string"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.set",
+        "typeVersion": 3.4,
+        "position": [
+          768,
+          288
+        ],
+        "id": "01e27418-0ad4-44b1-aa0b-49da8315a418",
+        "name": "Set Fields"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.splitInBatches",
+        "typeVersion": 3,
+        "position": [
+          544,
+          368
+        ],
+        "id": "678d97b8-9a7b-4a50-abc8-25ea5c6fbcb8",
+        "name": "Loop Over Items"
+      },
+      {
+        "parameters": {
+          "amount": 10
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1216,
+          368
+        ],
+        "id": "a2cf7472-6279-4e00-99b9-9873ea309a51",
+        "name": "10s",
+        "webhookId": "53a49d9c-8910-4f54-a13c-b444e15075e5"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "V7Lmu5QG1WNyYgPT",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/V7Lmu5QG1WNyYgPT",
+            "cachedResultName": "Marketing — BBS - Process video"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "link": "={{ $json.msg_media_url }}",
+              "team": "={{ $json.team }}",
+              "source": "={{ $json.source }}",
+              "message_id": "={{ $json.msg_id }}",
+              "name": "={{ $json.name }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "link",
+                "displayName": "link",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "message_id",
+                "displayName": "message_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "team",
+                "displayName": "team",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "source",
+                "displayName": "source",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              },
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "string",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "mode": "each",
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.3,
+        "position": [
+          992,
+          288
+        ],
+        "id": "16a727fe-a0a7-450e-806d-f77421bebd29",
+        "name": "Call 'BBS - Process video'"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "6cea64d1-932a-4594-8513-a18a177d9c44",
+                "leftValue": "={{ $json.success }}",
+                "rightValue": false,
+                "operator": {
+                  "type": "boolean",
+                  "operation": "true",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          320,
+          368
+        ],
+        "id": "6ba4cba7-6589-4cab-a544-f85fcec4a0f9",
+        "name": "If"
+      }
+    ],
+    "connections": {
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "Get pending video messages",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get pending video messages": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Set Fields": {
+        "main": [
+          [
+            {
+              "node": "Call 'BBS - Process video'",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Loop Over Items": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Set Fields",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "10s": {
+        "main": [
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Call 'BBS - Process video'": {
+        "main": [
+          [
+            {
+              "node": "10s",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [],
+          [
+            {
+              "node": "Loop Over Items",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Diego Bejarano",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "0fdd3212-d8b5-4fa9-a56d-7731b5b338b0",
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get pending video messages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get pending video messages": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Fields": {
+      "main": [
+        [
+          {
+            "node": "Call 'BBS - Process video'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Set Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10s": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'BBS - Process video'": {
+      "main": [
+        [
+          {
+            "node": "10s",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-05-27T21:10:49.596Z",
+  "id": "8V0fNbi1HZo0opQu",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "BBS - Get pending videos",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/5 7-20 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -112,
+        368
+      ],
+      "id": "019659d6-1293-4690-bacc-d8a8b6c7796d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "WITH updated AS (\n  UPDATE maytapi_bbs_messages\n  SET status = 'processing'\n  WHERE status = 'pending'\n    AND (\n      message_type = 'video'\n      OR (\n        message_type = 'text'\n        AND media_url ~* 'https?://(?:www\\.)?loom\\.com/share/[a-f0-9]{32}(\\?[^\\s]*)?'\n      )\n    )\n    AND muLtiple_participants is FALSE\n  RETURNING *\n)\nSELECT *\nFROM updated\nORDER BY timestamp ASC;",
+        "options": {
+          "queryBatching": "single"
+        }
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        112,
+        368
+      ],
+      "id": "a975f8f7-54ed-4937-87cb-c2d6c2eb71cc",
+      "name": "Get pending video messages",
+      "alwaysOutputData": false,
+      "credentials": {
+        "postgres": {
+          "id": "HrjPwXbCSjXnq2mx",
+          "name": "BBS user"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7dff997a-76f2-4f8a-889e-a3b01495dfdc",
+              "name": "msg_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "6093b6b7-d527-42b1-ae63-4640c7c78b8d",
+              "name": "msg_media_url",
+              "value": "={{ $json.media_url }}",
+              "type": "string"
+            },
+            {
+              "id": "706a81b1-2eb4-428b-b644-bd4557cedaf2",
+              "name": "team",
+              "value": "={{ $json.origin_team.toLowerCase() }}",
+              "type": "string"
+            },
+            {
+              "id": "13303d0f-55c7-4cd6-953a-7dcc8f7d08af",
+              "name": "source",
+              "value": "={{ $json.channel }}",
+              "type": "string"
+            },
+            {
+              "id": "ab8727b1-0385-4fff-b403-77eeb8215649",
+              "name": "name",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        768,
+        288
+      ],
+      "id": "01e27418-0ad4-44b1-aa0b-49da8315a418",
+      "name": "Set Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        544,
+        368
+      ],
+      "id": "678d97b8-9a7b-4a50-abc8-25ea5c6fbcb8",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1216,
+        368
+      ],
+      "id": "a2cf7472-6279-4e00-99b9-9873ea309a51",
+      "name": "10s",
+      "webhookId": "53a49d9c-8910-4f54-a13c-b444e15075e5"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "V7Lmu5QG1WNyYgPT",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/V7Lmu5QG1WNyYgPT",
+          "cachedResultName": "Marketing — BBS - Process video"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "link": "={{ $json.msg_media_url }}",
+            "team": "={{ $json.team }}",
+            "source": "={{ $json.source }}",
+            "message_id": "={{ $json.msg_id }}",
+            "name": "={{ $json.name }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "message_id",
+              "displayName": "message_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "team",
+              "displayName": "team",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        992,
+        288
+      ],
+      "id": "16a727fe-a0a7-450e-806d-f77421bebd29",
+      "name": "Call 'BBS - Process video'"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "6cea64d1-932a-4594-8513-a18a177d9c44",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        320,
+        368
+      ],
+      "id": "6ba4cba7-6589-4cab-a544-f85fcec4a0f9",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-05-27T21:10:49.596Z",
+      "createdAt": "2026-05-27T21:10:49.596Z",
+      "role": "workflow:owner",
+      "workflowId": "8V0fNbi1HZo0opQu",
+      "projectId": "Jh2Qr9k13AXs70cH"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-30T16:08:16.138Z",
+  "versionId": "0fdd3212-d8b5-4fa9-a56d-7731b5b338b0"
+}
