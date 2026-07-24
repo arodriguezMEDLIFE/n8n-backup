@@ -1,0 +1,209 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2025-12-04T23:25:24.852Z",
+    "createdAt": "2025-12-04T23:25:24.852Z",
+    "versionId": "9c6314a4-2feb-4f4d-b073-8303455a8a23",
+    "workflowId": "4UmSG6rgk02KCgBU",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "availability-test",
+          "responseMode": "responseNode",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -192,
+          0
+        ],
+        "id": "7a823276-f820-4ea9-b554-98d3900d20d7",
+        "name": "Webhook",
+        "webhookId": "60d9bd36-7418-4241-b7a7-2ee8711892b5"
+      },
+      {
+        "parameters": {
+          "jsCode": "const { DateTime } = require(\"luxon\");\n\nconst webhook = $input.first().json.body;\nconst localDateTime = webhook.localDateTime;\nconst tz = webhook.timeZone;\nconst email = webhook.email;\n\n// ---- Config (tweak if you want) ----\nconst EMAIL_MAX_LEN = 254;\n// Only local ISO without Z/offset: \"YYYY-MM-DDTHH:mm\" (seconds/millis optional)\nconst ISO_LOCAL_PATTERN =\n  /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(?::(\\d{2})(?:\\.(\\d{1,3}))?)?$/;\n\n// ---- Helpers ----\nfunction isValidEmail(s) {\n  if (typeof s !== \"string\") return false;\n  if (s.length === 0 || s.length > EMAIL_MAX_LEN) return false;\n  const re = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n  return re.test(s);\n}\n\nfunction isValidIana(zone) {\n  if (typeof zone !== \"string\" || !zone.trim()) return false;\n  const probe = DateTime.local().setZone(zone);\n  return probe.isValid;\n}\n\nfunction parseLocalInZone(isoLocalStr, zone) {\n  // Reject if it has Z or an explicit offset — we expect a *local* wall time\n  if (/[zZ]$/.test(isoLocalStr) || /[+-]\\d{2}:\\d{2}$/.test(isoLocalStr)) {\n    return { ok: false, error: \"localDateTime must NOT include Z or an offset\" };\n  }\n\n  if (!ISO_LOCAL_PATTERN.test(isoLocalStr)) {\n    return {\n      ok: false,\n      error:\n        \"expected ISO local format like 2025-08-21T08:00 or 2025-08-21T08:00:00\",\n    };\n  }\n\n  // Parse as **local wall time in the provided zone**, not converting from system tz\n  const dt = DateTime.fromISO(isoLocalStr, { zone, setZone: true });\n\n  if (!dt.isValid) {\n    return { ok: false, error: dt.invalidReason || \"invalid datetime\" };\n  }\n  return { ok: true, dt };\n}\n\n// ---- Validation ----\nconst errors = [];\n\nif (!tz) errors.push(\"timezone is missing\");\nif (tz && !isValidIana(tz)) errors.push(\"timezone must be a valid IANA name (e.g., America/Lima)\");\n\nif (!email) errors.push(\"email is missing\");\nif (email && !isValidEmail(email)) errors.push(\"email is not a valid format\");\n\nlet parsed;\nif (!localDateTime) {\n  errors.push(\"localDateTime is missing\");\n} else {\n  parsed = parseLocalInZone(localDateTime, tz || \"UTC\");\n  if (!parsed.ok) errors.push(`localDateTime invalid: ${parsed.error}`);\n}\n\nif (errors.length) {\n  throw new Error(\"Validation failed: \" + errors.join(\" | \"));\n}\n\n// ---- Success: normalized outputs ----\nconst dt = parsed.dt; // Luxon DateTime in the requested tz\nconst day = dt.day\nconst available = day % 2 === 0; // true if even, false if odd\n\nreturn [\n  {\n    json: {\n      available,\n    },\n  },\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          16,
+          0
+        ],
+        "id": "3b32d6cb-ff78-44c5-b00b-289246b50c39",
+        "name": "Code",
+        "onError": "continueRegularOutput"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "n8n-nodes-base.respondToWebhook",
+        "typeVersion": 1.4,
+        "position": [
+          224,
+          0
+        ],
+        "id": "cf87b36b-3e02-43ca-b197-d7f295170c72",
+        "name": "Respond to Webhook"
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Code",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code": {
+        "main": [
+          [
+            {
+              "node": "Respond to Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Medlife Automations",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "9c6314a4-2feb-4f4d-b073-8303455a8a23",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-10-04T05:53:41.612Z",
+  "id": "4UmSG6rgk02KCgBU",
+  "isArchived": false,
+  "meta": null,
+  "name": "ava",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "availability-test",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "7a823276-f820-4ea9-b554-98d3900d20d7",
+      "name": "Webhook",
+      "webhookId": "60d9bd36-7418-4241-b7a7-2ee8711892b5"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { DateTime } = require(\"luxon\");\n\nconst webhook = $input.first().json.body;\nconst localDateTime = webhook.localDateTime;\nconst tz = webhook.timeZone;\nconst email = webhook.email;\n\n// ---- Config (tweak if you want) ----\nconst EMAIL_MAX_LEN = 254;\n// Only local ISO without Z/offset: \"YYYY-MM-DDTHH:mm\" (seconds/millis optional)\nconst ISO_LOCAL_PATTERN =\n  /^(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(?::(\\d{2})(?:\\.(\\d{1,3}))?)?$/;\n\n// ---- Helpers ----\nfunction isValidEmail(s) {\n  if (typeof s !== \"string\") return false;\n  if (s.length === 0 || s.length > EMAIL_MAX_LEN) return false;\n  const re = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/;\n  return re.test(s);\n}\n\nfunction isValidIana(zone) {\n  if (typeof zone !== \"string\" || !zone.trim()) return false;\n  const probe = DateTime.local().setZone(zone);\n  return probe.isValid;\n}\n\nfunction parseLocalInZone(isoLocalStr, zone) {\n  // Reject if it has Z or an explicit offset — we expect a *local* wall time\n  if (/[zZ]$/.test(isoLocalStr) || /[+-]\\d{2}:\\d{2}$/.test(isoLocalStr)) {\n    return { ok: false, error: \"localDateTime must NOT include Z or an offset\" };\n  }\n\n  if (!ISO_LOCAL_PATTERN.test(isoLocalStr)) {\n    return {\n      ok: false,\n      error:\n        \"expected ISO local format like 2025-08-21T08:00 or 2025-08-21T08:00:00\",\n    };\n  }\n\n  // Parse as **local wall time in the provided zone**, not converting from system tz\n  const dt = DateTime.fromISO(isoLocalStr, { zone, setZone: true });\n\n  if (!dt.isValid) {\n    return { ok: false, error: dt.invalidReason || \"invalid datetime\" };\n  }\n  return { ok: true, dt };\n}\n\n// ---- Validation ----\nconst errors = [];\n\nif (!tz) errors.push(\"timezone is missing\");\nif (tz && !isValidIana(tz)) errors.push(\"timezone must be a valid IANA name (e.g., America/Lima)\");\n\nif (!email) errors.push(\"email is missing\");\nif (email && !isValidEmail(email)) errors.push(\"email is not a valid format\");\n\nlet parsed;\nif (!localDateTime) {\n  errors.push(\"localDateTime is missing\");\n} else {\n  parsed = parseLocalInZone(localDateTime, tz || \"UTC\");\n  if (!parsed.ok) errors.push(`localDateTime invalid: ${parsed.error}`);\n}\n\nif (errors.length) {\n  throw new Error(\"Validation failed: \" + errors.join(\" | \"));\n}\n\n// ---- Success: normalized outputs ----\nconst dt = parsed.dt; // Luxon DateTime in the requested tz\nconst day = dt.day\nconst available = day % 2 === 0; // true if even, false if odd\n\nreturn [\n  {\n    json: {\n      available,\n    },\n  },\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        0
+      ],
+      "id": "3b32d6cb-ff78-44c5-b00b-289246b50c39",
+      "name": "Code",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        0
+      ],
+      "id": "cf87b36b-3e02-43ca-b197-d7f295170c72",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "108",
+            "x-forwarded-for": "38.25.52.139",
+            "content-type": "application/json",
+            "user-agent": "PostmanRuntime/7.49.1",
+            "accept-encoding": "gzip, br",
+            "postman-token": "86d73206-450f-4a90-ab2e-980cafc8cb59",
+            "cf-ray": "9a8f09e61a76502c-GRU",
+            "accept": "*/*",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "38.25.52.139",
+            "cf-ipcountry": "PE",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "localDateTime": "2025-01-01T15:06:00",
+            "timeZone": "America/Lima",
+            "email": "testy@test.com"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/availability-test",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-10-04T05:53:41.612Z",
+      "createdAt": "2025-10-04T05:53:41.612Z",
+      "role": "workflow:owner",
+      "workflowId": "4UmSG6rgk02KCgBU",
+      "projectId": "Zk1Hp7v36MXd24qN"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2025-12-04T23:25:24.787Z",
+  "versionId": "9c6314a4-2feb-4f4d-b073-8303455a8a23"
+}
