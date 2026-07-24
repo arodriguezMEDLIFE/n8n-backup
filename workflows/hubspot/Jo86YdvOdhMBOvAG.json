@@ -1,0 +1,3916 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-15T14:54:42.537Z",
+    "createdAt": "2026-01-15T14:54:42.537Z",
+    "versionId": "a0f9a42b-269f-4c76-8f1d-3e236b266bce",
+    "workflowId": "Jo86YdvOdhMBOvAG",
+    "nodes": [
+      {
+        "parameters": {
+          "content": "```json\n[\n{\n\"headers\": {\n\"host\": \"n8n.medlifemovement.org\",\n\"connection\": \"upgrade\",\n\"content-length\": \"2929\",\n\"accept-encoding\": \"gzip, br\",\n\"x-forwarded-for\": \"45.32.192.90\",\n\"cf-ray\": \"898fb39cee483ac7-DFW\",\n\"x-forwarded-proto\": \"https\",\n\"cf-visitor\": \"{\"scheme\":\"https\"}\",\n\"content-type\": \"application/json\",\n\"x-cal-signature-256\": \"no-secret-provided\",\n\"accept\": \"*/*\",\n\"accept-language\": \"*\",\n\"sec-fetch-mode\": \"cors\",\n\"user-agent\": \"node\",\n\"cf-connecting-ip\": \"45.32.192.90\",\n\"cdn-loop\": \"cloudflare\",\n\"cf-ipcountry\": \"US\"\n},\n\"params\": {\n},\n\"query\": {\n},\n\"body\": {\n\"triggerEvent\": \"BOOKING_CREATED\",\n\"createdAt\": \"2024-06-24T21:09:55.217Z\",\n\"payload\": {\n\"bookerUrl\": \"https://calcom.medlifemovement.org\",\n\"type\": \"goal-setting-medlife\",\n\"title\": \"Goal Setting Medlife between Franz Rebaza and Test Webhook\",\n\"description\": \"This is a meeting for goal setting (editable)\",\n\"additionalNotes\": \"asdasd\",\n\"customInputs\": {\n},\n\"startTime\": \"2024-06-24T23:45:00Z\",\n\"endTime\": \"2024-06-25T00:00:00Z\",\n\"organizer\": {\n\"id\": 1,\n\"name\": \"Franz Rebaza\",\n\"email\": \"frebaza@medlifemovement.org\",\n\"username\": \"frebaza\",\n\"timeZone\": \"America/Bogota\",\n\"language\": {\n\"locale\": \"en\"\n},\n\"timeFormat\": \"h:mma\",\n\"utcOffset\": -300\n},\n\"responses\": {\n\"name\": {\n\"label\": \"your_name\",\n\"value\": \"Test Webhook\",\n\"isHidden\": false\n},\n\"email\": {\n\"label\": \"email_address\",\n\"value\": \"franz-1241@hotmail.com\",\n\"isHidden\": false\n},\n\"location\": {\n\"label\": \"location\",\n\"value\": {\n\"optionValue\": \"\",\n\"value\": \"integrations:zoom\"\n},\n\"isHidden\": false\n},\n\"title\": {\n\"label\": \"what_is_this_meeting_about\",\n\"isHidden\": true\n},\n\"notes\": {\n\"label\": \"Additional Notes (optional)\",\n\"value\": \"asdasd\",\n\"isHidden\": false\n},\n\"guests\": {\n\"label\": \"additional_guests\",\n\"value\": [\n],\n\"isHidden\": false\n},\n\"rescheduleReason\": {\n\"label\": \"reason_for_reschedule\",\n\"isHidden\": false\n},\n\"chaptername\": {\n\"label\": \"Write your Chapter\",\n\"value\": \"Indiana University Purdue University Indianapolis\",\n\"isHidden\": false\n}\n},\n\"userFieldsResponses\": {\n\"chaptername\": {\n\"label\": \"Write your Chapter\",\n\"value\": \"Indiana University Purdue University Indianapolis\",\n\"isHidden\": false\n}\n},\n\"attendees\": [\n{\n\"email\": \"franz-1241@hotmail.com\",\n\"name\": \"Test Webhook\",\n\"firstName\": \"\",\n\"lastName\": \"\",\n\"timeZone\": \"America/Bogota\",\n\"language\": {\n\"locale\": \"en\"\n},\n\"utcOffset\": -300\n}\n],\n\"location\": \"integrations:zoom\",\n\"conferenceCredentialId\": 7,\n\"destinationCalendar\": [\n{\n\"id\": 1,\n\"integration\": \"google_calendar\",\n\"externalId\": \"frebaza@medlifemovement.org\",\n\"primaryEmail\": \"frebaza@medlifemovement.org\",\n\"userId\": 1,\n\"eventTypeId\": null,\n\"credentialId\": 1\n}\n],\n\"hideCalendarNotes\": false,\n\"requiresConfirmation\": false,\n\"eventTypeId\": 11,\n\"seatsShowAttendees\": true,\n\"seatsPerTimeSlot\": null,\n\"seatsShowAvailabilityCount\": true,\n\"schedulingType\": null,\n\"iCalUID\": \"88bDhhZJk8UJQCbjR1UbXo@Cal.com\",\n\"iCalSequence\": 0,\n\"uid\": \"88bDhhZJk8UJQCbjR1UbXo\",\n\"conferenceData\": {\n\"createRequest\": {\n\"requestId\": \"8867fe6c-9326-5912-9766-fb3553f58d20\"\n}\n},\n\"videoCallData\": {\n\"type\": \"zoom_video\",\n\"id\": \"82668816449\",\n\"password\": \"410861\",\n\"url\": \"https://us02web.zoom.us/j/82668816449?pwd=Tmv87mSHM1NLUgzcfFqR1tfgsF8Qa9.1\"\n},\n\"appsStatus\": [\n{\n\"appName\": \"zoom\",\n\"type\": \"zoom_video\",\n\"success\": 1,\n\"failures\": 0,\n\"errors\": [\n]\n},\n{\n\"appName\": \"google-calendar\",\n\"type\": \"google_calendar\",\n\"success\": 1,\n\"failures\": 0,\n\"errors\": [\n],\n\"warnings\": [\n]\n},\n{\n\"appName\": \"hubspot\",\n\"type\": \"hubspot_crm\",\n\"success\": 1,\n\"failures\": 0,\n\"errors\": [\n]\n}\n],\n\"eventTitle\": \"Goal Setting Medlife\",\n\"eventDescription\": \"This is a meeting for goal setting (editable)\",\n\"price\": 0,\n\"currency\": \"usd\",\n\"length\": 15,\n\"bookingId\": 4,\n\"metadata\": {\n\"videoCallUrl\": \"https://us02web.zoom.us/j/82668816449?pwd=Tmv87mSHM1NLUgzcfFqR1tfgsF8Qa9.1\"\n},\n\"status\": \"ACCEPTED\"\n}\n},\n\"webhookUrl\": \"https://n8n.medlifemovement.org/webhook-test/d961a9d8-400b-4444-991e-7aef7b3b5477\",\n\"executionMode\": \"test\"\n}\n]\n```",
+          "height": 122.23489167616876,
+          "width": 171.81299885974903,
+          "color": 7
+        },
+        "id": "f8e88807-b4ce-4ac9-ac6e-8a699d8b73c8",
+        "name": "Sticky Note1",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          752,
+          224
+        ]
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "calcom_events",
+            "mode": "list",
+            "cachedResultName": "calcom_events"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "created_at": "={{ $now.toUTC(-300) }}",
+              "execution_mode": "={{ $('Calcom Webhook').all()[0].json.executionMode }}",
+              "event_type": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+              "request": "={{ $('Calcom Webhook').all()[0].json }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "uid",
+                "displayName": "uid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "execution_mode",
+                "displayName": "execution_mode",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "event_type",
+                "displayName": "event_type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "request",
+                "displayName": "request",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "object",
+                "canBeUsedToMatch": true
+              }
+            ]
+          },
+          "options": {
+            "replaceEmptyStrings": true
+          }
+        },
+        "id": "48352538-8f0e-444b-99f1-e129984320db",
+        "name": "Log Webhook",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          1088,
+          384
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "BookingReference",
+            "mode": "list",
+            "cachedResultName": "BookingReference"
+          },
+          "limit": 5,
+          "where": {
+            "values": [
+              {
+                "column": "bookingId",
+                "value": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}"
+              },
+              {
+                "column": "type",
+                "value": "hubspot_crm"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "16d89efd-14ac-4e32-9cbf-f0fca6c46730",
+        "name": "get_hs_meeting_id",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          2368,
+          -384
+        ],
+        "notesInFlow": true,
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "GHWiSaZMBtM0J7LO",
+            "name": "Calcom DB"
+          }
+        },
+        "notes": "Select on Calcom DB"
+      },
+      {
+        "parameters": {
+          "content": "BOOKING_CREATED",
+          "height": 550,
+          "width": 2449
+        },
+        "id": "f6cc3a07-2a4d-4516-987a-c1cb4c5850f2",
+        "name": "Sticky Note",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1936,
+          -560
+        ]
+      },
+      {
+        "parameters": {
+          "content": "BOOKING_CANCELED\n",
+          "height": 200.50171037628274,
+          "width": 1013.911060433295
+        },
+        "id": "be733ad3-8cae-4dcf-85c6-f3f1adf92388",
+        "name": "Sticky Note2",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1920,
+          48
+        ]
+      },
+      {
+        "parameters": {
+          "content": "BOOKING_RESCHEDULED\n\n",
+          "height": 215.42983899529463,
+          "width": 1264.286989085598
+        },
+        "id": "e6b75168-68db-449d-a62d-dac1839c976d",
+        "name": "Sticky Note3",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1920,
+          288
+        ]
+      },
+      {
+        "parameters": {
+          "content": "MEETING_STARTED\n",
+          "height": 200.50171037628274,
+          "width": 1013.911060433295
+        },
+        "id": "c43faacf-1224-4240-95a9-1b5f4f810271",
+        "name": "Sticky Note4",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1920,
+          528
+        ]
+      },
+      {
+        "parameters": {
+          "content": "MEETING_ENDED\n",
+          "height": 200.50171037628274,
+          "width": 1013.911060433295
+        },
+        "id": "66af8af4-47dd-4450-9983-12c1ba9df83d",
+        "name": "Sticky Note5",
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          1920,
+          784
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "BookingReference",
+            "mode": "list",
+            "cachedResultName": "BookingReference"
+          },
+          "limit": 5,
+          "where": {
+            "values": [
+              {
+                "column": "bookingId",
+                "value": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}"
+              },
+              {
+                "column": "type",
+                "value": "hubspot_crm"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "d099c2d8-5ca9-4acd-9f82-303f785b3e7a",
+        "name": "get_new_hs_meeting",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          1968,
+          352
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "GHWiSaZMBtM0J7LO",
+            "name": "Calcom DB"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "calcom_hs_bookings",
+            "mode": "list",
+            "cachedResultName": "calcom_hs_bookings"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "is_deleted": false,
+              "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+              "organizer_email": "={{ $('Calcom Webhook').item.json.body.payload.organizer.email }}",
+              "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+              "zoom_meeting_id": "={{ $('Calcom Webhook').first().json.body.payload.metadata.videoCallUrl }}",
+              "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+              "hs_meeting_id": "={{ $('get_hs_meeting_id').item.json.uid ?? $('create_hs_meeting').item.json.hs_meeting_id }}",
+              "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId }}",
+              "calcom_meeting_name": "={{ $('Calcom Webhook').item.json.body.payload.eventTitle }}",
+              "google_meet_link": "={{$('Calcom Webhook').all()[0].json.body.payload.metadata.videoCallUrl}}",
+              "type": "={{ $('Calcom Webhook').item.json.body.payload.type }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "calcom_booking_uid",
+                "displayName": "calcom_booking_uid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "calcom_booking_id",
+                "displayName": "calcom_booking_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "hs_meeting_id",
+                "displayName": "hs_meeting_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "zoom_meeting_id",
+                "displayName": "zoom_meeting_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "organizer_email",
+                "displayName": "organizer_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "atendee_email",
+                "displayName": "atendee_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "atendee_seat_id",
+                "displayName": "atendee_seat_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "is_deleted",
+                "displayName": "is_deleted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "calcom_meeting_name",
+                "displayName": "calcom_meeting_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "google_meet_link",
+                "displayName": "google_meet_link",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "type",
+                "displayName": "type",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "id": "4e88d4b0-ecf9-4312-8ede-d84c9a031539",
+        "name": "calcom_hs_bookings",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          3344,
+          -400
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                      "rightValue": "BOOKING_CREATED",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "218661d4-439c-4cc6-8c28-83ed57276390"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "BOOKING_CREATED"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "77c8a94f-5e1b-439a-afda-cf8cc38bbfb3",
+                      "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                      "rightValue": "BOOKING_CANCELLED",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "BOOKING_CANCELLED"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "0ed97ab4-c186-4b46-9209-b34141ec0282",
+                      "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                      "rightValue": "BOOKING_RESCHEDULED",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "BOOKING_RESCHEDULED"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "356bd51b-6d31-476a-a595-0293ff76f739",
+                      "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                      "rightValue": "MEETING_STARTED",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "MEETING_STARTED"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": false,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 1
+                  },
+                  "conditions": [
+                    {
+                      "id": "f2487400-f3d6-4ec6-9d05-371ce8018afe",
+                      "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                      "rightValue": "MEETING_ENDED",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "MEETING_ENDED"
+              }
+            ]
+          },
+          "options": {
+            "ignoreCase": true
+          }
+        },
+        "id": "ec788f28-51a3-4652-8a31-150afb466f64",
+        "name": "Switch",
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3,
+        "position": [
+          1552,
+          368
+        ]
+      },
+      {
+        "parameters": {},
+        "id": "7761d2a5-873d-407d-92d7-dac9ac2aed4e",
+        "name": "Wait",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          3664,
+          128
+        ],
+        "webhookId": "8ee0dccb-8fc7-4354-884c-1b16ccd7bcaf"
+      },
+      {
+        "parameters": {},
+        "id": "9f305fe5-b8ab-4001-a301-9ee23b290f0b",
+        "name": "No Operation, do nothing",
+        "type": "n8n-nodes-base.noOp",
+        "typeVersion": 1,
+        "position": [
+          2192,
+          112
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\n\n// Function to search for a contact\nasync function search_contact(email) {\n  try {\n    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: \"hs_additional_emails\",\n              operator: \"CONTAINS_TOKEN\"\n            }\n          ]\n        },\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: 'email',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [],\n      limit: 1,\n      after: 0\n    });\n    return searchResponse;\n  } catch (e) {\n    throw Error(e);\n  }\n}\n\n// Function to create a contact\nasync function create_contact(email, company, fullName) {\n  var nameParts = fullName.split(' ');\n  var firstName = nameParts.slice(0, -1).join(' '); // Everything except the last word\n  var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''; // The last word\n\n  const properties = {\n    email: email,\n    firstname: firstName,\n    lastname: lastName,\n    company: company\n  };\n  const SimplePublicObjectInputForCreate = { properties };\n\n  try {\n    const createResponse = await hubspotClient.crm.contacts.basicApi.create(SimplePublicObjectInputForCreate);\n    return createResponse;\n  } catch (e) {\n      if (e.code ===409) {\n        const message = e.body.message;\n        const regex = /\\d+/;\n        const match = message.match(regex);\n        if (match) {\n          const existingId = match[0];\n          return {id: existingId};\n        } else {\n          throw Error(\"ID not found in the message 403.\");\n        }\n      }\n    else {\n      throw Error(e)\n    }\n    }\n}\nconst email = $('Calcom Webhook').item.json.body.payload.responses.email.value;\nconst company = $('Calcom Webhook').first().json.body.payload.responses['chapter-name']?.value ?? $('Calcom Webhook').first().json.body.payload.responses.school.value;\nconst fullName = $('Calcom Webhook').item.json.body.payload.responses.name.value.trim();\n\nlet searchResponse = await search_contact(email);\nlet toObjectId;\nif (searchResponse.results.length > 0 && searchResponse.results[0].id) {\n  toObjectId = searchResponse.results[0].id;\n} else {\n  const newContact = await create_contact(email, company, fullName);\n  toObjectId = newContact.id;\n}\nconsole.log(`To Object ID: ${toObjectId}`);\n\n\nconst properties = {\n  \"hs_activity_type\": $('Calcom Webhook').all()[0].json.body.payload.type,\n  \"hs_meeting_location\": $('Calcom Webhook').all()[0].json.body.payload.metadata.videoCallUrl,\n  \"hubspot_owner_id\": $('get_hs_owner_id').first().json.hubspot_owner_id\n};\nconst SimplePublicObjectInput = { properties };\nconst meetingId = $('get_hs_meeting_id').all()[0].json.uid;\n\ntry {\n  const apiResponse = await hubspotClient.crm.objects.meetings.basicApi.update(meetingId, SimplePublicObjectInput);\n  return {response: apiResponse, contact_id : toObjectId};\n} catch (e) {\n    console.log(e)\n  return {meeting_id_error : $('get_hs_meeting_id').all()[0].json.uid}\n}"
+        },
+        "id": "a86fffea-48cd-4c2b-8de4-c438563044dd",
+        "name": "update_hs_meeting",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3120,
+          -512
+        ]
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\n\nconst properties = {\n  \"hs_activity_type\": $('Calcom Webhook').all()[0].json.body.payload.type,\n};\nconst SimplePublicObjectInput = { properties };\nconst meetingId = $('get_new_hs_meeting').all()[0].json.uid;\n\ntry {\n  const apiResponse = await hubspotClient.crm.objects.meetings.basicApi.update(meetingId, SimplePublicObjectInput);\n  return apiResponse;\n} catch (e) {\n    console.log(e)\n}"
+        },
+        "id": "7def7f31-72cf-4bd6-a6fc-8a823446ce48",
+        "name": "update_hs_meeting1",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2304,
+          352
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "1231fa6b-98f0-4ac8-968e-bfb72a24d003",
+                "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.payload.recurringEvent }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "exists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "aba57bca-5e20-4b67-94fa-8038535bd26e",
+        "name": "is_recurring",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          3568,
+          -400
+        ]
+      },
+      {
+        "parameters": {
+          "authentication": "oAuth2",
+          "operation": "update",
+          "meetingId": "={{ $('Calcom Webhook').item.json.body.payload.videoCallData.id }}",
+          "updateFields": {
+            "type": 2
+          }
+        },
+        "id": "c114044c-1e66-4174-8af8-9f3560fa705a",
+        "name": "Turn into non recurring",
+        "type": "n8n-nodes-base.zoom",
+        "typeVersion": 1,
+        "position": [
+          3888,
+          -704
+        ],
+        "credentials": {
+          "zoomOAuth2Api": {
+            "id": "T4qVKOZQdWKLJeUZ",
+            "name": "Zoom account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "calcom_hs_bookings",
+            "mode": "list",
+            "cachedResultName": "calcom_hs_bookings"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "is_deleted": false,
+              "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+              "organizer_email": "={{ $('Calcom Webhook').item.json.body.payload.organizer.email }}",
+              "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+              "zoom_meeting_id": "={{ $('Calcom Webhook').item.json.body.payload.videoCallData.id }}",
+              "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+              "hs_meeting_id": "={{ $('get_new_hs_meeting').item.json.uid }}",
+              "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId }}",
+              "calcom_meeting_name": "={{ $('Calcom Webhook').item.json.body.payload.eventTitle }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "calcom_booking_uid",
+                "displayName": "calcom_booking_uid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "calcom_booking_id",
+                "displayName": "calcom_booking_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "hs_meeting_id",
+                "displayName": "hs_meeting_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "zoom_meeting_id",
+                "displayName": "zoom_meeting_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "organizer_email",
+                "displayName": "organizer_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "atendee_email",
+                "displayName": "atendee_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "atendee_seat_id",
+                "displayName": "atendee_seat_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "is_deleted",
+                "displayName": "is_deleted",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "calcom_meeting_name",
+                "displayName": "calcom_meeting_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "eb6fa999-91d6-450d-bcf5-ca7272c4d91c",
+        "name": "calcom_hs_bookings2",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          3040,
+          352
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "id": "6785a8d3-9688-4e7e-9580-9b1ecc276d97",
+        "name": "Wait1",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          1312,
+          384
+        ],
+        "webhookId": "cca62d05-753a-4a48-80fa-fd9a01ed7aa4"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "id": "cfd74fab-4870-402c-b7da-92873da6977f",
+        "name": "Wait2",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2752,
+          -384
+        ],
+        "webhookId": "669ee4f2-0f21-4c41-abf2-15bdb002f4b9"
+      },
+      {
+        "parameters": {
+          "amount": 1
+        },
+        "id": "38959b62-55d8-45d3-8ed7-ef6eb73906bc",
+        "name": "Wait3",
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          2128,
+          352
+        ],
+        "webhookId": "fce3c6bd-f8c4-4436-9c4a-95e868813189"
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require('@hubspot/api-client');\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key });\nconst validator = require(\"validator\")\n\n\n//Function to sanitize email\nfunction sanitizeEmail(rawEmail) {\n  let email = rawEmail.trim().toLowerCase();\n\n  // Common TLD typo corrections\n  const corrections = {\n    \".cmo\": \".com\",\n    \".cpm\": \".com\",\n    \".cim\": \".com\",\n    \".cok\": \".com\",\n    \".orh\": \".org\",\n    \".ogr\": \".org\",\n    \".con\": \".com\",\n    \".edh\": \".edu\",\n    \".esu\": \".edu\"\n  };\n  for (const [typo, fix] of Object.entries(corrections)) {\n    if (email.endsWith(typo)) {\n      email = email.slice(0, -typo.length) + fix;\n      break;\n    }\n  }\n  if (validator.isEmail(email)) {\n    return email;\n  }\n  return null;\n}\n\n// Function to search for a contact\nasync function search_contact(email) {\n  try {\n    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: \"hs_additional_emails\",\n              operator: \"CONTAINS_TOKEN\"\n            }\n          ]\n        },\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: 'email',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [],\n      limit: 1,\n      after: 0\n    });\n    return searchResponse;\n  } catch (e) {\n    throw Error(e);\n  }\n}\n\n// Function to create a contact\nasync function create_contact(email, company, fullName) {\n  var nameParts = fullName.split(' ');\n  var firstName = nameParts.slice(0, -1).join(' '); // Everything except the last word\n  var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''; // The last word\n\n  const properties = {\n    email: email,\n    firstname: firstName,\n    lastname: lastName,\n    company: company\n  };\n  const SimplePublicObjectInputForCreate = { properties };\n\n  try {\n    const createResponse = await hubspotClient.crm.contacts.basicApi.create(SimplePublicObjectInputForCreate);\n    return createResponse;\n  } catch (e) {\n      if (e.code ===409) {\n        const message = e.body.message;\n        const regex = /\\d+/;\n        const match = message.match(regex);\n        if (match) {\n          const existingId = match[0];\n          return {id: existingId};\n        } else {\n          throw Error(\"ID not found in the message 403.\");\n        }\n      }\n    else {\n      throw Error(e)\n    }\n    }\n}\n\n// Associate meeting with contact\nconst raw_email = $('Calcom Webhook').first().json.body.payload.responses.email.value;\nconst email = sanitizeEmail(raw_email)\nif (!email) {\n  throw new Error(\"failed to sanitize email\")\n}\nconst company = $('Calcom Webhook').first().json.body.payload.responses['chapter-name']?.value ?? $('Calcom Webhook').first().json.body.payload.responses.school?.value ?? $('Calcom Webhook').first().json.body.payload.responses.School.value;\nconst fullName = $('Calcom Webhook').first().json.body.payload.responses.name.value.trim();\n\nlet searchResponse = await search_contact(email);\nconst fromObjectType = \"MEETING\";\nconst fromObjectId = $('check_if_exists').all()[0].json.hs_meeting_id;\nconst toObjectType = \"CONTACT\";\nlet toObjectId;\nif (searchResponse.results.length > 0 && searchResponse.results[0].id) {\n  toObjectId = searchResponse.results[0].id;\n} else {\n  const newContact = await create_contact(email, company, fullName);\n  toObjectId = newContact.id;\n}\n\n\n\n\ntry {\n  const apiResponse = await hubspotClient.crm.associations.v4.basicApi.createDefault(fromObjectType, fromObjectId, toObjectType, toObjectId);\n  return { response: apiResponse, contact_id: toObjectId };\n} catch (e) {\n  throw Error(e);\n}\n"
+        },
+        "id": "20b4048e-7cc2-4798-ba01-6d7c424d8a7d",
+        "name": "update_hs_meeting_associations",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          2512,
+          -208
+        ]
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "calcom_atendees",
+            "mode": "list",
+            "cachedResultName": "calcom_atendees"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+              "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+              "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+              "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId }}",
+              "atendee_hs_contact_id": "={{ $('update_hs_meeting_associations').item.json.contact_id }}",
+              "timezone": "={{ $('Calcom Webhook').item.json.body.payload.attendees[0].timeZone }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "calcom_booking_uid",
+                "displayName": "calcom_booking_uid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "calcom_booking_id",
+                "displayName": "calcom_booking_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "atendee_email",
+                "displayName": "atendee_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "atendee_seat_id",
+                "displayName": "atendee_seat_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "atendee_hs_contact_id",
+                "displayName": "atendee_hs_contact_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "reminder_1d_sent_at",
+                "displayName": "reminder_1d_sent_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "reminder_1h_sent_at",
+                "displayName": "reminder_1h_sent_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "reminder_10m_sent_at",
+                "displayName": "reminder_10m_sent_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "timezone",
+                "displayName": "timezone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "id": "d60baf98-0c07-43fd-ad70-fbe5fed145e8",
+        "name": "Insert Attendee",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          2720,
+          -208
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "calcom_atendees",
+            "mode": "list",
+            "cachedResultName": "calcom_atendees"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+              "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+              "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+              "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId ?? `Individual-${$('Calcom Webhook').item.json.body.payload.bookingId}` }}",
+              "atendee_hs_contact_id": "={{$('update_hs_meeting').isExecuted ? $('update_hs_meeting').item.json.contact_id : $('create_hs_meeting').item.json.contact_id  }}",
+              "timezone": "={{ $('Calcom Webhook').item.json.body.payload.attendees[0].timeZone }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "calcom_booking_uid",
+                "displayName": "calcom_booking_uid",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "calcom_booking_id",
+                "displayName": "calcom_booking_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "atendee_email",
+                "displayName": "atendee_email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "atendee_seat_id",
+                "displayName": "atendee_seat_id",
+                "required": true,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "atendee_hs_contact_id",
+                "displayName": "atendee_hs_contact_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "reminder_1d_sent_at",
+                "displayName": "reminder_1d_sent_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "reminder_1h_sent_at",
+                "displayName": "reminder_1h_sent_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "reminder_10m_sent_at",
+                "displayName": "reminder_10m_sent_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true,
+                "removed": true
+              },
+              {
+                "id": "timezone",
+                "displayName": "timezone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "id": "a636f8b4-0e05-460a-bf92-8532485a6914",
+        "name": "Insert Attendee1",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          3872,
+          -384
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "d961a9d8-400b-4444-991e-7aef7b3b5477",
+          "options": {}
+        },
+        "id": "cb3410ac-78a8-43a1-9613-13c576dc2dd2",
+        "name": "Calcom Webhook",
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          784,
+          384
+        ],
+        "webhookId": "d961a9d8-400b-4444-991e-7aef7b3b5477"
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Sm1ofvpIAGypAxLs",
+            "mode": "list",
+            "cachedResultName": "Purge Calcom"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "body": "={{ $('Calcom Webhook').all()[0].json.body }}"
+            },
+            "matchingColumns": [
+              "body"
+            ],
+            "schema": [
+              {
+                "id": "body",
+                "displayName": "body",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "object",
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": true
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          3920,
+          128
+        ],
+        "id": "c3abd5a4-ad4b-444a-88e7-fda67d21ad31",
+        "name": "Purge Calcom Workflow1"
+      },
+      {
+        "parameters": {
+          "errorMessage": "Meeting should not be recurring on Calcom"
+        },
+        "type": "n8n-nodes-base.stopAndError",
+        "typeVersion": 1,
+        "position": [
+          3744,
+          -624
+        ],
+        "id": "2cfbb4e0-c008-4175-a60b-1e77e89198f6",
+        "name": "Stop and Error"
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "value": "public",
+            "mode": "list",
+            "cachedResultName": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "medlife_users",
+            "mode": "list",
+            "cachedResultName": "medlife_users"
+          },
+          "limit": 1,
+          "where": {
+            "values": [
+              {
+                "column": "email",
+                "value": "={{ $('Calcom Webhook').item.json.body.payload.organizer.email }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "6b3d172e-dca1-4be8-aaa3-666857e98bf0",
+        "name": "get_hs_owner_id",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          2560,
+          -384
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "cf7e8fce-356f-4848-b708-29ce5a1673bb",
+                "leftValue": "={{ $('check_if_exists').item.json.calcom_booking_uid }}",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "notExists",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "fc259d3e-f5c9-4979-834f-4dc49fcdffc5",
+        "name": "is new Booking?",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          2192,
+          -288
+        ],
+        "alwaysOutputData": false
+      },
+      {
+        "parameters": {
+          "workflowId": {
+            "__rl": true,
+            "value": "Km5NnTNHj8x0gsor",
+            "mode": "list",
+            "cachedResultName": "Calcom Slack notis"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "body": "={{ $('Calcom Webhook').all()[0].json.body }}"
+            },
+            "matchingColumns": [
+              "body"
+            ],
+            "schema": [
+              {
+                "id": "body",
+                "displayName": "body",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "canBeUsedToMatch": true,
+                "type": "object"
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": true
+          },
+          "options": {
+            "waitForSubWorkflow": false
+          }
+        },
+        "type": "n8n-nodes-base.executeWorkflow",
+        "typeVersion": 1.2,
+        "position": [
+          4144,
+          -208
+        ],
+        "id": "60266bcc-fe80-4c21-b2c2-bc6feae499b5",
+        "name": "Calcom Slack Noti wf"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 2
+            },
+            "conditions": [
+              {
+                "id": "6e1f87ab-c5ee-4e3b-90c9-db80fa7efd34",
+                "leftValue": "={{$('get_hs_meeting_id').first().json}}",
+                "rightValue": "",
+                "operator": {
+                  "type": "object",
+                  "operation": "notEmpty",
+                  "singleValue": true
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.2,
+        "position": [
+          2912,
+          -384
+        ],
+        "id": "d63be437-e21f-48d2-af85-1e792ca94374",
+        "name": "calcom_created_hs_meeting?"
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT DISTINCT calcom_booking_uid,hs_meeting_id FROM calcom_hs_bookings WHERE calcom_booking_uid = '{{ $('Calcom Webhook').item.json.body.payload.uid }}'",
+          "options": {}
+        },
+        "id": "9ef0ff87-95c8-46f1-b04c-05525930e01e",
+        "name": "check_if_exists",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          1968,
+          -288
+        ],
+        "alwaysOutputData": true,
+        "notesInFlow": true,
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        },
+        "notes": "Select on n8n storage"
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\nconst { validator} = require(\"validator\")\n// Function to search for a contact\nasync function search_contact(email) {\n  try {\n    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: \"hs_additional_emails\",\n              operator: \"CONTAINS_TOKEN\"\n            }\n          ]\n        },\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: 'email',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [],\n      limit: 1,\n      after: 0\n    });\n    return searchResponse;\n  } catch (e) {\n    throw Error(e);\n  }\n}\n\n// Function to create a contact\nasync function create_contact(email, company, fullName) {\n  var nameParts = fullName.split(' ');\n  var firstName = nameParts.slice(0, -1).join(' '); // Everything except the last word\n  var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''; // The last word\n\n  const properties = {\n    email: email,\n    firstname: firstName,\n    lastname: lastName,\n    company: company\n  };\n  const SimplePublicObjectInputForCreate = { properties };\n\n  try {\n    const createResponse = await hubspotClient.crm.contacts.basicApi.create(SimplePublicObjectInputForCreate);\n    return createResponse;\n  } catch (e) {\n      if (e.code ===409) {\n        const message = e.body.message;\n        const regex = /\\d+/;\n        const match = message.match(regex);\n        if (match) {\n          const existingId = match[0];\n          return {id: existingId};\n        } else {\n          throw Error(\"ID not found in the message 403.\");\n        }\n      }\n    else {\n      throw Error(e)\n    }\n    }\n}\n\nfunction sanitizeEmail(rawEmail) {\n  let fn_email = rawEmail.trim().toLowerCase();\n\n  const corrections = {\n    \".cmo\": \".com\",\n    \".cpm\": \".com\",\n    \".cim\": \".com\",\n    \".cok\": \".com\",\n    \".orh\": \".org\",\n    \".ogr\": \".org\",\n    \".neto\": \".net\",\n    \".con\": \".com\",\n    \".clm\": \".com\",\n    \".ckm\": \".com\",\n    \".esu\": \".edu\"\n  };\n\n  for (const [typo, fix] of Object.entries(corrections)) {\n    if (fn_email.endsWith(typo)) {\n      fn_email = fn_email.slice(0, -typo.length) + fix;\n      break;\n    }\n  }\n  return fn_email\n}\n\nconst raw_email = $('Calcom Webhook').first().json.body.payload.responses.email.value;\nconst email = sanitizeEmail(raw_email)\n\nconst company = $('Calcom Webhook').first().json.body.payload.responses['chapter-name']?.value ?? $('Calcom Webhook').first().json.body.payload.responses.school?.value ?? \"No chapter (Unnusual. Ask BI)\";\nconst fullName = $('Calcom Webhook').first().json.body.payload.responses.name.value.trim();\n\nlet meeting_type = $('Calcom Webhook').all()[0].json.body.payload.type\n\n//Quick fixes\n// if (meeting_type === \"30min\") { meeting_type = 'slt-interest'}\nif (meeting_type === \"exploratory-meeting-mafer\") { meeting_type = 'slt-interest-individual'}\n// if (meeting_type === \"15min\") { meeting_type = 'chaperone-application'}\n\n\nlet searchResponse = await search_contact(email);\nlet toObjectId;\nif (searchResponse.results.length > 0 && searchResponse.results[0].id) {\n  toObjectId = searchResponse.results[0].id;\n} else {\n  const newContact = await create_contact(email, company, fullName);\n  toObjectId = newContact.id;\n}\n\nconst hs_meeting_description = `\n<b>Invitee Time Zone:</b><br>${$('Calcom Webhook').first().json.body.payload.organizer.timeZone}<br>\n<b>Where:</b><br>Google<br>\n<b>Description:</b><br>${$('Calcom Webhook').first().json.body.payload.description}\n`\n\n// Get the current timestamp for the meeting\nconst meetingTimestamp =  new Date($('Calcom Webhook').first().json.body.payload.startTime).toISOString();\nconst meetingEndTimestamp = new Date ($('Calcom Webhook').first().json.body.payload.endTime).toISOString()\nconst properties = {\n  \"hs_timestamp\": meetingTimestamp,\n  \"hs_meeting_title\": $('Calcom Webhook').all()[0].json.body.payload.title,\n  \"hs_activity_type\": meeting_type,\n  \"hs_meeting_location\": $('Calcom Webhook').all()[0].json.body.payload.metadata.videoCallUrl,\n  \"hubspot_owner_id\": $('get_hs_owner_id').first().json.hubspot_owner_id,\n  \"hs_meeting_outcome\": \"SCHEDULED\",\n  \"hs_meeting_end_time\": meetingEndTimestamp,\n  \"hs_meeting_start_time\": meetingTimestamp,\n  \"hs_meeting_body\": hs_meeting_description\n};\nconst associations= [\n    {\n      types: [{ associationCategory: \"HUBSPOT_DEFINED\", associationTypeId: 200 }],\n      to: { id: toObjectId }\n    }\n  ]\n\nconst SimplePublicObjectInputForCreate = { properties, associations};\n\ntry {\n  const apiResponse = await hubspotClient.crm.objects.meetings.basicApi.create(SimplePublicObjectInputForCreate);\n  return { contact_id : toObjectId, hs_meeting_id: apiResponse.id};\n} catch (e) {\n  throw Error(e)\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          3120,
+          -320
+        ],
+        "id": "a12242f5-e075-4c4d-9020-ae51fbc6958f",
+        "name": "create_hs_meeting"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('Calcom Webhook').item.json.body.payload.type }}",
+                      "rightValue": "founder-meet-n-greet",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "4fcad273-25e7-4eac-be72-100d48bb4781"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "EXP Founders"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 2
+                  },
+                  "conditions": [
+                    {
+                      "id": "2fbdf900-03e4-4f90-adf1-7c5143396b6a",
+                      "leftValue": "={{ $('Calcom Webhook').item.json.body.payload.type }}",
+                      "rightValue": "e-board-interview",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "EXP eboard interview"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.2,
+        "position": [
+          4496,
+          -208
+        ],
+        "id": "c815dce0-52f1-49ef-843c-ed67aab977d6",
+        "name": "Special vars"
+      },
+      {
+        "parameters": {
+          "jsCode": "const {shake, mapValues} = require('radash')\nlet contact_id\nif ($('create_hs_meeting').isExecuted) {\n  contact_id = $('create_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting').isExecuted) {\n  contact_id = $('update_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting_associations').isExecuted) {\n  contact_id = $('update_hs_meeting_associations').first().json.contact_id\n} else {\n  throw new Error(\"No contact ID Found, q fue\")\n}\n\nconst responses = $('Calcom Webhook').first().json.body.payload.responses\nlet clean = shake(mapValues(responses, (response) => {\n  if (response.label === \"location\") {\n    return undefined\n  }\n  if (response.isHidden) {\n    return undefined\n  }\n  return response.value\n\n}))\n\nconst school_type__c_values = {\n\"University\": \"University\",\n\"CGEP\": \"CGEP\",\n\"Graduate School\": \"Graduate School\",\n\"High School\":\"High School\",\n\"College\": \"Independent\"\n}\n\nconst properties = {\n  \"school\": clean.school, \n  \"school_type__c\": school_type__c_values[clean['school-type']] ?? \"\",\n  \"booking__founder_interest_leading_question\": clean['question-interest-leading'], //question-interest-leading\n  \"booking__list_of_clubs_question\":clean['question-involved-extra'], //question-involved-extra\n}\n\n\nconst { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\ntry {\n  const response = await hubspotClient.crm.contacts.basicApi.update(contact_id,{properties});\n  return {response};\n} catch (e) {\n  throw e\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4768,
+          -416
+        ],
+        "id": "562be5d4-9e39-4076-a7bb-75b542afe688",
+        "name": "Founder properties updates"
+      },
+      {
+        "parameters": {
+          "jsCode": "const {shake, mapValues} = require('radash')\nlet contact_id\nif ($('create_hs_meeting').isExecuted) {\n  contact_id = $('create_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting').isExecuted) {\n  contact_id = $('update_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting_associations').isExecuted) {\n  contact_id = $('update_hs_meeting_associations').first().json.contact_id\n} else {\n  throw new Error(\"No contact ID Found, q fue\")\n}\n\nconst responses = $('Calcom Webhook').first().json.body.payload.responses\nlet clean = shake(mapValues(responses, (response) => {\n  if (response.label === \"location\") {\n    return undefined\n  }\n  if (response.isHidden) {\n    return undefined\n  }\n  return response.value\n\n}))\nconst school_type__c_values = {\n\"University\": \"University\",\n\"CGEP\": \"CGEP\",\n\"Graduate School\": \"Graduate School\",\n\"High School\":\"High School\",\n\"College\": \"Independent\"\n}\n\nconst properties = {\n  \"school\": clean.school, \n  \"school_type__c\": school_type__c_values[clean['school-type']] ?? \"\",\n  \"booking__eboard_interest_in_slt_question\": clean['question-interest-slt'], //question-interest-slt\n  \"booking__list_of_clubs_question\":clean['question-involved-extra'], //question-involved-extra\n}\n\n\nconst { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\ntry {\n  const response = await hubspotClient.crm.contacts.basicApi.update(contact_id,{properties});\n  return {response};\n} catch (e) {\n  throw e\n}"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          4768,
+          -240
+        ],
+        "id": "0a0cab33-8902-4319-b56b-d6be30ac8035",
+        "name": "Eboard properties updates"
+      }
+    ],
+    "connections": {
+      "Log Webhook": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_hs_meeting_id": {
+        "main": [
+          [
+            {
+              "node": "get_hs_owner_id",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_new_hs_meeting": {
+        "main": [
+          [
+            {
+              "node": "Wait3",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "check_if_exists",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "No Operation, do nothing",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "get_new_hs_meeting",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Purge Calcom Workflow1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "No Operation, do nothing": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_hs_meeting": {
+        "main": [
+          [
+            {
+              "node": "calcom_hs_bookings",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_hs_meeting1": {
+        "main": [
+          [
+            {
+              "node": "calcom_hs_bookings2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "calcom_hs_bookings": {
+        "main": [
+          [
+            {
+              "node": "is_recurring",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "is_recurring": {
+        "main": [
+          [
+            {
+              "node": "Stop and Error",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Insert Attendee1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "calcom_hs_bookings2": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait2": {
+        "main": [
+          [
+            {
+              "node": "calcom_created_hs_meeting?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait3": {
+        "main": [
+          [
+            {
+              "node": "update_hs_meeting1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "update_hs_meeting_associations": {
+        "main": [
+          [
+            {
+              "node": "Insert Attendee",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calcom Webhook": {
+        "main": [
+          [
+            {
+              "node": "Log Webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Purge Calcom Workflow1": {
+        "main": [
+          []
+        ]
+      },
+      "get_hs_owner_id": {
+        "main": [
+          [
+            {
+              "node": "Wait2",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "is new Booking?": {
+        "main": [
+          [
+            {
+              "node": "get_hs_meeting_id",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "update_hs_meeting_associations",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert Attendee": {
+        "main": [
+          [
+            {
+              "node": "Calcom Slack Noti wf",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Insert Attendee1": {
+        "main": [
+          [
+            {
+              "node": "Calcom Slack Noti wf",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "calcom_created_hs_meeting?": {
+        "main": [
+          [
+            {
+              "node": "update_hs_meeting",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "create_hs_meeting",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "check_if_exists": {
+        "main": [
+          [
+            {
+              "node": "is new Booking?",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "create_hs_meeting": {
+        "main": [
+          [
+            {
+              "node": "calcom_hs_bookings",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Calcom Slack Noti wf": {
+        "main": [
+          [
+            {
+              "node": "Special vars",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Special vars": {
+        "main": [
+          [
+            {
+              "node": "Founder properties updates",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Eboard properties updates",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Medlife Automations",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "a0f9a42b-269f-4c76-8f1d-3e236b266bce",
+  "connections": {
+    "Log Webhook": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_hs_meeting_id": {
+      "main": [
+        [
+          {
+            "node": "get_hs_owner_id",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_new_hs_meeting": {
+      "main": [
+        [
+          {
+            "node": "Wait3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "check_if_exists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "get_new_hs_meeting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Purge Calcom Workflow1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Operation, do nothing": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_hs_meeting": {
+      "main": [
+        [
+          {
+            "node": "calcom_hs_bookings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_hs_meeting1": {
+      "main": [
+        [
+          {
+            "node": "calcom_hs_bookings2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calcom_hs_bookings": {
+      "main": [
+        [
+          {
+            "node": "is_recurring",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is_recurring": {
+      "main": [
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Insert Attendee1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calcom_hs_bookings2": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait2": {
+      "main": [
+        [
+          {
+            "node": "calcom_created_hs_meeting?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait3": {
+      "main": [
+        [
+          {
+            "node": "update_hs_meeting1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update_hs_meeting_associations": {
+      "main": [
+        [
+          {
+            "node": "Insert Attendee",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcom Webhook": {
+      "main": [
+        [
+          {
+            "node": "Log Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Purge Calcom Workflow1": {
+      "main": [
+        []
+      ]
+    },
+    "get_hs_owner_id": {
+      "main": [
+        [
+          {
+            "node": "Wait2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "is new Booking?": {
+      "main": [
+        [
+          {
+            "node": "get_hs_meeting_id",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "update_hs_meeting_associations",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Attendee": {
+      "main": [
+        [
+          {
+            "node": "Calcom Slack Noti wf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Attendee1": {
+      "main": [
+        [
+          {
+            "node": "Calcom Slack Noti wf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "calcom_created_hs_meeting?": {
+      "main": [
+        [
+          {
+            "node": "update_hs_meeting",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "create_hs_meeting",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "check_if_exists": {
+      "main": [
+        [
+          {
+            "node": "is new Booking?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_hs_meeting": {
+      "main": [
+        [
+          {
+            "node": "calcom_hs_bookings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calcom Slack Noti wf": {
+      "main": [
+        [
+          {
+            "node": "Special vars",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Special vars": {
+      "main": [
+        [
+          {
+            "node": "Founder properties updates",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Eboard properties updates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2024-06-24T18:00:39.590Z",
+  "id": "Jo86YdvOdhMBOvAG",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Calcom Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "```json\n[\n{\n\"headers\": {\n\"host\": \"n8n.medlifemovement.org\",\n\"connection\": \"upgrade\",\n\"content-length\": \"2929\",\n\"accept-encoding\": \"gzip, br\",\n\"x-forwarded-for\": \"45.32.192.90\",\n\"cf-ray\": \"898fb39cee483ac7-DFW\",\n\"x-forwarded-proto\": \"https\",\n\"cf-visitor\": \"{\"scheme\":\"https\"}\",\n\"content-type\": \"application/json\",\n\"x-cal-signature-256\": \"no-secret-provided\",\n\"accept\": \"*/*\",\n\"accept-language\": \"*\",\n\"sec-fetch-mode\": \"cors\",\n\"user-agent\": \"node\",\n\"cf-connecting-ip\": \"45.32.192.90\",\n\"cdn-loop\": \"cloudflare\",\n\"cf-ipcountry\": \"US\"\n},\n\"params\": {\n},\n\"query\": {\n},\n\"body\": {\n\"triggerEvent\": \"BOOKING_CREATED\",\n\"createdAt\": \"2024-06-24T21:09:55.217Z\",\n\"payload\": {\n\"bookerUrl\": \"https://calcom.medlifemovement.org\",\n\"type\": \"goal-setting-medlife\",\n\"title\": \"Goal Setting Medlife between Franz Rebaza and Test Webhook\",\n\"description\": \"This is a meeting for goal setting (editable)\",\n\"additionalNotes\": \"asdasd\",\n\"customInputs\": {\n},\n\"startTime\": \"2024-06-24T23:45:00Z\",\n\"endTime\": \"2024-06-25T00:00:00Z\",\n\"organizer\": {\n\"id\": 1,\n\"name\": \"Franz Rebaza\",\n\"email\": \"frebaza@medlifemovement.org\",\n\"username\": \"frebaza\",\n\"timeZone\": \"America/Bogota\",\n\"language\": {\n\"locale\": \"en\"\n},\n\"timeFormat\": \"h:mma\",\n\"utcOffset\": -300\n},\n\"responses\": {\n\"name\": {\n\"label\": \"your_name\",\n\"value\": \"Test Webhook\",\n\"isHidden\": false\n},\n\"email\": {\n\"label\": \"email_address\",\n\"value\": \"franz-1241@hotmail.com\",\n\"isHidden\": false\n},\n\"location\": {\n\"label\": \"location\",\n\"value\": {\n\"optionValue\": \"\",\n\"value\": \"integrations:zoom\"\n},\n\"isHidden\": false\n},\n\"title\": {\n\"label\": \"what_is_this_meeting_about\",\n\"isHidden\": true\n},\n\"notes\": {\n\"label\": \"Additional Notes (optional)\",\n\"value\": \"asdasd\",\n\"isHidden\": false\n},\n\"guests\": {\n\"label\": \"additional_guests\",\n\"value\": [\n],\n\"isHidden\": false\n},\n\"rescheduleReason\": {\n\"label\": \"reason_for_reschedule\",\n\"isHidden\": false\n},\n\"chaptername\": {\n\"label\": \"Write your Chapter\",\n\"value\": \"Indiana University Purdue University Indianapolis\",\n\"isHidden\": false\n}\n},\n\"userFieldsResponses\": {\n\"chaptername\": {\n\"label\": \"Write your Chapter\",\n\"value\": \"Indiana University Purdue University Indianapolis\",\n\"isHidden\": false\n}\n},\n\"attendees\": [\n{\n\"email\": \"franz-1241@hotmail.com\",\n\"name\": \"Test Webhook\",\n\"firstName\": \"\",\n\"lastName\": \"\",\n\"timeZone\": \"America/Bogota\",\n\"language\": {\n\"locale\": \"en\"\n},\n\"utcOffset\": -300\n}\n],\n\"location\": \"integrations:zoom\",\n\"conferenceCredentialId\": 7,\n\"destinationCalendar\": [\n{\n\"id\": 1,\n\"integration\": \"google_calendar\",\n\"externalId\": \"frebaza@medlifemovement.org\",\n\"primaryEmail\": \"frebaza@medlifemovement.org\",\n\"userId\": 1,\n\"eventTypeId\": null,\n\"credentialId\": 1\n}\n],\n\"hideCalendarNotes\": false,\n\"requiresConfirmation\": false,\n\"eventTypeId\": 11,\n\"seatsShowAttendees\": true,\n\"seatsPerTimeSlot\": null,\n\"seatsShowAvailabilityCount\": true,\n\"schedulingType\": null,\n\"iCalUID\": \"88bDhhZJk8UJQCbjR1UbXo@Cal.com\",\n\"iCalSequence\": 0,\n\"uid\": \"88bDhhZJk8UJQCbjR1UbXo\",\n\"conferenceData\": {\n\"createRequest\": {\n\"requestId\": \"8867fe6c-9326-5912-9766-fb3553f58d20\"\n}\n},\n\"videoCallData\": {\n\"type\": \"zoom_video\",\n\"id\": \"82668816449\",\n\"password\": \"410861\",\n\"url\": \"https://us02web.zoom.us/j/82668816449?pwd=Tmv87mSHM1NLUgzcfFqR1tfgsF8Qa9.1\"\n},\n\"appsStatus\": [\n{\n\"appName\": \"zoom\",\n\"type\": \"zoom_video\",\n\"success\": 1,\n\"failures\": 0,\n\"errors\": [\n]\n},\n{\n\"appName\": \"google-calendar\",\n\"type\": \"google_calendar\",\n\"success\": 1,\n\"failures\": 0,\n\"errors\": [\n],\n\"warnings\": [\n]\n},\n{\n\"appName\": \"hubspot\",\n\"type\": \"hubspot_crm\",\n\"success\": 1,\n\"failures\": 0,\n\"errors\": [\n]\n}\n],\n\"eventTitle\": \"Goal Setting Medlife\",\n\"eventDescription\": \"This is a meeting for goal setting (editable)\",\n\"price\": 0,\n\"currency\": \"usd\",\n\"length\": 15,\n\"bookingId\": 4,\n\"metadata\": {\n\"videoCallUrl\": \"https://us02web.zoom.us/j/82668816449?pwd=Tmv87mSHM1NLUgzcfFqR1tfgsF8Qa9.1\"\n},\n\"status\": \"ACCEPTED\"\n}\n},\n\"webhookUrl\": \"https://n8n.medlifemovement.org/webhook-test/d961a9d8-400b-4444-991e-7aef7b3b5477\",\n\"executionMode\": \"test\"\n}\n]\n```",
+        "height": 122.23489167616876,
+        "width": 171.81299885974903,
+        "color": 7
+      },
+      "id": "f8e88807-b4ce-4ac9-ac6e-8a699d8b73c8",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        752,
+        224
+      ]
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "calcom_events",
+          "mode": "list",
+          "cachedResultName": "calcom_events"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "created_at": "={{ $now.toUTC(-300) }}",
+            "execution_mode": "={{ $('Calcom Webhook').all()[0].json.executionMode }}",
+            "event_type": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+            "request": "={{ $('Calcom Webhook').all()[0].json }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "uid",
+              "displayName": "uid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "execution_mode",
+              "displayName": "execution_mode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "event_type",
+              "displayName": "event_type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "request",
+              "displayName": "request",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "object",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {
+          "replaceEmptyStrings": true
+        }
+      },
+      "id": "48352538-8f0e-444b-99f1-e129984320db",
+      "name": "Log Webhook",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        1088,
+        384
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "BookingReference",
+          "mode": "list",
+          "cachedResultName": "BookingReference"
+        },
+        "limit": 5,
+        "where": {
+          "values": [
+            {
+              "column": "bookingId",
+              "value": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}"
+            },
+            {
+              "column": "type",
+              "value": "hubspot_crm"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "16d89efd-14ac-4e32-9cbf-f0fca6c46730",
+      "name": "get_hs_meeting_id",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        2368,
+        -384
+      ],
+      "notesInFlow": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "GHWiSaZMBtM0J7LO",
+          "name": "Calcom DB"
+        }
+      },
+      "notes": "Select on Calcom DB"
+    },
+    {
+      "parameters": {
+        "content": "BOOKING_CREATED",
+        "height": 550,
+        "width": 2449
+      },
+      "id": "f6cc3a07-2a4d-4516-987a-c1cb4c5850f2",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1936,
+        -560
+      ]
+    },
+    {
+      "parameters": {
+        "content": "BOOKING_CANCELED\n",
+        "height": 200.50171037628274,
+        "width": 1013.911060433295
+      },
+      "id": "be733ad3-8cae-4dcf-85c6-f3f1adf92388",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "content": "BOOKING_RESCHEDULED\n\n",
+        "height": 215.42983899529463,
+        "width": 1264.286989085598
+      },
+      "id": "e6b75168-68db-449d-a62d-dac1839c976d",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "content": "MEETING_STARTED\n",
+        "height": 200.50171037628274,
+        "width": 1013.911060433295
+      },
+      "id": "c43faacf-1224-4240-95a9-1b5f4f810271",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        528
+      ]
+    },
+    {
+      "parameters": {
+        "content": "MEETING_ENDED\n",
+        "height": 200.50171037628274,
+        "width": 1013.911060433295
+      },
+      "id": "66af8af4-47dd-4450-9983-12c1ba9df83d",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1920,
+        784
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "BookingReference",
+          "mode": "list",
+          "cachedResultName": "BookingReference"
+        },
+        "limit": 5,
+        "where": {
+          "values": [
+            {
+              "column": "bookingId",
+              "value": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}"
+            },
+            {
+              "column": "type",
+              "value": "hubspot_crm"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d099c2d8-5ca9-4acd-9f82-303f785b3e7a",
+      "name": "get_new_hs_meeting",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        1968,
+        352
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "GHWiSaZMBtM0J7LO",
+          "name": "Calcom DB"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "calcom_hs_bookings",
+          "mode": "list",
+          "cachedResultName": "calcom_hs_bookings"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_deleted": false,
+            "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+            "organizer_email": "={{ $('Calcom Webhook').item.json.body.payload.organizer.email }}",
+            "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+            "zoom_meeting_id": "={{ $('Calcom Webhook').first().json.body.payload.metadata.videoCallUrl }}",
+            "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+            "hs_meeting_id": "={{ $('get_hs_meeting_id').item.json.uid ?? $('create_hs_meeting').item.json.hs_meeting_id }}",
+            "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId }}",
+            "calcom_meeting_name": "={{ $('Calcom Webhook').item.json.body.payload.eventTitle }}",
+            "google_meet_link": "={{$('Calcom Webhook').all()[0].json.body.payload.metadata.videoCallUrl}}",
+            "type": "={{ $('Calcom Webhook').item.json.body.payload.type }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calcom_booking_uid",
+              "displayName": "calcom_booking_uid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calcom_booking_id",
+              "displayName": "calcom_booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hs_meeting_id",
+              "displayName": "hs_meeting_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "zoom_meeting_id",
+              "displayName": "zoom_meeting_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "organizer_email",
+              "displayName": "organizer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "atendee_email",
+              "displayName": "atendee_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "atendee_seat_id",
+              "displayName": "atendee_seat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_deleted",
+              "displayName": "is_deleted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calcom_meeting_name",
+              "displayName": "calcom_meeting_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "google_meet_link",
+              "displayName": "google_meet_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "4e88d4b0-ecf9-4312-8ede-d84c9a031539",
+      "name": "calcom_hs_bookings",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        3344,
+        -400
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                    "rightValue": "BOOKING_CREATED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "218661d4-439c-4cc6-8c28-83ed57276390"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BOOKING_CREATED"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "77c8a94f-5e1b-439a-afda-cf8cc38bbfb3",
+                    "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                    "rightValue": "BOOKING_CANCELLED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BOOKING_CANCELLED"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "0ed97ab4-c186-4b46-9209-b34141ec0282",
+                    "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                    "rightValue": "BOOKING_RESCHEDULED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "BOOKING_RESCHEDULED"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "356bd51b-6d31-476a-a595-0293ff76f739",
+                    "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                    "rightValue": "MEETING_STARTED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "MEETING_STARTED"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 1
+                },
+                "conditions": [
+                  {
+                    "id": "f2487400-f3d6-4ec6-9d05-371ce8018afe",
+                    "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.triggerEvent }}",
+                    "rightValue": "MEETING_ENDED",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "MEETING_ENDED"
+            }
+          ]
+        },
+        "options": {
+          "ignoreCase": true
+        }
+      },
+      "id": "ec788f28-51a3-4652-8a31-150afb466f64",
+      "name": "Switch",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        1552,
+        368
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "7761d2a5-873d-407d-92d7-dac9ac2aed4e",
+      "name": "Wait",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3664,
+        128
+      ],
+      "webhookId": "8ee0dccb-8fc7-4354-884c-1b16ccd7bcaf"
+    },
+    {
+      "parameters": {},
+      "id": "9f305fe5-b8ab-4001-a301-9ee23b290f0b",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2192,
+        112
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\n\n// Function to search for a contact\nasync function search_contact(email) {\n  try {\n    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: \"hs_additional_emails\",\n              operator: \"CONTAINS_TOKEN\"\n            }\n          ]\n        },\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: 'email',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [],\n      limit: 1,\n      after: 0\n    });\n    return searchResponse;\n  } catch (e) {\n    throw Error(e);\n  }\n}\n\n// Function to create a contact\nasync function create_contact(email, company, fullName) {\n  var nameParts = fullName.split(' ');\n  var firstName = nameParts.slice(0, -1).join(' '); // Everything except the last word\n  var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''; // The last word\n\n  const properties = {\n    email: email,\n    firstname: firstName,\n    lastname: lastName,\n    company: company\n  };\n  const SimplePublicObjectInputForCreate = { properties };\n\n  try {\n    const createResponse = await hubspotClient.crm.contacts.basicApi.create(SimplePublicObjectInputForCreate);\n    return createResponse;\n  } catch (e) {\n      if (e.code ===409) {\n        const message = e.body.message;\n        const regex = /\\d+/;\n        const match = message.match(regex);\n        if (match) {\n          const existingId = match[0];\n          return {id: existingId};\n        } else {\n          throw Error(\"ID not found in the message 403.\");\n        }\n      }\n    else {\n      throw Error(e)\n    }\n    }\n}\nconst email = $('Calcom Webhook').item.json.body.payload.responses.email.value;\nconst company = $('Calcom Webhook').first().json.body.payload.responses['chapter-name']?.value ?? $('Calcom Webhook').first().json.body.payload.responses.school.value;\nconst fullName = $('Calcom Webhook').item.json.body.payload.responses.name.value.trim();\n\nlet searchResponse = await search_contact(email);\nlet toObjectId;\nif (searchResponse.results.length > 0 && searchResponse.results[0].id) {\n  toObjectId = searchResponse.results[0].id;\n} else {\n  const newContact = await create_contact(email, company, fullName);\n  toObjectId = newContact.id;\n}\nconsole.log(`To Object ID: ${toObjectId}`);\n\n\nconst properties = {\n  \"hs_activity_type\": $('Calcom Webhook').all()[0].json.body.payload.type,\n  \"hs_meeting_location\": $('Calcom Webhook').all()[0].json.body.payload.metadata.videoCallUrl,\n  \"hubspot_owner_id\": $('get_hs_owner_id').first().json.hubspot_owner_id\n};\nconst SimplePublicObjectInput = { properties };\nconst meetingId = $('get_hs_meeting_id').all()[0].json.uid;\n\ntry {\n  const apiResponse = await hubspotClient.crm.objects.meetings.basicApi.update(meetingId, SimplePublicObjectInput);\n  return {response: apiResponse, contact_id : toObjectId};\n} catch (e) {\n    console.log(e)\n  return {meeting_id_error : $('get_hs_meeting_id').all()[0].json.uid}\n}"
+      },
+      "id": "a86fffea-48cd-4c2b-8de4-c438563044dd",
+      "name": "update_hs_meeting",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        -512
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\n\nconst properties = {\n  \"hs_activity_type\": $('Calcom Webhook').all()[0].json.body.payload.type,\n};\nconst SimplePublicObjectInput = { properties };\nconst meetingId = $('get_new_hs_meeting').all()[0].json.uid;\n\ntry {\n  const apiResponse = await hubspotClient.crm.objects.meetings.basicApi.update(meetingId, SimplePublicObjectInput);\n  return apiResponse;\n} catch (e) {\n    console.log(e)\n}"
+      },
+      "id": "7def7f31-72cf-4bd6-a6fc-8a823446ce48",
+      "name": "update_hs_meeting1",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2304,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "1231fa6b-98f0-4ac8-968e-bfb72a24d003",
+              "leftValue": "={{ $('Calcom Webhook').all()[0].json.body.payload.recurringEvent }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "aba57bca-5e20-4b67-94fa-8038535bd26e",
+      "name": "is_recurring",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        3568,
+        -400
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "update",
+        "meetingId": "={{ $('Calcom Webhook').item.json.body.payload.videoCallData.id }}",
+        "updateFields": {
+          "type": 2
+        }
+      },
+      "id": "c114044c-1e66-4174-8af8-9f3560fa705a",
+      "name": "Turn into non recurring",
+      "type": "n8n-nodes-base.zoom",
+      "typeVersion": 1,
+      "position": [
+        3888,
+        -704
+      ],
+      "credentials": {
+        "zoomOAuth2Api": {
+          "id": "T4qVKOZQdWKLJeUZ",
+          "name": "Zoom account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "calcom_hs_bookings",
+          "mode": "list",
+          "cachedResultName": "calcom_hs_bookings"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_deleted": false,
+            "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+            "organizer_email": "={{ $('Calcom Webhook').item.json.body.payload.organizer.email }}",
+            "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+            "zoom_meeting_id": "={{ $('Calcom Webhook').item.json.body.payload.videoCallData.id }}",
+            "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+            "hs_meeting_id": "={{ $('get_new_hs_meeting').item.json.uid }}",
+            "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId }}",
+            "calcom_meeting_name": "={{ $('Calcom Webhook').item.json.body.payload.eventTitle }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calcom_booking_uid",
+              "displayName": "calcom_booking_uid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calcom_booking_id",
+              "displayName": "calcom_booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "hs_meeting_id",
+              "displayName": "hs_meeting_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "zoom_meeting_id",
+              "displayName": "zoom_meeting_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "organizer_email",
+              "displayName": "organizer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "atendee_email",
+              "displayName": "atendee_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "atendee_seat_id",
+              "displayName": "atendee_seat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "is_deleted",
+              "displayName": "is_deleted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calcom_meeting_name",
+              "displayName": "calcom_meeting_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eb6fa999-91d6-450d-bcf5-ca7272c4d91c",
+      "name": "calcom_hs_bookings2",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        3040,
+        352
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "id": "6785a8d3-9688-4e7e-9580-9b1ecc276d97",
+      "name": "Wait1",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1312,
+        384
+      ],
+      "webhookId": "cca62d05-753a-4a48-80fa-fd9a01ed7aa4"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "id": "cfd74fab-4870-402c-b7da-92873da6977f",
+      "name": "Wait2",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2752,
+        -384
+      ],
+      "webhookId": "669ee4f2-0f21-4c41-abf2-15bdb002f4b9"
+    },
+    {
+      "parameters": {
+        "amount": 1
+      },
+      "id": "38959b62-55d8-45d3-8ed7-ef6eb73906bc",
+      "name": "Wait3",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2128,
+        352
+      ],
+      "webhookId": "fce3c6bd-f8c4-4436-9c4a-95e868813189"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require('@hubspot/api-client');\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key });\nconst validator = require(\"validator\")\n\n\n//Function to sanitize email\nfunction sanitizeEmail(rawEmail) {\n  let email = rawEmail.trim().toLowerCase();\n\n  // Common TLD typo corrections\n  const corrections = {\n    \".cmo\": \".com\",\n    \".cpm\": \".com\",\n    \".cim\": \".com\",\n    \".cok\": \".com\",\n    \".orh\": \".org\",\n    \".ogr\": \".org\",\n    \".con\": \".com\",\n    \".edh\": \".edu\",\n    \".esu\": \".edu\"\n  };\n  for (const [typo, fix] of Object.entries(corrections)) {\n    if (email.endsWith(typo)) {\n      email = email.slice(0, -typo.length) + fix;\n      break;\n    }\n  }\n  if (validator.isEmail(email)) {\n    return email;\n  }\n  return null;\n}\n\n// Function to search for a contact\nasync function search_contact(email) {\n  try {\n    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: \"hs_additional_emails\",\n              operator: \"CONTAINS_TOKEN\"\n            }\n          ]\n        },\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: 'email',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [],\n      limit: 1,\n      after: 0\n    });\n    return searchResponse;\n  } catch (e) {\n    throw Error(e);\n  }\n}\n\n// Function to create a contact\nasync function create_contact(email, company, fullName) {\n  var nameParts = fullName.split(' ');\n  var firstName = nameParts.slice(0, -1).join(' '); // Everything except the last word\n  var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''; // The last word\n\n  const properties = {\n    email: email,\n    firstname: firstName,\n    lastname: lastName,\n    company: company\n  };\n  const SimplePublicObjectInputForCreate = { properties };\n\n  try {\n    const createResponse = await hubspotClient.crm.contacts.basicApi.create(SimplePublicObjectInputForCreate);\n    return createResponse;\n  } catch (e) {\n      if (e.code ===409) {\n        const message = e.body.message;\n        const regex = /\\d+/;\n        const match = message.match(regex);\n        if (match) {\n          const existingId = match[0];\n          return {id: existingId};\n        } else {\n          throw Error(\"ID not found in the message 403.\");\n        }\n      }\n    else {\n      throw Error(e)\n    }\n    }\n}\n\n// Associate meeting with contact\nconst raw_email = $('Calcom Webhook').first().json.body.payload.responses.email.value;\nconst email = sanitizeEmail(raw_email)\nif (!email) {\n  throw new Error(\"failed to sanitize email\")\n}\nconst company = $('Calcom Webhook').first().json.body.payload.responses['chapter-name']?.value ?? $('Calcom Webhook').first().json.body.payload.responses.school?.value ?? $('Calcom Webhook').first().json.body.payload.responses.School.value;\nconst fullName = $('Calcom Webhook').first().json.body.payload.responses.name.value.trim();\n\nlet searchResponse = await search_contact(email);\nconst fromObjectType = \"MEETING\";\nconst fromObjectId = $('check_if_exists').all()[0].json.hs_meeting_id;\nconst toObjectType = \"CONTACT\";\nlet toObjectId;\nif (searchResponse.results.length > 0 && searchResponse.results[0].id) {\n  toObjectId = searchResponse.results[0].id;\n} else {\n  const newContact = await create_contact(email, company, fullName);\n  toObjectId = newContact.id;\n}\n\n\n\n\ntry {\n  const apiResponse = await hubspotClient.crm.associations.v4.basicApi.createDefault(fromObjectType, fromObjectId, toObjectType, toObjectId);\n  return { response: apiResponse, contact_id: toObjectId };\n} catch (e) {\n  throw Error(e);\n}\n"
+      },
+      "id": "20b4048e-7cc2-4798-ba01-6d7c424d8a7d",
+      "name": "update_hs_meeting_associations",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2512,
+        -208
+      ]
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "calcom_atendees",
+          "mode": "list",
+          "cachedResultName": "calcom_atendees"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+            "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+            "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+            "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId }}",
+            "atendee_hs_contact_id": "={{ $('update_hs_meeting_associations').item.json.contact_id }}",
+            "timezone": "={{ $('Calcom Webhook').item.json.body.payload.attendees[0].timeZone }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calcom_booking_uid",
+              "displayName": "calcom_booking_uid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calcom_booking_id",
+              "displayName": "calcom_booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendee_email",
+              "displayName": "atendee_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendee_seat_id",
+              "displayName": "atendee_seat_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendee_hs_contact_id",
+              "displayName": "atendee_hs_contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reminder_1d_sent_at",
+              "displayName": "reminder_1d_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reminder_1h_sent_at",
+              "displayName": "reminder_1h_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reminder_10m_sent_at",
+              "displayName": "reminder_10m_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "timezone",
+              "displayName": "timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "d60baf98-0c07-43fd-ad70-fbe5fed145e8",
+      "name": "Insert Attendee",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        2720,
+        -208
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "calcom_atendees",
+          "mode": "list",
+          "cachedResultName": "calcom_atendees"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "calcom_booking_id": "={{ $('Calcom Webhook').item.json.body.payload.bookingId }}",
+            "calcom_booking_uid": "={{ $('Calcom Webhook').item.json.body.payload.uid }}",
+            "atendee_email": "={{ $('Calcom Webhook').item.json.body.payload.responses.email.value }}",
+            "atendee_seat_id": "={{ $('Calcom Webhook').item.json.body.payload.attendeeSeatId ?? `Individual-${$('Calcom Webhook').item.json.body.payload.bookingId}` }}",
+            "atendee_hs_contact_id": "={{$('update_hs_meeting').isExecuted ? $('update_hs_meeting').item.json.contact_id : $('create_hs_meeting').item.json.contact_id  }}",
+            "timezone": "={{ $('Calcom Webhook').item.json.body.payload.attendees[0].timeZone }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "calcom_booking_uid",
+              "displayName": "calcom_booking_uid",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calcom_booking_id",
+              "displayName": "calcom_booking_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendee_email",
+              "displayName": "atendee_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendee_seat_id",
+              "displayName": "atendee_seat_id",
+              "required": true,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "atendee_hs_contact_id",
+              "displayName": "atendee_hs_contact_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "reminder_1d_sent_at",
+              "displayName": "reminder_1d_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reminder_1h_sent_at",
+              "displayName": "reminder_1h_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reminder_10m_sent_at",
+              "displayName": "reminder_10m_sent_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "timezone",
+              "displayName": "timezone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "a636f8b4-0e05-460a-bf92-8532485a6914",
+      "name": "Insert Attendee1",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        3872,
+        -384
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "d961a9d8-400b-4444-991e-7aef7b3b5477",
+        "options": {}
+      },
+      "id": "cb3410ac-78a8-43a1-9613-13c576dc2dd2",
+      "name": "Calcom Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        784,
+        384
+      ],
+      "webhookId": "d961a9d8-400b-4444-991e-7aef7b3b5477"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Sm1ofvpIAGypAxLs",
+          "mode": "list",
+          "cachedResultName": "Purge Calcom"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "body": "={{ $('Calcom Webhook').all()[0].json.body }}"
+          },
+          "matchingColumns": [
+            "body"
+          ],
+          "schema": [
+            {
+              "id": "body",
+              "displayName": "body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": true
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        3920,
+        128
+      ],
+      "id": "c3abd5a4-ad4b-444a-88e7-fda67d21ad31",
+      "name": "Purge Calcom Workflow1"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Meeting should not be recurring on Calcom"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        3744,
+        -624
+      ],
+      "id": "2cfbb4e0-c008-4175-a60b-1e77e89198f6",
+      "name": "Stop and Error"
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "value": "public",
+          "mode": "list",
+          "cachedResultName": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "medlife_users",
+          "mode": "list",
+          "cachedResultName": "medlife_users"
+        },
+        "limit": 1,
+        "where": {
+          "values": [
+            {
+              "column": "email",
+              "value": "={{ $('Calcom Webhook').item.json.body.payload.organizer.email }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6b3d172e-dca1-4be8-aaa3-666857e98bf0",
+      "name": "get_hs_owner_id",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        2560,
+        -384
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "cf7e8fce-356f-4848-b708-29ce5a1673bb",
+              "leftValue": "={{ $('check_if_exists').item.json.calcom_booking_uid }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "fc259d3e-f5c9-4979-834f-4dc49fcdffc5",
+      "name": "is new Booking?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2192,
+        -288
+      ],
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "Km5NnTNHj8x0gsor",
+          "mode": "list",
+          "cachedResultName": "Calcom Slack notis"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "body": "={{ $('Calcom Webhook').all()[0].json.body }}"
+          },
+          "matchingColumns": [
+            "body"
+          ],
+          "schema": [
+            {
+              "id": "body",
+              "displayName": "body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "object"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        4144,
+        -208
+      ],
+      "id": "60266bcc-fe80-4c21-b2c2-bc6feae499b5",
+      "name": "Calcom Slack Noti wf"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "6e1f87ab-c5ee-4e3b-90c9-db80fa7efd34",
+              "leftValue": "={{$('get_hs_meeting_id').first().json}}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2912,
+        -384
+      ],
+      "id": "d63be437-e21f-48d2-af85-1e792ca94374",
+      "name": "calcom_created_hs_meeting?"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT DISTINCT calcom_booking_uid,hs_meeting_id FROM calcom_hs_bookings WHERE calcom_booking_uid = '{{ $('Calcom Webhook').item.json.body.payload.uid }}'",
+        "options": {}
+      },
+      "id": "9ef0ff87-95c8-46f1-b04c-05525930e01e",
+      "name": "check_if_exists",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        1968,
+        -288
+      ],
+      "alwaysOutputData": true,
+      "notesInFlow": true,
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      },
+      "notes": "Select on n8n storage"
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\nconst { validator} = require(\"validator\")\n// Function to search for a contact\nasync function search_contact(email) {\n  try {\n    const searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n      filterGroups: [\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: \"hs_additional_emails\",\n              operator: \"CONTAINS_TOKEN\"\n            }\n          ]\n        },\n        {\n          filters: [\n            {\n              value: email,\n              propertyName: 'email',\n              operator: 'EQ'\n            }\n          ]\n        }\n      ],\n      sorts: [],\n      properties: [],\n      limit: 1,\n      after: 0\n    });\n    return searchResponse;\n  } catch (e) {\n    throw Error(e);\n  }\n}\n\n// Function to create a contact\nasync function create_contact(email, company, fullName) {\n  var nameParts = fullName.split(' ');\n  var firstName = nameParts.slice(0, -1).join(' '); // Everything except the last word\n  var lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : ''; // The last word\n\n  const properties = {\n    email: email,\n    firstname: firstName,\n    lastname: lastName,\n    company: company\n  };\n  const SimplePublicObjectInputForCreate = { properties };\n\n  try {\n    const createResponse = await hubspotClient.crm.contacts.basicApi.create(SimplePublicObjectInputForCreate);\n    return createResponse;\n  } catch (e) {\n      if (e.code ===409) {\n        const message = e.body.message;\n        const regex = /\\d+/;\n        const match = message.match(regex);\n        if (match) {\n          const existingId = match[0];\n          return {id: existingId};\n        } else {\n          throw Error(\"ID not found in the message 403.\");\n        }\n      }\n    else {\n      throw Error(e)\n    }\n    }\n}\n\nfunction sanitizeEmail(rawEmail) {\n  let fn_email = rawEmail.trim().toLowerCase();\n\n  const corrections = {\n    \".cmo\": \".com\",\n    \".cpm\": \".com\",\n    \".cim\": \".com\",\n    \".cok\": \".com\",\n    \".orh\": \".org\",\n    \".ogr\": \".org\",\n    \".neto\": \".net\",\n    \".con\": \".com\",\n    \".clm\": \".com\",\n    \".ckm\": \".com\",\n    \".esu\": \".edu\"\n  };\n\n  for (const [typo, fix] of Object.entries(corrections)) {\n    if (fn_email.endsWith(typo)) {\n      fn_email = fn_email.slice(0, -typo.length) + fix;\n      break;\n    }\n  }\n  return fn_email\n}\n\nconst raw_email = $('Calcom Webhook').first().json.body.payload.responses.email.value;\nconst email = sanitizeEmail(raw_email)\n\nconst company = $('Calcom Webhook').first().json.body.payload.responses['chapter-name']?.value ?? $('Calcom Webhook').first().json.body.payload.responses.school?.value ?? \"No chapter (Unnusual. Ask BI)\";\nconst fullName = $('Calcom Webhook').first().json.body.payload.responses.name.value.trim();\n\nlet meeting_type = $('Calcom Webhook').all()[0].json.body.payload.type\n\n//Quick fixes\n// if (meeting_type === \"30min\") { meeting_type = 'slt-interest'}\nif (meeting_type === \"exploratory-meeting-mafer\") { meeting_type = 'slt-interest-individual'}\n// if (meeting_type === \"15min\") { meeting_type = 'chaperone-application'}\n\n\nlet searchResponse = await search_contact(email);\nlet toObjectId;\nif (searchResponse.results.length > 0 && searchResponse.results[0].id) {\n  toObjectId = searchResponse.results[0].id;\n} else {\n  const newContact = await create_contact(email, company, fullName);\n  toObjectId = newContact.id;\n}\n\nconst hs_meeting_description = `\n<b>Invitee Time Zone:</b><br>${$('Calcom Webhook').first().json.body.payload.organizer.timeZone}<br>\n<b>Where:</b><br>Google<br>\n<b>Description:</b><br>${$('Calcom Webhook').first().json.body.payload.description}\n`\n\n// Get the current timestamp for the meeting\nconst meetingTimestamp =  new Date($('Calcom Webhook').first().json.body.payload.startTime).toISOString();\nconst meetingEndTimestamp = new Date ($('Calcom Webhook').first().json.body.payload.endTime).toISOString()\nconst properties = {\n  \"hs_timestamp\": meetingTimestamp,\n  \"hs_meeting_title\": $('Calcom Webhook').all()[0].json.body.payload.title,\n  \"hs_activity_type\": meeting_type,\n  \"hs_meeting_location\": $('Calcom Webhook').all()[0].json.body.payload.metadata.videoCallUrl,\n  \"hubspot_owner_id\": $('get_hs_owner_id').first().json.hubspot_owner_id,\n  \"hs_meeting_outcome\": \"SCHEDULED\",\n  \"hs_meeting_end_time\": meetingEndTimestamp,\n  \"hs_meeting_start_time\": meetingTimestamp,\n  \"hs_meeting_body\": hs_meeting_description\n};\nconst associations= [\n    {\n      types: [{ associationCategory: \"HUBSPOT_DEFINED\", associationTypeId: 200 }],\n      to: { id: toObjectId }\n    }\n  ]\n\nconst SimplePublicObjectInputForCreate = { properties, associations};\n\ntry {\n  const apiResponse = await hubspotClient.crm.objects.meetings.basicApi.create(SimplePublicObjectInputForCreate);\n  return { contact_id : toObjectId, hs_meeting_id: apiResponse.id};\n} catch (e) {\n  throw Error(e)\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3120,
+        -320
+      ],
+      "id": "a12242f5-e075-4c4d-9020-ae51fbc6958f",
+      "name": "create_hs_meeting"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Calcom Webhook').item.json.body.payload.type }}",
+                    "rightValue": "founder-meet-n-greet",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "4fcad273-25e7-4eac-be72-100d48bb4781"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "EXP Founders"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2fbdf900-03e4-4f90-adf1-7c5143396b6a",
+                    "leftValue": "={{ $('Calcom Webhook').item.json.body.payload.type }}",
+                    "rightValue": "e-board-interview",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "EXP eboard interview"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4496,
+        -208
+      ],
+      "id": "c815dce0-52f1-49ef-843c-ed67aab977d6",
+      "name": "Special vars"
+    },
+    {
+      "parameters": {
+        "jsCode": "const {shake, mapValues} = require('radash')\nlet contact_id\nif ($('create_hs_meeting').isExecuted) {\n  contact_id = $('create_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting').isExecuted) {\n  contact_id = $('update_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting_associations').isExecuted) {\n  contact_id = $('update_hs_meeting_associations').first().json.contact_id\n} else {\n  throw new Error(\"No contact ID Found, q fue\")\n}\n\nconst responses = $('Calcom Webhook').first().json.body.payload.responses\nlet clean = shake(mapValues(responses, (response) => {\n  if (response.label === \"location\") {\n    return undefined\n  }\n  if (response.isHidden) {\n    return undefined\n  }\n  return response.value\n\n}))\n\nconst school_type__c_values = {\n\"University\": \"University\",\n\"CGEP\": \"CGEP\",\n\"Graduate School\": \"Graduate School\",\n\"High School\":\"High School\",\n\"College\": \"Independent\"\n}\n\nconst properties = {\n  \"school\": clean.school, \n  \"school_type__c\": school_type__c_values[clean['school-type']] ?? \"\",\n  \"booking__founder_interest_leading_question\": clean['question-interest-leading'], //question-interest-leading\n  \"booking__list_of_clubs_question\":clean['question-involved-extra'], //question-involved-extra\n}\n\n\nconst { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\ntry {\n  const response = await hubspotClient.crm.contacts.basicApi.update(contact_id,{properties});\n  return {response};\n} catch (e) {\n  throw e\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4768,
+        -416
+      ],
+      "id": "562be5d4-9e39-4076-a7bb-75b542afe688",
+      "name": "Founder properties updates"
+    },
+    {
+      "parameters": {
+        "jsCode": "const {shake, mapValues} = require('radash')\nlet contact_id\nif ($('create_hs_meeting').isExecuted) {\n  contact_id = $('create_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting').isExecuted) {\n  contact_id = $('update_hs_meeting').first().json.contact_id\n} else if ($('update_hs_meeting_associations').isExecuted) {\n  contact_id = $('update_hs_meeting_associations').first().json.contact_id\n} else {\n  throw new Error(\"No contact ID Found, q fue\")\n}\n\nconst responses = $('Calcom Webhook').first().json.body.payload.responses\nlet clean = shake(mapValues(responses, (response) => {\n  if (response.label === \"location\") {\n    return undefined\n  }\n  if (response.isHidden) {\n    return undefined\n  }\n  return response.value\n\n}))\nconst school_type__c_values = {\n\"University\": \"University\",\n\"CGEP\": \"CGEP\",\n\"Graduate School\": \"Graduate School\",\n\"High School\":\"High School\",\n\"College\": \"Independent\"\n}\n\nconst properties = {\n  \"school\": clean.school, \n  \"school_type__c\": school_type__c_values[clean['school-type']] ?? \"\",\n  \"booking__eboard_interest_in_slt_question\": clean['question-interest-slt'], //question-interest-slt\n  \"booking__list_of_clubs_question\":clean['question-involved-extra'], //question-involved-extra\n}\n\n\nconst { Client } = require('@hubspot/api-client')\nconst hubspotClient = new Client({ accessToken: $vars.hs_wetravel_app_key })\n\ntry {\n  const response = await hubspotClient.crm.contacts.basicApi.update(contact_id,{properties});\n  return {response};\n} catch (e) {\n  throw e\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4768,
+        -240
+      ],
+      "id": "0a0cab33-8902-4319-b56b-d6be30ac8035",
+      "name": "Eboard properties updates"
+    }
+  ],
+  "pinData": {
+    "Calcom Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "4535",
+            "x-forwarded-for": "104.154.64.45",
+            "accept": "*/*",
+            "accept-language": "*",
+            "accept-encoding": "gzip, br",
+            "user-agent": "node",
+            "cf-ray": "981161d0698e8637-ORD",
+            "sec-fetch-mode": "cors",
+            "content-type": "application/json",
+            "x-cal-signature-256": "no-secret-provided",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "104.154.64.45",
+            "cf-ipcountry": "US",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "triggerEvent": "BOOKING_CREATED",
+            "createdAt": "2025-09-18T14:02:37.444Z",
+            "payload": {
+              "bookerUrl": "https://calcom.medlifemovement.org",
+              "title": "Founder Meet & Greet with Maria",
+              "startTime": "2025-10-01T17:00:00+00:00",
+              "endTime": "2025-10-01T17:40:00+00:00",
+              "additionalNotes": "",
+              "type": "founder-meet-n-greet",
+              "description": "Hi!<br>Thanks for booking a meeting with me! I'm excited to meet you and share more information about MEDLIFE and ways to get involved!<br>Best,",
+              "eventTypeId": 130,
+              "hideCalendarNotes": false,
+              "hideCalendarEventDetails": false,
+              "hideOrganizerEmail": false,
+              "schedulingType": null,
+              "seatsPerTimeSlot": 2,
+              "seatsShowAttendees": false,
+              "seatsShowAvailabilityCount": true,
+              "customReplyToEmail": null,
+              "disableRescheduling": true,
+              "disableCancelling": false,
+              "organizer": {
+                "id": 20,
+                "name": "Maria Fernanda Ramirez Velarde",
+                "email": "mramirez@medlifemovement.org",
+                "username": "mramirez",
+                "timeZone": "America/Lima",
+                "language": {
+                  "locale": "en"
+                },
+                "timeFormat": "h:mma",
+                "utcOffset": -300
+              },
+              "attendees": [
+                {
+                  "email": "marypattonm@gmail.con",
+                  "name": "Mary Patton Meyer",
+                  "firstName": "",
+                  "lastName": "",
+                  "timeZone": "America/Chicago",
+                  "language": {
+                    "locale": "en"
+                  },
+                  "utcOffset": -300
+                }
+              ],
+              "customInputs": {},
+              "responses": {
+                "name": {
+                  "label": "your_name",
+                  "value": "Mary Patton Meyer",
+                  "isHidden": false
+                },
+                "email": {
+                  "label": "email_address",
+                  "value": "marypattonm@gmail.con",
+                  "isHidden": false
+                },
+                "attendeePhoneNumber": {
+                  "label": "phone_number",
+                  "isHidden": true
+                },
+                "location": {
+                  "label": "location",
+                  "value": {
+                    "value": "integrations:google:meet",
+                    "optionValue": ""
+                  },
+                  "isHidden": false
+                },
+                "rescheduleReason": {
+                  "label": "reason_for_reschedule",
+                  "isHidden": true
+                },
+                "title": {
+                  "label": "what_is_this_meeting_about",
+                  "isHidden": true
+                },
+                "notes": {
+                  "label": "additional_notes",
+                  "isHidden": true
+                },
+                "guests": {
+                  "label": "additional_guests",
+                  "value": [],
+                  "isHidden": true
+                },
+                "school": {
+                  "label": "School",
+                  "value": "University of Arkansas- Fayetteville",
+                  "isHidden": false
+                },
+                "school-type": {
+                  "label": "School Type",
+                  "value": "University",
+                  "isHidden": false
+                },
+                "question-interest-leading": {
+                  "label": "Are you interested in leading a MEDLIFE chapter and potentially volunteering abroad this year?",
+                  "value": "Yes",
+                  "isHidden": false
+                },
+                "question-involved-extra": {
+                  "label": "Please list the organizations, clubs, fraternities/sororities you are involved in, along with your role in each. ",
+                  "value": "I am a member of Kappa Kappa Gamma and I serve as the external arts coordinator. I am also a student ambassador for the university. Last spring, I went with UARK Greekwide and Cru to Costa Rica on a Filter of Hope mission trip.",
+                  "isHidden": false
+                }
+              },
+              "userFieldsResponses": {
+                "school": {
+                  "label": "School",
+                  "value": "University of Arkansas- Fayetteville",
+                  "isHidden": false
+                },
+                "school-type": {
+                  "label": "School Type",
+                  "value": "University",
+                  "isHidden": false
+                },
+                "question-interest-leading": {
+                  "label": "Are you interested in leading a MEDLIFE chapter and potentially volunteering abroad this year?",
+                  "value": "Yes",
+                  "isHidden": false
+                },
+                "question-involved-extra": {
+                  "label": "Please list the organizations, clubs, fraternities/sororities you are involved in, along with your role in each. ",
+                  "value": "I am a member of Kappa Kappa Gamma and I serve as the external arts coordinator. I am also a student ambassador for the university. Last spring, I went with UARK Greekwide and Cru to Costa Rica on a Filter of Hope mission trip.",
+                  "isHidden": false
+                }
+              },
+              "location": "integrations:google:meet",
+              "destinationCalendar": [
+                {
+                  "id": 42,
+                  "integration": "google_calendar",
+                  "externalId": "c_ceb4128aa20e7376c707c73a5d69af420440243eb64f54946540dda8499b0782@group.calendar.google.com",
+                  "primaryEmail": "mramirez@medlifemovement.org",
+                  "userId": 20,
+                  "eventTypeId": null,
+                  "credentialId": 51,
+                  "createdAt": "2025-09-04T06:54:44.252Z",
+                  "updatedAt": null,
+                  "delegationCredentialId": null,
+                  "domainWideDelegationCredentialId": null
+                }
+              ],
+              "iCalUID": "dTp2Z8c4NLMfpUia7ybQnH@Cal.com",
+              "iCalSequence": 0,
+              "requiresConfirmation": false,
+              "oneTimePassword": null,
+              "uid": "d6XeRW1GkihvApELsPDaGo",
+              "attendeeSeatId": "70603737-65fb-4019-a7b4-737de348c342",
+              "conferenceData": {
+                "createRequest": {
+                  "requestId": "8a0ce172-f69a-51b5-8481-93feb73d58e2"
+                }
+              },
+              "appsStatus": [
+                {
+                  "appName": "google-calendar",
+                  "type": "google_calendar",
+                  "success": 1,
+                  "failures": 0,
+                  "errors": [],
+                  "warnings": []
+                },
+                {
+                  "appName": "Google Meet",
+                  "type": "conferencing",
+                  "success": 1,
+                  "failures": 0,
+                  "errors": []
+                }
+              ],
+              "eventTitle": "Founder Meet & Greet",
+              "eventDescription": "Hi!<br>Thanks for booking a meeting with me! I'm excited to meet you and share more information about MEDLIFE and ways to get involved!<br>Best,",
+              "price": 0,
+              "currency": "usd",
+              "length": 40,
+              "bookingId": 3369,
+              "metadata": {
+                "videoCallUrl": "https://meet.google.com/yyw-ijwm-bxc"
+              },
+              "status": "ACCEPTED"
+            }
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/d961a9d8-400b-4444-991e-7aef7b3b5477",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2024-06-24T18:00:39.590Z",
+      "createdAt": "2024-06-24T18:00:39.590Z",
+      "role": "workflow:owner",
+      "workflowId": "Jo86YdvOdhMBOvAG",
+      "projectId": "wkaaqWEwkqI65Kns"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2024-07-17T16:06:53.644Z",
+      "createdAt": "2024-07-17T16:06:53.644Z",
+      "id": "wQigXdeZ5QeUfh2m",
+      "name": "hubspot"
+    },
+    {
+      "updatedAt": "2024-07-12T17:23:41.951Z",
+      "createdAt": "2024-07-12T17:23:41.951Z",
+      "id": "SQyGe9dbEolIe1D0",
+      "name": "calcom"
+    },
+    {
+      "updatedAt": "2025-01-08T16:30:09.560Z",
+      "createdAt": "2025-01-08T16:30:09.560Z",
+      "id": "ByGiBEEfze63veYx",
+      "name": "postgres"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-15T14:54:42.534Z",
+  "versionId": "a0f9a42b-269f-4c76-8f1d-3e236b266bce"
+}
