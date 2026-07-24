@@ -1,0 +1,308 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-01-14T16:41:16.794Z",
+    "createdAt": "2026-01-14T16:41:16.794Z",
+    "versionId": "46317fad-ab02-4d38-8333-060969471495",
+    "workflowId": "hoGWp6NXfVdXVpIc",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "2f057758-5176-4d23-8285-a85661f5f0b4",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -160,
+          0
+        ],
+        "id": "fc7b7df8-c623-4419-8a7c-1d9b2b4bd153",
+        "name": "Webhook",
+        "webhookId": "2f057758-5176-4d23-8285-a85661f5f0b4"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY",
+            "mode": "list",
+            "cachedResultName": "GPT MEDLIFE Testimonial",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "interview_id": "={{ $json.body.interview_id }}",
+              "timestamp": "={{ new Date().toDateTime().format('MM/dd/yyyy') }}",
+              "involvement_with_medlife": "={{ $json.body.involvement_with_medlife }}",
+              "perspective_impact": "={{ $json.body.perspective_impact }}",
+              "skills_developed": "={{ $json.body.skills_developed }}",
+              "future_intentions": "={{ $json.body.future_intentions }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "interview_id",
+                "displayName": "interview_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "timestamp",
+                "displayName": "timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "involvement_with_medlife",
+                "displayName": "involvement_with_medlife",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "perspective_impact",
+                "displayName": "perspective_impact",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "skills_developed",
+                "displayName": "skills_developed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "future_intentions",
+                "displayName": "future_intentions",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          48,
+          0
+        ],
+        "id": "07217836-39b9-4712-9700-e259461a8f7a",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "eOG97Zb2TPghM621",
+            "name": "Google Sheets Automations"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Jadyra Ch'aska Choque Quispe",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "46317fad-ab02-4d38-8333-060969471495",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-14T14:36:43.032Z",
+  "id": "hoGWp6NXfVdXVpIc",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "GPT MEDLIFE Testimonial",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "2f057758-5176-4d23-8285-a85661f5f0b4",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -160,
+        0
+      ],
+      "id": "fc7b7df8-c623-4419-8a7c-1d9b2b4bd153",
+      "name": "Webhook",
+      "webhookId": "2f057758-5176-4d23-8285-a85661f5f0b4"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY",
+          "mode": "list",
+          "cachedResultName": "GPT MEDLIFE Testimonial",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "interview_id": "={{ $json.body.interview_id }}",
+            "timestamp": "={{ new Date().toDateTime().format('MM/dd/yyyy') }}",
+            "involvement_with_medlife": "={{ $json.body.involvement_with_medlife }}",
+            "perspective_impact": "={{ $json.body.perspective_impact }}",
+            "skills_developed": "={{ $json.body.skills_developed }}",
+            "future_intentions": "={{ $json.body.future_intentions }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "interview_id",
+              "displayName": "interview_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "involvement_with_medlife",
+              "displayName": "involvement_with_medlife",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "perspective_impact",
+              "displayName": "perspective_impact",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "skills_developed",
+              "displayName": "skills_developed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "future_intentions",
+              "displayName": "future_intentions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        0
+      ],
+      "id": "07217836-39b9-4712-9700-e259461a8f7a",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eOG97Zb2TPghM621",
+          "name": "Google Sheets Automations"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-14T14:36:43.032Z",
+      "createdAt": "2026-01-14T14:36:43.032Z",
+      "role": "workflow:owner",
+      "workflowId": "hoGWp6NXfVdXVpIc",
+      "projectId": "Rg8Ts2b95CWk71eL"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-01-14T16:41:16.791Z",
+  "versionId": "46317fad-ab02-4d38-8333-060969471495"
+}
