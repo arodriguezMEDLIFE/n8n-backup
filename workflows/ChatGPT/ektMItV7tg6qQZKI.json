@@ -1,0 +1,409 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-02-02T20:59:56.408Z",
+    "createdAt": "2026-02-02T20:59:56.408Z",
+    "versionId": "70d61b79-b49c-4f7a-a6cc-17eda69b9a19",
+    "workflowId": "ektMItV7tg6qQZKI",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "98ecfe6a-b9e6-4780-afc3-b9812f89a94b",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -176,
+          0
+        ],
+        "id": "4060a3e3-7676-4b50-a8d3-fc8d7e9e9b77",
+        "name": "Webhook",
+        "webhookId": "98ecfe6a-b9e6-4780-afc3-b9812f89a94b"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1CuN2jed2h9tAJNf7tS0Sqkg8CY0lUBjlMoOVoTznF24",
+            "mode": "list",
+            "cachedResultName": "The MEDLIFE Standard GPT",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1CuN2jed2h9tAJNf7tS0Sqkg8CY0lUBjlMoOVoTznF24/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": "gid=0",
+            "mode": "list",
+            "cachedResultName": "Sheet1",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY/edit#gid=0"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "timestamp": "={{ new Date().toDateTime().format('MM/dd/yyyy') }}",
+              "doubts": "={{ $json.body.doubts }}",
+              "red": "={{ $json.body.red }}",
+              "yellow": "={{ $json.body.yellow }}",
+              "green": "={{ $json.body.green }}",
+              "name": "={{ $json.body.name }}",
+              "team": "={{ $json.body.team }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "name",
+                "displayName": "name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "timestamp",
+                "displayName": "timestamp",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "doubts",
+                "displayName": "doubts",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "red",
+                "displayName": "red",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "yellow",
+                "displayName": "yellow",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "green",
+                "displayName": "green",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "team",
+                "displayName": "team",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          48,
+          0
+        ],
+        "id": "baf83e7b-2051-44b2-a262-6371fac8c638",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "eOG97Zb2TPghM621",
+            "name": "Google Sheets Automations"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Astrid Figueroa",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "70d61b79-b49c-4f7a-a6cc-17eda69b9a19",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-01-22T14:22:40.891Z",
+  "id": "ektMItV7tg6qQZKI",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "GPT MEDLIFE Standard",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "98ecfe6a-b9e6-4780-afc3-b9812f89a94b",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        0
+      ],
+      "id": "4060a3e3-7676-4b50-a8d3-fc8d7e9e9b77",
+      "name": "Webhook",
+      "webhookId": "98ecfe6a-b9e6-4780-afc3-b9812f89a94b"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1CuN2jed2h9tAJNf7tS0Sqkg8CY0lUBjlMoOVoTznF24",
+          "mode": "list",
+          "cachedResultName": "The MEDLIFE Standard GPT",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1CuN2jed2h9tAJNf7tS0Sqkg8CY0lUBjlMoOVoTznF24/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Gm1wklfLA5-FRB_-U_TpwycO39Zm-Hw1BC7IK3ArhXY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ new Date().toDateTime().format('MM/dd/yyyy') }}",
+            "doubts": "={{ $json.body.doubts }}",
+            "red": "={{ $json.body.red }}",
+            "yellow": "={{ $json.body.yellow }}",
+            "green": "={{ $json.body.green }}",
+            "name": "={{ $json.body.name }}",
+            "team": "={{ $json.body.team }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "doubts",
+              "displayName": "doubts",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "red",
+              "displayName": "red",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "yellow",
+              "displayName": "yellow",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "green",
+              "displayName": "green",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "team",
+              "displayName": "team",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        48,
+        0
+      ],
+      "id": "baf83e7b-2051-44b2-a262-6371fac8c638",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eOG97Zb2TPghM621",
+          "name": "Google Sheets Automations"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "128",
+            "x-forwarded-for": "191.233.196.125",
+            "traceparent": "00-698110270000000066157eebe3e775fa-2e2798ad6dd54191-00",
+            "tracestate": "dd=s:-1;p:5c532426b20a744a;t.dm:-3",
+            "accept-encoding": "gzip, br",
+            "accept": "*/*",
+            "cf-ray": "9c7c9cb33f51566f-GRU",
+            "x-request-id": "32f26aa2-0cb8-42b4-b11b-67235c7e6e79/9eer",
+            "user-agent": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; ChatGPT-User/1.0; +https://openai.com/bot",
+            "openai-ephemeral-user-id": "295e7727-67f1-5ac1-a20d-e874a3e3a6c9",
+            "openai-conversation-id": "f6c09233-2602-5bd2-aa80-b2185e803253",
+            "openai-gpt-id": "g-69399a6041f48191a1952565e908466c",
+            "x-med-key": "WnE3rBNAscSbeXJhxexU",
+            "content-type": "application/json",
+            "x-datadog-trace-id": "7355925117985584634",
+            "x-datadog-parent-id": "2970132777975424906",
+            "x-datadog-sampling-priority": "-1",
+            "x-datadog-tags": "_dd.p.tid=6981102700000000,_dd.p.dm=-3",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "191.233.196.125",
+            "cf-ipcountry": "BR",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "timestamp": 1738531200,
+            "name": "Ana Pérez",
+            "team": "MED International",
+            "doubts": 0,
+            "green": 1,
+            "yellow": 0,
+            "red": 0
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/98ecfe6a-b9e6-4780-afc3-b9812f89a94b",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-01-22T14:22:40.891Z",
+      "createdAt": "2026-01-22T14:22:40.891Z",
+      "role": "workflow:owner",
+      "workflowId": "ektMItV7tg6qQZKI",
+      "projectId": "Rg8Ts2b95CWk71eL"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-08-29T20:07:28.427Z",
+      "createdAt": "2025-08-29T20:07:16.072Z",
+      "id": "X5SzaTeo8VDkCJJL",
+      "name": "ChatGPT"
+    },
+    {
+      "updatedAt": "2025-04-29T03:27:45.610Z",
+      "createdAt": "2025-04-29T03:27:45.610Z",
+      "id": "PAmQZGb0lQpoRgXA",
+      "name": "talent-management"
+    },
+    {
+      "updatedAt": "2024-10-17T21:26:25.982Z",
+      "createdAt": "2024-10-17T21:26:25.982Z",
+      "id": "ffWqqNwjNb12CmI5",
+      "name": "sheets"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-02-02T20:59:56.406Z",
+  "versionId": "70d61b79-b49c-4f7a-a6cc-17eda69b9a19"
+}
