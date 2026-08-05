@@ -1,0 +1,1936 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-08-05T01:40:19.423Z",
+    "createdAt": "2026-08-05T01:40:19.423Z",
+    "versionId": "a5a9eac4-efe1-4b68-bb92-896c75953319",
+    "workflowId": "I6RotZH1ydmT04pq",
+    "nodes": [
+      {
+        "parameters": {
+          "authentication": "accessToken",
+          "additionalFields": {
+            "billingAddressUi": {
+              "billingAddressValues": {
+                "firstName": "={{ $json.Name }}",
+                "lastName": "={{ $json['Last Name'] }}",
+                "company": "={{ $json.Company }}",
+                "country": "={{ $json.Country }}",
+                "address1": "={{ $json['Street Address'] }}",
+                "city": "={{ $json.City }}",
+                "province": "={{ $json['Province/State'] }}",
+                "zip": "={{ $json.ZIP }}",
+                "phone": "={{ $json.Phone }}"
+              }
+            },
+            "discountCodesUi": {
+              "discountCodesValues": [
+                {
+                  "amount": "100",
+                  "code": "Custom Discount"
+                }
+              ]
+            },
+            "email": "={{ $json.Email }}",
+            "locationId": 87657873688,
+            "sendFulfillmentReceipt": true,
+            "sendReceipt": true,
+            "shippingAddressUi": {
+              "shippingAddressValues": {
+                "firstName": "={{ $json.Name }}",
+                "lastName": "={{ $json['Last Name'] }}",
+                "company": "={{ $json.Company }}",
+                "country": "={{ $json.Country }}",
+                "address1": "={{ $json['Street Address'] }}",
+                "city": "={{ $json.City }}",
+                "province": "={{ $json['Province/State'] }}",
+                "zip": "={{ $json.ZIP }}",
+                "phone": "={{ $json.Phone }}"
+              }
+            },
+            "test": "={{ \"false\" }}"
+          },
+          "limeItemsUi": {
+            "lineItemValues": [
+              {
+                "productId": "={{ $json['Product ID'] }}",
+                "variantId": "={{ $json['Variant ID'] }}",
+                "title": "={{ $json['Item Title'] }}",
+                "quantity": "={{ $json['Quantity'] }}",
+                "price": "1"
+              }
+            ]
+          }
+        },
+        "id": "d9215c68-fd3f-46dd-8bec-ec695af977aa",
+        "name": "Shopify",
+        "type": "n8n-nodes-base.shopify",
+        "typeVersion": 1,
+        "position": [
+          1808,
+          192
+        ],
+        "retryOnFail": true,
+        "waitBetweenTries": 3000,
+        "credentials": {
+          "shopifyAccessTokenApi": {
+            "id": "xmKQudPoHcAaagLW",
+            "name": "Shopify Access Account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "f15a3c8e-a4e0-4aa6-808e-e283191df983",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          848,
+          400
+        ],
+        "id": "51f03fb1-ec9d-4b5a-96ca-db60c17bc271",
+        "name": "Webhook",
+        "webhookId": "f15a3c8e-a4e0-4aa6-808e-e283191df983"
+      },
+      {
+        "parameters": {
+          "mode": "runOnceForEachItem",
+          "jsCode": "const item = $input.item;\nconst body = item.json.body || {};\nconst headers = item.json.headers || {};\n\n// ===== NUEVO 1: catálogo de productos (forma × versión) =====\nconst PRODUCT_CATALOG = {\n  college: {\n    current: { title: \"MEDLIFE Chapter Kit 26-27\",             productId: \"ID_PRODUCTO_COLLEGE_2026\", variantId: \"ID_VARIANTE_COLLEGE_2026\" },\n    legacy:  { title: \"MEDLIFE Kit for College Chapters 2025\", productId: \"9796557898008\",            variantId: \"50401230815512\" }\n  },\n  hs: {\n    current: { title: \"MEDLIFE Kit for High school Chapters 2026\", productId: \"10249804874008\", variantId: \"51989351498008\" },\n    legacy:  { title: \"MEDLIFE Kit for High school Chapters 2025\", productId: \"9796559962392\",  variantId: \"50401238188312\" }\n  }\n};\n\n// ===== NUEVO 2: ¿hay stock del kit 2026? (por forma) =====\nconst STOCK_2026 = {\n  college: false,\n  hs: true\n};\n\n// ===== NUEVO 3: forma de origen según el form_id que envía HubSpot =====\nconst FORM_MAP = {\n  \"de306230-7676-4775-9bd5-179094f8a770\": \"college\",\n  \"f2f5112e-9426-47e8-8abd-04315230862a\": \"hs\"\n};\nconst rawFormId = String(body.hs_form_id ?? '').trim().toLowerCase();\nconst formType = FORM_MAP[rawFormId] || null;\n\n// --- HubSpot -> columnas Shopify ---\nconst fullName = String(body.promo_materials_name ?? '').trim();\nconst nameParts = fullName.split(/\\s+/);\nconst firstName = nameParts.shift() || '';\nconst lastName = nameParts.join(' ') || '';\n\nconst data = {\n  Name: firstName,\n  'Last Name': lastName,\n  Email: String(body.delivery_contact_email ?? '').trim(),\n  Phone: String(body.delivery_contact_phone ?? '').trim(),\n  Company: String(body.high_school_or_university_name ?? '').trim(),\n  'Street Address': String(body.delivery_address_line_1 ?? '').trim(),\n  City: String(body.delivery_address_city ?? '').trim(),\n  'Province/State': String(body.delivery_address_state_region ?? '').trim(),\n  Country: String(body.delivery_address_country ?? '').trim(),\n  ZIP: String(body.delivery_address_zip_code ?? '').trim()\n};\n\n// --- 1. Normalizar nombre de país (variantes comunes) ---\n// >>> CAMBIO: Hong Kong y South Korea agregados (son países propios en Shopify, NO China)\nconst countryAliases = {\n  'usa': 'United States', 'us': 'United States', 'u.s.a.': 'United States',\n  'united states of america': 'United States', 'estados unidos': 'United States',\n  'puerto rico': 'United States',\n  'canada': 'Canada', 'canadá': 'Canada',\n  'china': 'China', 'prc': 'China', \"people's republic of china\": 'China',\n  'uk': 'United Kingdom', 'u.k.': 'United Kingdom', 'great britain': 'United Kingdom',\n  'hong kong': 'Hong Kong', 'hk': 'Hong Kong', 'hong kong sar': 'Hong Kong',\n  'south korea': 'South Korea', 'korea del sur': 'South Korea', 'corea del sur': 'South Korea',\n  'republic of korea': 'South Korea', 'kr': 'South Korea', 'korea, south': 'South Korea'\n};\nlet country = String(data.Country ?? '').trim();\nconst countryKey = country.toLowerCase();\nif (countryAliases[countryKey]) {\n  country = countryAliases[countryKey];\n}\n\n// --- 2. Mapeo de provincia/estado SEGÚN el país ---\nconst usStates = {\n  AL: \"Alabama\", AK: \"Alaska\", AZ: \"Arizona\", AR: \"Arkansas\", CA: \"California\",\n  CO: \"Colorado\", CT: \"Connecticut\", DE: \"Delaware\", FL: \"Florida\", GA: \"Georgia\",\n  HI: \"Hawaii\", ID: \"Idaho\", IL: \"Illinois\", IN: \"Indiana\", IA: \"Iowa\",\n  KS: \"Kansas\", KY: \"Kentucky\", LA: \"Louisiana\", ME: \"Maine\", MD: \"Maryland\",\n  MA: \"Massachusetts\", MASSACHUSETTS: \"Massachusetts\", MI: \"Michigan\", MN: \"Minnesota\", MS: \"Mississippi\", MO: \"Missouri\",\n  MT: \"Montana\", NE: \"Nebraska\", NV: \"Nevada\", NH: \"New Hampshire\", NJ: \"New Jersey\",\n  NM: \"New Mexico\", NY: \"New York\", NC: \"North Carolina\", ND: \"North Dakota\", OH: \"Ohio\",\n  OK: \"Oklahoma\", OR: \"Oregon\", PA: \"Pennsylvania\", RI: \"Rhode Island\", SC: \"South Carolina\",\n  SD: \"South Dakota\", TN: \"Tennessee\", TX: \"Texas\", UT: \"Utah\", VT: \"Vermont\",\n  VA: \"Virginia\", WA: \"Washington\", WV: \"West Virginia\", WI: \"Wisconsin\", WY: \"Wyoming\",\n  DC: \"District of Columbia\", PR: \"Puerto Rico\"\n};\nconst caProvinces = {\n  AB: \"Alberta\", BC: \"British Columbia\", MB: \"Manitoba\", NB: \"New Brunswick\",\n  NL: \"Newfoundland and Labrador\", NS: \"Nova Scotia\", NT: \"Northwest Territories\",\n  NU: \"Nunavut\", ON: \"Ontario\", PE: \"Prince Edward Island\", QC: \"Quebec\",\n  SK: \"Saskatchewan\", YT: \"Yukon\"\n};\nlet province = String(data['Province/State'] ?? '').trim();\nconst provinceUpper = province.toUpperCase();\nif (country === 'United States' && usStates[provinceUpper]) {\n  province = usStates[provinceUpper];\n} else if (country === 'Canada' && caProvinces[provinceUpper]) {\n  province = caProvinces[provinceUpper];\n}\nif (provinceUpper === 'PR' || province.toLowerCase() === 'puerto rico') {\n  country = 'United States';\n  province = 'Puerto Rico';\n}\n\n// --- 3. Normalizar ZIP ---\n// >>> CAMBIO: limpia caracteres no numéricos y solo recupera ceros a la izquierda\n//     cuando es seguro (número corto SIN cero inicial, ej. 653 -> 00653).\n//     Un valor que ya trae cero inicial y viene corto (ej. \"0096-\") es incompleto\n//     -> se deja tal cual para que la validación de abajo lo mande a error.\nlet zip = String(data.ZIP ?? '').trim();\nif (country === 'United States') {\n  const raw = zip;\n  const digits = zip.replace(/\\D/g, ''); // quita guiones, espacios, letras\n  if (digits.length >= 9) {\n    zip = digits.slice(0, 5) + '-' + digits.slice(5, 9); // 009601234 -> 00960-1234\n  } else if (digits.length === 5) {\n    zip = digits;\n  } else if (digits.length < 5 && !raw.startsWith('0')) {\n    zip = digits.padStart(5, '0'); // 653 -> 00653 (pérdida de ceros a la izquierda)\n  } else {\n    zip = digits; // incompleto/typo -> lo atrapa la validación\n  }\n}\n\n// --- 4. Días hasta la feria + versión de kit ---\nconst fairDateRaw = body.activities_fair_date;\nconst fairDate = fairDateRaw ? new Date(fairDateRaw) : null;\nconst today = new Date();\nconst msPerDay = 1000 * 60 * 60 * 24;\nlet daysUntilFair = null;\nlet useLegacyKit = false; // true = kit 2025 (feria <= 15 días)\nif (fairDate && !isNaN(fairDate.getTime())) {\n  daysUntilFair = Math.ceil((fairDate - today) / msPerDay);\n  useLegacyKit = daysUntilFair <= 15;\n}\nconst kitVersion = useLegacyKit ? 'legacy' : 'current';\n\n// ===== NUEVO 4: resolver el producto (forma × versión) =====\nlet product = null;\nif (formType && PRODUCT_CATALOG[formType]) {\n  product = PRODUCT_CATALOG[formType][kitVersion] || null;\n}\n\n// --- 5. Validación de campos obligatorios ---\nconst requiredFields = ['Name', 'Last Name', 'Email', 'Street Address', 'City', 'ZIP', 'Country'];\nconst missing = requiredFields.filter(f => {\n  const value = data[f];\n  return value === undefined || value === null || String(value).trim() === '';\n});\n\nconst emailValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(data.Email ?? '').trim());\nif (!emailValid) missing.push('Email (formato inválido)');\n\n// >>> CAMBIO: Hong Kong y South Korea agregados a la lista de países permitidos\nconst knownCountries = ['United States', 'Canada', 'China', 'United Kingdom', 'Hong Kong', 'South Korea'];\nif (!knownCountries.includes(country)) {\n  missing.push(`País no reconocido: \"${data.Country}\"`);\n}\n\n// >>> CAMBIO: validar formato de ZIP solo para US/PR (5 dígitos, o 5+4)\nif (country === 'United States') {\n  if (!/^\\d{5}(-\\d{4})?$/.test(zip)) {\n    missing.push(`ZIP inválido para US/PR: \"${data.ZIP}\"`);\n  }\n}\n\n// ===== NUEVO 5: validar forma y producto =====\nif (!formType) missing.push(`Forma no reconocida (hs_form_id): \"${body.hs_form_id ?? '(vacío)'}\"`);\nif (formType && !product) missing.push(`Sin producto configurado para ${formType}/${kitVersion}`);\n\nconst isValid = missing.length === 0;\n\n// ===== NUEVO 6: decisión de ruta =====\nlet route;\nif (!isValid) {\n  route = 'error';\n} else if (kitVersion === 'legacy') {\n  route = 'ship_now';\n} else if (STOCK_2026[formType]) {\n  route = 'ship_now';\n} else {\n  route = 'hold_2026';\n}\n\n// --- 6. Salida ---\nitem.json = {\n  ...data,\n  Country: country,\n  'Province/State': province,\n  ZIP: zip,\n  'Item Title':  product ? product.title    : '',\n  'Product ID':  product ? product.productId : '',\n  'Variant ID':  product ? product.variantId : '',\n  Quantity: 1,\n  formType,\n  kitVersion,\n  useLegacyKit,\n  daysUntilFair,\n  activities_fair_date: fairDateRaw ?? '',\n  fair_date_readable: (fairDate && !isNaN(fairDate.getTime())) ? fairDate.toISOString().slice(0, 10) : '',\n  pending_id: String(headers['x-hubspot-correlation-id'] ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),\n  status: 'pending',\n  created_at: today.toISOString(),\n  route,\n  isValid,\n  validationErrors: missing.length ? `Faltan o son inválidos: ${missing.join(', ')}` : ''\n};\n\nreturn item;"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          1104,
+          400
+        ],
+        "id": "14f9ec1a-b3f8-4248-8387-a6615a563f2e",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw",
+            "mode": "list",
+            "cachedResultName": "Shopify Order Creation - n8n",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 643236307,
+            "mode": "list",
+            "cachedResultName": "Automated_Address Format - Send",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit#gid=643236307"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "Name": "={{ $json.Name }}",
+              "Last Name": "={{ $json['Last Name'] }}",
+              "Email": "={{ $json.Email }}",
+              "Phone": "={{ $json.Phone }}",
+              "Company": "={{ $json.Company }}",
+              "Street Address": "={{ $json['Street Address'] }}",
+              "City": "={{ $json.City }}",
+              "Province/State": "={{ $json['Province/State'] }}",
+              "Country": "={{ $json.Country }}",
+              "ZIP": "={{ $json.ZIP }}",
+              "Item Title": "={{ $json['Item Title'] }}",
+              "Product ID": "={{ $json['Product ID'] }}",
+              "Variant ID": "={{ $json['Variant ID'] }}",
+              "Quantity": "={{ $json.Quantity }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Name",
+                "displayName": "Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Last Name",
+                "displayName": "Last Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Email",
+                "displayName": "Email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Phone",
+                "displayName": "Phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Company",
+                "displayName": "Company",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Street Address",
+                "displayName": "Street Address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "City",
+                "displayName": "City",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Province/State",
+                "displayName": "Province/State",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Country",
+                "displayName": "Country",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ZIP",
+                "displayName": "ZIP",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Item Title",
+                "displayName": "Item Title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Product ID",
+                "displayName": "Product ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Variant ID",
+                "displayName": "Variant ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Quantity",
+                "displayName": "Quantity",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "id": "4574db88-d331-4ee0-9199-28c4b01b546d",
+        "name": "Google Sheets1",
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.3,
+        "position": [
+          1824,
+          16
+        ],
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "eOG97Zb2TPghM621",
+            "name": "Google Sheets Automations"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw",
+            "mode": "list",
+            "cachedResultName": "Shopify Order Creation - n8n",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 1973823567,
+            "mode": "list",
+            "cachedResultName": "Errors_automated",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit#gid=1973823567"
+          },
+          "columns": {
+            "mappingMode": "autoMapInputData",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "Name",
+                "displayName": "Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Last Name",
+                "displayName": "Last Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Email",
+                "displayName": "Email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Phone",
+                "displayName": "Phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Company",
+                "displayName": "Company",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Street Address",
+                "displayName": "Street Address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "City",
+                "displayName": "City",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Province/State",
+                "displayName": "Province/State",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Country",
+                "displayName": "Country",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "ZIP",
+                "displayName": "ZIP",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Item Title",
+                "displayName": "Item Title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Product ID",
+                "displayName": "Product ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Variant ID",
+                "displayName": "Variant ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Quantity",
+                "displayName": "Quantity",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1792,
+          592
+        ],
+        "id": "c0c2ed74-3daf-468d-aa85-2b0663415722",
+        "name": "Append row in sheet",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "eOG97Zb2TPghM621",
+            "name": "Google Sheets Automations"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "select": "user",
+          "user": {
+            "__rl": true,
+            "value": "U08LTPP4789",
+            "mode": "list",
+            "cachedResultName": "yjallo"
+          },
+          "text": "🚨 Review Media Kit Sending Errors: This notification is triggered whenever an error occurs while creating a Media Kit shipping order. Please review the error details and take the necessary action.",
+          "otherOptions": {}
+        },
+        "type": "n8n-nodes-base.slack",
+        "typeVersion": 2.4,
+        "position": [
+          2048,
+          592
+        ],
+        "id": "70fa3356-a2e3-4d5e-8507-8b269e796544",
+        "name": "Send a message",
+        "webhookId": "b5d4a7fe-f030-4616-8047-7b2895bd460e",
+        "credentials": {
+          "slackApi": {
+            "id": "v1Pwm8W9FLCUPmDF",
+            "name": "Test Assign"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $json.route }}",
+                      "rightValue": "ship_now",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "cd06e8a8-ecd1-4933-af62-5e03f606bb4e"
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "2e283e8a-31d8-4209-b354-62568d4c7de1",
+                      "leftValue": "={{ $json.route }}",
+                      "rightValue": "hold_2026",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "1780beeb-53e3-4faf-91c8-ca654efe73dd",
+                      "leftValue": "={{ $json.route }}",
+                      "rightValue": "error",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                }
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          1312,
+          400
+        ],
+        "id": "9f88c870-b0d5-4b93-9943-d38344097b9a",
+        "name": "Switch",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000
+      },
+      {
+        "parameters": {
+          "operation": "append",
+          "documentId": {
+            "__rl": true,
+            "value": "1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw",
+            "mode": "list",
+            "cachedResultName": "Shopify Order Creation - n8n",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 2091725953,
+            "mode": "list",
+            "cachedResultName": "Pending_2026",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit#gid=2091725953"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "pending_id": "={{ $('Code in JavaScript').item.json.pending_id }}",
+              "status": "={{ $('Code in JavaScript').item.json.status }}",
+              "formType": "={{ $('Code in JavaScript').item.json.formType }}",
+              "Name": "={{ $('Code in JavaScript').item.json.Name }}",
+              "Last Name": "={{ $('Code in JavaScript').item.json['Last Name'] }}",
+              "Email": "={{ $('Code in JavaScript').item.json.Email }}",
+              "Phone": "={{ $('Code in JavaScript').item.json.Phone }}",
+              "Company": "={{ $('Code in JavaScript').item.json.Company }}",
+              "Street Address": "={{ $('Code in JavaScript').item.json['Street Address'] }}",
+              "City": "={{ $('Code in JavaScript').item.json.City }}",
+              "Province/State": "={{ $('Code in JavaScript').item.json['Province/State'] }}",
+              "ZIP": "={{ $('Code in JavaScript').item.json.ZIP }}",
+              "Country": "={{ $('Code in JavaScript').item.json.Country }}",
+              "activities_fair_date": "={{ $('Code in JavaScript').item.json.activities_fair_date }}",
+              "fair_date_readable": "={{ $('Code in JavaScript').item.json.fair_date_readable }}",
+              "created_at": "={{ $('Code in JavaScript').item.json.created_at }}",
+              "Quantity": "={{ $('Code in JavaScript').item.json.Quantity }}",
+              "Variant ID": "={{ $('Code in JavaScript').item.json['Variant ID'] }}",
+              "Product ID": "={{ $('Code in JavaScript').item.json['Product ID'] }}",
+              "Item Title": "={{ $('Code in JavaScript').item.json['Item Title'] }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "pending_id",
+                "displayName": "pending_id",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "status",
+                "displayName": "status",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "formType",
+                "displayName": "formType",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Name",
+                "displayName": "Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Last Name",
+                "displayName": "Last Name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Email",
+                "displayName": "Email",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Phone",
+                "displayName": "Phone",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Company",
+                "displayName": "Company",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Street Address",
+                "displayName": "Street Address",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "City",
+                "displayName": "City",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Province/State",
+                "displayName": "Province/State",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Country",
+                "displayName": "Country",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "ZIP",
+                "displayName": "ZIP",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "activities_fair_date",
+                "displayName": "activities_fair_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "fair_date_readable",
+                "displayName": "fair_date_readable",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "created_at",
+                "displayName": "created_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Item Title",
+                "displayName": "Item Title",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Product ID",
+                "displayName": "Product ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Variant ID",
+                "displayName": "Variant ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Quantity",
+                "displayName": "Quantity",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "processed_at",
+                "displayName": "processed_at",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          1792,
+          416
+        ],
+        "id": "a4d22abe-154e-475e-85fa-4f8fbb01ea10",
+        "name": "Append row in sheet1",
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "eOG97Zb2TPghM621",
+            "name": "Google Sheets Automations"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Shopify": {
+        "main": [
+          []
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Sheets1": {
+        "main": [
+          []
+        ]
+      },
+      "Append row in sheet": {
+        "main": [
+          [
+            {
+              "node": "Send a message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Google Sheets1",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "Shopify",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Append row in sheet1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Append row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Append row in sheet1": {
+        "main": [
+          []
+        ]
+      }
+    },
+    "authors": "Diego Bejarano",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "a5a9eac4-efe1-4b68-bb92-896c75953319",
+  "connections": {
+    "Shopify": {
+      "main": [
+        []
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        []
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Shopify",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "createdAt": "2026-06-30T21:51:39.811Z",
+  "id": "I6RotZH1ydmT04pq",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Shopify Order Creation - Automated from chapter submission",
+  "nodes": [
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "additionalFields": {
+          "billingAddressUi": {
+            "billingAddressValues": {
+              "firstName": "={{ $json.Name }}",
+              "lastName": "={{ $json['Last Name'] }}",
+              "company": "={{ $json.Company }}",
+              "country": "={{ $json.Country }}",
+              "address1": "={{ $json['Street Address'] }}",
+              "city": "={{ $json.City }}",
+              "province": "={{ $json['Province/State'] }}",
+              "zip": "={{ $json.ZIP }}",
+              "phone": "={{ $json.Phone }}"
+            }
+          },
+          "discountCodesUi": {
+            "discountCodesValues": [
+              {
+                "amount": "100",
+                "code": "Custom Discount"
+              }
+            ]
+          },
+          "email": "={{ $json.Email }}",
+          "locationId": 87657873688,
+          "sendFulfillmentReceipt": true,
+          "sendReceipt": true,
+          "shippingAddressUi": {
+            "shippingAddressValues": {
+              "firstName": "={{ $json.Name }}",
+              "lastName": "={{ $json['Last Name'] }}",
+              "company": "={{ $json.Company }}",
+              "country": "={{ $json.Country }}",
+              "address1": "={{ $json['Street Address'] }}",
+              "city": "={{ $json.City }}",
+              "province": "={{ $json['Province/State'] }}",
+              "zip": "={{ $json.ZIP }}",
+              "phone": "={{ $json.Phone }}"
+            }
+          },
+          "test": "={{ \"false\" }}"
+        },
+        "limeItemsUi": {
+          "lineItemValues": [
+            {
+              "productId": "={{ $json['Product ID'] }}",
+              "variantId": "={{ $json['Variant ID'] }}",
+              "title": "={{ $json['Item Title'] }}",
+              "quantity": "={{ $json['Quantity'] }}",
+              "price": "1"
+            }
+          ]
+        }
+      },
+      "id": "d9215c68-fd3f-46dd-8bec-ec695af977aa",
+      "name": "Shopify",
+      "type": "n8n-nodes-base.shopify",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        192
+      ],
+      "retryOnFail": true,
+      "waitBetweenTries": 3000,
+      "credentials": {
+        "shopifyAccessTokenApi": {
+          "id": "xmKQudPoHcAaagLW",
+          "name": "Shopify Access Account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "f15a3c8e-a4e0-4aa6-808e-e283191df983",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        400
+      ],
+      "id": "51f03fb1-ec9d-4b5a-96ca-db60c17bc271",
+      "name": "Webhook",
+      "webhookId": "f15a3c8e-a4e0-4aa6-808e-e283191df983"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const item = $input.item;\nconst body = item.json.body || {};\nconst headers = item.json.headers || {};\n\n// ===== NUEVO 1: catálogo de productos (forma × versión) =====\nconst PRODUCT_CATALOG = {\n  college: {\n    current: { title: \"MEDLIFE Chapter Kit 26-27\",             productId: \"ID_PRODUCTO_COLLEGE_2026\", variantId: \"ID_VARIANTE_COLLEGE_2026\" },\n    legacy:  { title: \"MEDLIFE Kit for College Chapters 2025\", productId: \"9796557898008\",            variantId: \"50401230815512\" }\n  },\n  hs: {\n    current: { title: \"MEDLIFE Kit for High school Chapters 2026\", productId: \"10249804874008\", variantId: \"51989351498008\" },\n    legacy:  { title: \"MEDLIFE Kit for High school Chapters 2025\", productId: \"9796559962392\",  variantId: \"50401238188312\" }\n  }\n};\n\n// ===== NUEVO 2: ¿hay stock del kit 2026? (por forma) =====\nconst STOCK_2026 = {\n  college: false,\n  hs: true\n};\n\n// ===== NUEVO 3: forma de origen según el form_id que envía HubSpot =====\nconst FORM_MAP = {\n  \"de306230-7676-4775-9bd5-179094f8a770\": \"college\",\n  \"f2f5112e-9426-47e8-8abd-04315230862a\": \"hs\"\n};\nconst rawFormId = String(body.hs_form_id ?? '').trim().toLowerCase();\nconst formType = FORM_MAP[rawFormId] || null;\n\n// --- HubSpot -> columnas Shopify ---\nconst fullName = String(body.promo_materials_name ?? '').trim();\nconst nameParts = fullName.split(/\\s+/);\nconst firstName = nameParts.shift() || '';\nconst lastName = nameParts.join(' ') || '';\n\nconst data = {\n  Name: firstName,\n  'Last Name': lastName,\n  Email: String(body.delivery_contact_email ?? '').trim(),\n  Phone: String(body.delivery_contact_phone ?? '').trim(),\n  Company: String(body.high_school_or_university_name ?? '').trim(),\n  'Street Address': String(body.delivery_address_line_1 ?? '').trim(),\n  City: String(body.delivery_address_city ?? '').trim(),\n  'Province/State': String(body.delivery_address_state_region ?? '').trim(),\n  Country: String(body.delivery_address_country ?? '').trim(),\n  ZIP: String(body.delivery_address_zip_code ?? '').trim()\n};\n\n// --- 1. Normalizar nombre de país (variantes comunes) ---\n// >>> CAMBIO: Hong Kong y South Korea agregados (son países propios en Shopify, NO China)\nconst countryAliases = {\n  'usa': 'United States', 'us': 'United States', 'u.s.a.': 'United States',\n  'united states of america': 'United States', 'estados unidos': 'United States',\n  'puerto rico': 'United States',\n  'canada': 'Canada', 'canadá': 'Canada',\n  'china': 'China', 'prc': 'China', \"people's republic of china\": 'China',\n  'uk': 'United Kingdom', 'u.k.': 'United Kingdom', 'great britain': 'United Kingdom',\n  'hong kong': 'Hong Kong', 'hk': 'Hong Kong', 'hong kong sar': 'Hong Kong',\n  'south korea': 'South Korea', 'korea del sur': 'South Korea', 'corea del sur': 'South Korea',\n  'republic of korea': 'South Korea', 'kr': 'South Korea', 'korea, south': 'South Korea'\n};\nlet country = String(data.Country ?? '').trim();\nconst countryKey = country.toLowerCase();\nif (countryAliases[countryKey]) {\n  country = countryAliases[countryKey];\n}\n\n// --- 2. Mapeo de provincia/estado SEGÚN el país ---\nconst usStates = {\n  AL: \"Alabama\", AK: \"Alaska\", AZ: \"Arizona\", AR: \"Arkansas\", CA: \"California\",\n  CO: \"Colorado\", CT: \"Connecticut\", DE: \"Delaware\", FL: \"Florida\", GA: \"Georgia\",\n  HI: \"Hawaii\", ID: \"Idaho\", IL: \"Illinois\", IN: \"Indiana\", IA: \"Iowa\",\n  KS: \"Kansas\", KY: \"Kentucky\", LA: \"Louisiana\", ME: \"Maine\", MD: \"Maryland\",\n  MA: \"Massachusetts\", MASSACHUSETTS: \"Massachusetts\", MI: \"Michigan\", MN: \"Minnesota\", MS: \"Mississippi\", MO: \"Missouri\",\n  MT: \"Montana\", NE: \"Nebraska\", NV: \"Nevada\", NH: \"New Hampshire\", NJ: \"New Jersey\",\n  NM: \"New Mexico\", NY: \"New York\", NC: \"North Carolina\", ND: \"North Dakota\", OH: \"Ohio\",\n  OK: \"Oklahoma\", OR: \"Oregon\", PA: \"Pennsylvania\", RI: \"Rhode Island\", SC: \"South Carolina\",\n  SD: \"South Dakota\", TN: \"Tennessee\", TX: \"Texas\", UT: \"Utah\", VT: \"Vermont\",\n  VA: \"Virginia\", WA: \"Washington\", WV: \"West Virginia\", WI: \"Wisconsin\", WY: \"Wyoming\",\n  DC: \"District of Columbia\", PR: \"Puerto Rico\"\n};\nconst caProvinces = {\n  AB: \"Alberta\", BC: \"British Columbia\", MB: \"Manitoba\", NB: \"New Brunswick\",\n  NL: \"Newfoundland and Labrador\", NS: \"Nova Scotia\", NT: \"Northwest Territories\",\n  NU: \"Nunavut\", ON: \"Ontario\", PE: \"Prince Edward Island\", QC: \"Quebec\",\n  SK: \"Saskatchewan\", YT: \"Yukon\"\n};\nlet province = String(data['Province/State'] ?? '').trim();\nconst provinceUpper = province.toUpperCase();\nif (country === 'United States' && usStates[provinceUpper]) {\n  province = usStates[provinceUpper];\n} else if (country === 'Canada' && caProvinces[provinceUpper]) {\n  province = caProvinces[provinceUpper];\n}\nif (provinceUpper === 'PR' || province.toLowerCase() === 'puerto rico') {\n  country = 'United States';\n  province = 'Puerto Rico';\n}\n\n// --- 3. Normalizar ZIP ---\n// >>> CAMBIO: limpia caracteres no numéricos y solo recupera ceros a la izquierda\n//     cuando es seguro (número corto SIN cero inicial, ej. 653 -> 00653).\n//     Un valor que ya trae cero inicial y viene corto (ej. \"0096-\") es incompleto\n//     -> se deja tal cual para que la validación de abajo lo mande a error.\nlet zip = String(data.ZIP ?? '').trim();\nif (country === 'United States') {\n  const raw = zip;\n  const digits = zip.replace(/\\D/g, ''); // quita guiones, espacios, letras\n  if (digits.length >= 9) {\n    zip = digits.slice(0, 5) + '-' + digits.slice(5, 9); // 009601234 -> 00960-1234\n  } else if (digits.length === 5) {\n    zip = digits;\n  } else if (digits.length < 5 && !raw.startsWith('0')) {\n    zip = digits.padStart(5, '0'); // 653 -> 00653 (pérdida de ceros a la izquierda)\n  } else {\n    zip = digits; // incompleto/typo -> lo atrapa la validación\n  }\n}\n\n// --- 4. Días hasta la feria + versión de kit ---\nconst fairDateRaw = body.activities_fair_date;\nconst fairDate = fairDateRaw ? new Date(fairDateRaw) : null;\nconst today = new Date();\nconst msPerDay = 1000 * 60 * 60 * 24;\nlet daysUntilFair = null;\nlet useLegacyKit = false; // true = kit 2025 (feria <= 15 días)\nif (fairDate && !isNaN(fairDate.getTime())) {\n  daysUntilFair = Math.ceil((fairDate - today) / msPerDay);\n  useLegacyKit = daysUntilFair <= 15;\n}\nconst kitVersion = useLegacyKit ? 'legacy' : 'current';\n\n// ===== NUEVO 4: resolver el producto (forma × versión) =====\nlet product = null;\nif (formType && PRODUCT_CATALOG[formType]) {\n  product = PRODUCT_CATALOG[formType][kitVersion] || null;\n}\n\n// --- 5. Validación de campos obligatorios ---\nconst requiredFields = ['Name', 'Last Name', 'Email', 'Street Address', 'City', 'ZIP', 'Country'];\nconst missing = requiredFields.filter(f => {\n  const value = data[f];\n  return value === undefined || value === null || String(value).trim() === '';\n});\n\nconst emailValid = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(String(data.Email ?? '').trim());\nif (!emailValid) missing.push('Email (formato inválido)');\n\n// >>> CAMBIO: Hong Kong y South Korea agregados a la lista de países permitidos\nconst knownCountries = ['United States', 'Canada', 'China', 'United Kingdom', 'Hong Kong', 'South Korea'];\nif (!knownCountries.includes(country)) {\n  missing.push(`País no reconocido: \"${data.Country}\"`);\n}\n\n// >>> CAMBIO: validar formato de ZIP solo para US/PR (5 dígitos, o 5+4)\nif (country === 'United States') {\n  if (!/^\\d{5}(-\\d{4})?$/.test(zip)) {\n    missing.push(`ZIP inválido para US/PR: \"${data.ZIP}\"`);\n  }\n}\n\n// ===== NUEVO 5: validar forma y producto =====\nif (!formType) missing.push(`Forma no reconocida (hs_form_id): \"${body.hs_form_id ?? '(vacío)'}\"`);\nif (formType && !product) missing.push(`Sin producto configurado para ${formType}/${kitVersion}`);\n\nconst isValid = missing.length === 0;\n\n// ===== NUEVO 6: decisión de ruta =====\nlet route;\nif (!isValid) {\n  route = 'error';\n} else if (kitVersion === 'legacy') {\n  route = 'ship_now';\n} else if (STOCK_2026[formType]) {\n  route = 'ship_now';\n} else {\n  route = 'hold_2026';\n}\n\n// --- 6. Salida ---\nitem.json = {\n  ...data,\n  Country: country,\n  'Province/State': province,\n  ZIP: zip,\n  'Item Title':  product ? product.title    : '',\n  'Product ID':  product ? product.productId : '',\n  'Variant ID':  product ? product.variantId : '',\n  Quantity: 1,\n  formType,\n  kitVersion,\n  useLegacyKit,\n  daysUntilFair,\n  activities_fair_date: fairDateRaw ?? '',\n  fair_date_readable: (fairDate && !isNaN(fairDate.getTime())) ? fairDate.toISOString().slice(0, 10) : '',\n  pending_id: String(headers['x-hubspot-correlation-id'] ?? `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),\n  status: 'pending',\n  created_at: today.toISOString(),\n  route,\n  isValid,\n  validationErrors: missing.length ? `Faltan o son inválidos: ${missing.join(', ')}` : ''\n};\n\nreturn item;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        400
+      ],
+      "id": "14f9ec1a-b3f8-4248-8387-a6615a563f2e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw",
+          "mode": "list",
+          "cachedResultName": "Shopify Order Creation - n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 643236307,
+          "mode": "list",
+          "cachedResultName": "Automated_Address Format - Send",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit#gid=643236307"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Last Name": "={{ $json['Last Name'] }}",
+            "Email": "={{ $json.Email }}",
+            "Phone": "={{ $json.Phone }}",
+            "Company": "={{ $json.Company }}",
+            "Street Address": "={{ $json['Street Address'] }}",
+            "City": "={{ $json.City }}",
+            "Province/State": "={{ $json['Province/State'] }}",
+            "Country": "={{ $json.Country }}",
+            "ZIP": "={{ $json.ZIP }}",
+            "Item Title": "={{ $json['Item Title'] }}",
+            "Product ID": "={{ $json['Product ID'] }}",
+            "Variant ID": "={{ $json['Variant ID'] }}",
+            "Quantity": "={{ $json.Quantity }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Street Address",
+              "displayName": "Street Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "City",
+              "displayName": "City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Province/State",
+              "displayName": "Province/State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ZIP",
+              "displayName": "ZIP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item Title",
+              "displayName": "Item Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product ID",
+              "displayName": "Product ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "4574db88-d331-4ee0-9199-28c4b01b546d",
+      "name": "Google Sheets1",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        1824,
+        16
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eOG97Zb2TPghM621",
+          "name": "Google Sheets Automations"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw",
+          "mode": "list",
+          "cachedResultName": "Shopify Order Creation - n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1973823567,
+          "mode": "list",
+          "cachedResultName": "Errors_automated",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit#gid=1973823567"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Street Address",
+              "displayName": "Street Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "City",
+              "displayName": "City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Province/State",
+              "displayName": "Province/State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ZIP",
+              "displayName": "ZIP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Item Title",
+              "displayName": "Item Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Product ID",
+              "displayName": "Product ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1792,
+        592
+      ],
+      "id": "c0c2ed74-3daf-468d-aa85-2b0663415722",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eOG97Zb2TPghM621",
+          "name": "Google Sheets Automations"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "value": "U08LTPP4789",
+          "mode": "list",
+          "cachedResultName": "yjallo"
+        },
+        "text": "🚨 Review Media Kit Sending Errors: This notification is triggered whenever an error occurs while creating a Media Kit shipping order. Please review the error details and take the necessary action.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        2048,
+        592
+      ],
+      "id": "70fa3356-a2e3-4d5e-8507-8b269e796544",
+      "name": "Send a message",
+      "webhookId": "b5d4a7fe-f030-4616-8047-7b2895bd460e",
+      "credentials": {
+        "slackApi": {
+          "id": "v1Pwm8W9FLCUPmDF",
+          "name": "Test Assign"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "ship_now",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "cd06e8a8-ecd1-4933-af62-5e03f606bb4e"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "2e283e8a-31d8-4209-b354-62568d4c7de1",
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "hold_2026",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1780beeb-53e3-4faf-91c8-ca654efe73dd",
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "error",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        1312,
+        400
+      ],
+      "id": "9f88c870-b0d5-4b93-9943-d38344097b9a",
+      "name": "Switch",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw",
+          "mode": "list",
+          "cachedResultName": "Shopify Order Creation - n8n",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 2091725953,
+          "mode": "list",
+          "cachedResultName": "Pending_2026",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1y3ssmorFa1xZZu_WQG9u_KGaf7XS3IR9MrPpcSy5BEw/edit#gid=2091725953"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "pending_id": "={{ $('Code in JavaScript').item.json.pending_id }}",
+            "status": "={{ $('Code in JavaScript').item.json.status }}",
+            "formType": "={{ $('Code in JavaScript').item.json.formType }}",
+            "Name": "={{ $('Code in JavaScript').item.json.Name }}",
+            "Last Name": "={{ $('Code in JavaScript').item.json['Last Name'] }}",
+            "Email": "={{ $('Code in JavaScript').item.json.Email }}",
+            "Phone": "={{ $('Code in JavaScript').item.json.Phone }}",
+            "Company": "={{ $('Code in JavaScript').item.json.Company }}",
+            "Street Address": "={{ $('Code in JavaScript').item.json['Street Address'] }}",
+            "City": "={{ $('Code in JavaScript').item.json.City }}",
+            "Province/State": "={{ $('Code in JavaScript').item.json['Province/State'] }}",
+            "ZIP": "={{ $('Code in JavaScript').item.json.ZIP }}",
+            "Country": "={{ $('Code in JavaScript').item.json.Country }}",
+            "activities_fair_date": "={{ $('Code in JavaScript').item.json.activities_fair_date }}",
+            "fair_date_readable": "={{ $('Code in JavaScript').item.json.fair_date_readable }}",
+            "created_at": "={{ $('Code in JavaScript').item.json.created_at }}",
+            "Quantity": "={{ $('Code in JavaScript').item.json.Quantity }}",
+            "Variant ID": "={{ $('Code in JavaScript').item.json['Variant ID'] }}",
+            "Product ID": "={{ $('Code in JavaScript').item.json['Product ID'] }}",
+            "Item Title": "={{ $('Code in JavaScript').item.json['Item Title'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "pending_id",
+              "displayName": "pending_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "formType",
+              "displayName": "formType",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Phone",
+              "displayName": "Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Street Address",
+              "displayName": "Street Address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "City",
+              "displayName": "City",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Province/State",
+              "displayName": "Province/State",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Country",
+              "displayName": "Country",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ZIP",
+              "displayName": "ZIP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "activities_fair_date",
+              "displayName": "activities_fair_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "fair_date_readable",
+              "displayName": "fair_date_readable",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created_at",
+              "displayName": "created_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Item Title",
+              "displayName": "Item Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Product ID",
+              "displayName": "Product ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Variant ID",
+              "displayName": "Variant ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Quantity",
+              "displayName": "Quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1792,
+        416
+      ],
+      "id": "a4d22abe-154e-475e-85fa-4f8fbb01ea10",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eOG97Zb2TPghM621",
+          "name": "Google Sheets Automations"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "492",
+            "x-forwarded-for": "54.174.62.175",
+            "accept": "application/json",
+            "x-hubspot-origin-hublet": "na1",
+            "x-hubspot-timeout-millis": "44990",
+            "user-agent": "HubSpot Connect 2.0 (http://dev.hubspot.com/) (namespace: WebhooksPlatformExecution) - AutomationActionsExecutionService-web",
+            "cf-ray": "a260fb25ea7a173f-IAD",
+            "x-hubspot-correlation-id": "019fcee2-3394-7f9d-a700-9786fe58d23c",
+            "accept-encoding": "gzip, br",
+            "content-type": "application/json",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "54.174.62.175",
+            "cf-ipcountry": "US",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "hs_form_id": "de306230-7676-4775-9bd5-179094f8a770",
+            "activities_fair_date": 1785801600000,
+            "promo_materials_name": "Aisha A Irizarry Ramos",
+            "delivery_address_city": "Guanica",
+            "delivery_contact_email": "aisha.irizarry@upr.edu",
+            "delivery_contact_phone": 2816839364,
+            "delivery_address_line_1": "HC 37 Box 4589",
+            "delivery_address_country": "Puerto Rico",
+            "delivery_address_zip_code": "00653",
+            "delivery_address_state_region": "Puerto Rico",
+            "high_school_or_university_name": "Universidad de Puerto Rico-Ponce"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook-test/f15a3c8e-a4e0-4aa6-808e-e283191df983",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI",
+    "timeSavedMode": "fixed",
+    "availableInMCP": false,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "saveManualExecutions": true
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-30T21:51:39.811Z",
+      "createdAt": "2026-06-30T21:51:39.811Z",
+      "role": "workflow:owner",
+      "workflowId": "I6RotZH1ydmT04pq",
+      "projectId": "Rg8Ts2b95CWk71eL"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2025-02-07T16:33:19.266Z",
+      "createdAt": "2025-02-07T16:33:19.266Z",
+      "id": "liXNWfFjGBxupr8z",
+      "name": "shopify"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-08-05T01:40:19.421Z",
+  "versionId": "a5a9eac4-efe1-4b68-bb92-896c75953319"
+}
