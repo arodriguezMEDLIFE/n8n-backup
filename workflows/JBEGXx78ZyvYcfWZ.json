@@ -1,0 +1,724 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-08-07T22:45:17.255Z",
+    "createdAt": "2026-08-07T22:45:17.255Z",
+    "versionId": "89b0392f-3275-4f9c-8641-24c135cba7ff",
+    "workflowId": "JBEGXx78ZyvYcfWZ",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "ab38f98b-dabc-4947-93f0-68a3d836094e",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          0,
+          0
+        ],
+        "id": "b184c989-ef0f-4b6d-8e1d-2f071f84d327",
+        "name": "Webhook",
+        "webhookId": "ab38f98b-dabc-4947-93f0-68a3d836094e"
+      },
+      {
+        "parameters": {
+          "jsCode": "const b = $input.first().json.body;\n\n// epoch ms (medianoche UTC de HubSpot) -> \"YYYY-MM-DD\". UTC a propósito:\n// si convirtiera a hora de Lima, las fechas se correrían un día atrás.\nconst toDateUTC = (ms) => {\n  if (ms === null || ms === undefined || ms === \"\") return undefined;\n  const d = new Date(Number(ms));\n  return isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);\n};\nconst toYesNo = (v) => (v === true ? \"Yes\" : v === false ? \"No\" : undefined);\nconst val = (v) =>\n  v === null || v === undefined || v === \"\" ? undefined\n  : typeof v === \"string\" ? v.trim() : v;\n\nif (b.hs_object_id === null || b.hs_object_id === undefined) {\n  throw new Error(\"Payload sin hs_object_id\");\n}\n\n// Header EXACTO del Sheet (con \\n para los saltos de línea) -> valor del payload\nconst candidates = {\n  \"RECORD ID\": String(b.hs_object_id),\n  \"Chapter Info\\nForm\\n(Hubspot)\": toYesNo(b.chapter_info_completed),\n  \"Goals Form\\nCompleted\\n(Hubspot)\": toYesNo(b.chapter_goals_completed),\n  \"Instagram Link\\n(Hubspot)\": val(b.instagram_handle__c),\n  \"School start date\\n(Hubspot)\": toDateUTC(b.first_day_of_class),\n  \"Planning\\n& GSW\\nDate\": toDateUTC(b.n2024_25_gsw_date),\n  \"Club Fair\\n(Hubspot)\": toDateUTC(b.activities_fair_date),\n  \"1st GBM\\n(Hubspot)\": toDateUTC(b.gbm_date),\n  \"Medlife QR Sheet Link\\n(Hubspot)\": val(b.qr_database_url),\n  \"First\\nSLT Season\\n(Hubspot)\": val(b.slt_season_hs),\n  \"First\\nSLT Goal\\n(Hubspot)\": val(b.travelers_goal),\n  \"Second\\nSLT Goal\\n(Hubspot)\": val(b.travelers_goal_2),\n  \"SLT Destination, Date and Season 1\": val(b.slt_destination__date_and_season_hs),\n  \"SLT Destination, Date and Season 2\": val(b.slt_destination_date_and_season_2),\n};\n\n// \"vacío = no tocar\": se omiten las claves undefined (RECORD ID siempre va)\nconst row = {};\nfor (const [k, v] of Object.entries(candidates)) {\n  if (v !== undefined) row[k] = v;\n}\n\nreturn [{ json: row }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          208,
+          0
+        ],
+        "id": "1c23a9e6-ab69-4946-8ef4-cb11942da6fb",
+        "name": "Code in JavaScript"
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "documentId": {
+            "__rl": true,
+            "value": "15qF-pbAwUeIKNF4XUjYXDkAnL2_XbKLE6emnBR9xL30",
+            "mode": "list",
+            "cachedResultName": "Chapter Information From Hubspot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15qF-pbAwUeIKNF4XUjYXDkAnL2_XbKLE6emnBR9xL30/edit?usp=drivesdk"
+          },
+          "sheetName": {
+            "__rl": true,
+            "value": 412772176,
+            "mode": "list",
+            "cachedResultName": "From Hubspot",
+            "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15qF-pbAwUeIKNF4XUjYXDkAnL2_XbKLE6emnBR9xL30/edit#gid=412772176"
+          },
+          "columns": {
+            "mappingMode": "autoMapInputData",
+            "value": {},
+            "matchingColumns": [
+              "RECORD ID"
+            ],
+            "schema": [
+              {
+                "id": "RECORD ID",
+                "displayName": "RECORD ID",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true,
+                "removed": false
+              },
+              {
+                "id": "Chapter Name\n(Hubspot)",
+                "displayName": "Chapter Name\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Owner",
+                "displayName": "Owner",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Instagram Link\n(Hubspot)",
+                "displayName": "Instagram Link\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "School start date\n(Hubspot)",
+                "displayName": "School start date\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Planning\n& GSW\nDate",
+                "displayName": "Planning\n& GSW\nDate",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Chapter Info\nForm\n(Hubspot)",
+                "displayName": "Chapter Info\nForm\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Goals Form\nCompleted\n(Hubspot)",
+                "displayName": "Goals Form\nCompleted\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Club Fair\n(Hubspot)",
+                "displayName": "Club Fair\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "1st GBM\n(Hubspot)",
+                "displayName": "1st GBM\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Medlife QR Sheet Link\n(Hubspot)",
+                "displayName": "Medlife QR Sheet Link\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "First Semester\nBiweekly\nStart Date",
+                "displayName": "First Semester\nBiweekly\nStart Date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "2nd Semester\nBiweekly\nStart Date",
+                "displayName": "2nd Semester\nBiweekly\nStart Date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "First\nSLT Season\n(Hubspot)",
+                "displayName": "First\nSLT Season\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "First\nSLT Date\n(Hubspot)",
+                "displayName": "First\nSLT Date\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "First\nSLT Location\n(Hubspot)",
+                "displayName": "First\nSLT Location\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "First\nSLT Goal\n(Hubspot)",
+                "displayName": "First\nSLT Goal\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Second\nSLT Season\n(Hubspot)",
+                "displayName": "Second\nSLT Season\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Second\nSLT Date\n(Hubspot)",
+                "displayName": "Second\nSLT Date\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Second\nSLT Location\n(Hubspot)",
+                "displayName": "Second\nSLT Location\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "Second\nSLT Goal\n(Hubspot)",
+                "displayName": "Second\nSLT Goal\n(Hubspot)",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "SLT Destination, Date and Season 1",
+                "displayName": "SLT Destination, Date and Season 1",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "SLT Destination, Date and Season 2",
+                "displayName": "SLT Destination, Date and Season 2",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "row_number",
+                "displayName": "row_number",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true,
+                "readOnly": true,
+                "removed": true
+              }
+            ],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleSheets",
+        "typeVersion": 4.7,
+        "position": [
+          432,
+          0
+        ],
+        "id": "8bb1dcf1-4e0d-44d7-8db9-5b9fa8abb666",
+        "name": "Update row in sheet",
+        "retryOnFail": true,
+        "waitBetweenTries": 5000,
+        "credentials": {
+          "googleSheetsOAuth2Api": {
+            "id": "eOG97Zb2TPghM621",
+            "name": "Google Sheets Automations"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Code in JavaScript",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Code in JavaScript": {
+        "main": [
+          [
+            {
+              "node": "Update row in sheet",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Diego Bejarano",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "89b0392f-3275-4f9c-8641-24c135cba7ff",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-07T21:54:35.689Z",
+  "id": "JBEGXx78ZyvYcfWZ",
+  "isArchived": false,
+  "meta": null,
+  "name": "Sync properties from HubSpot to Google Sheet",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ab38f98b-dabc-4947-93f0-68a3d836094e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b184c989-ef0f-4b6d-8e1d-2f071f84d327",
+      "name": "Webhook",
+      "webhookId": "ab38f98b-dabc-4947-93f0-68a3d836094e"
+    },
+    {
+      "parameters": {
+        "jsCode": "const b = $input.first().json.body;\n\n// epoch ms (medianoche UTC de HubSpot) -> \"YYYY-MM-DD\". UTC a propósito:\n// si convirtiera a hora de Lima, las fechas se correrían un día atrás.\nconst toDateUTC = (ms) => {\n  if (ms === null || ms === undefined || ms === \"\") return undefined;\n  const d = new Date(Number(ms));\n  return isNaN(d.getTime()) ? undefined : d.toISOString().slice(0, 10);\n};\nconst toYesNo = (v) => (v === true ? \"Yes\" : v === false ? \"No\" : undefined);\nconst val = (v) =>\n  v === null || v === undefined || v === \"\" ? undefined\n  : typeof v === \"string\" ? v.trim() : v;\n\nif (b.hs_object_id === null || b.hs_object_id === undefined) {\n  throw new Error(\"Payload sin hs_object_id\");\n}\n\n// Header EXACTO del Sheet (con \\n para los saltos de línea) -> valor del payload\nconst candidates = {\n  \"RECORD ID\": String(b.hs_object_id),\n  \"Chapter Info\\nForm\\n(Hubspot)\": toYesNo(b.chapter_info_completed),\n  \"Goals Form\\nCompleted\\n(Hubspot)\": toYesNo(b.chapter_goals_completed),\n  \"Instagram Link\\n(Hubspot)\": val(b.instagram_handle__c),\n  \"School start date\\n(Hubspot)\": toDateUTC(b.first_day_of_class),\n  \"Planning\\n& GSW\\nDate\": toDateUTC(b.n2024_25_gsw_date),\n  \"Club Fair\\n(Hubspot)\": toDateUTC(b.activities_fair_date),\n  \"1st GBM\\n(Hubspot)\": toDateUTC(b.gbm_date),\n  \"Medlife QR Sheet Link\\n(Hubspot)\": val(b.qr_database_url),\n  \"First\\nSLT Season\\n(Hubspot)\": val(b.slt_season_hs),\n  \"First\\nSLT Goal\\n(Hubspot)\": val(b.travelers_goal),\n  \"Second\\nSLT Goal\\n(Hubspot)\": val(b.travelers_goal_2),\n  \"SLT Destination, Date and Season 1\": val(b.slt_destination__date_and_season_hs),\n  \"SLT Destination, Date and Season 2\": val(b.slt_destination_date_and_season_2),\n};\n\n// \"vacío = no tocar\": se omiten las claves undefined (RECORD ID siempre va)\nconst row = {};\nfor (const [k, v] of Object.entries(candidates)) {\n  if (v !== undefined) row[k] = v;\n}\n\nreturn [{ json: row }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1c23a9e6-ab69-4946-8ef4-cb11942da6fb",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "15qF-pbAwUeIKNF4XUjYXDkAnL2_XbKLE6emnBR9xL30",
+          "mode": "list",
+          "cachedResultName": "Chapter Information From Hubspot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15qF-pbAwUeIKNF4XUjYXDkAnL2_XbKLE6emnBR9xL30/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 412772176,
+          "mode": "list",
+          "cachedResultName": "From Hubspot",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/15qF-pbAwUeIKNF4XUjYXDkAnL2_XbKLE6emnBR9xL30/edit#gid=412772176"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [
+            "RECORD ID"
+          ],
+          "schema": [
+            {
+              "id": "RECORD ID",
+              "displayName": "RECORD ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Chapter Name\n(Hubspot)",
+              "displayName": "Chapter Name\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Owner",
+              "displayName": "Owner",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Instagram Link\n(Hubspot)",
+              "displayName": "Instagram Link\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "School start date\n(Hubspot)",
+              "displayName": "School start date\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Planning\n& GSW\nDate",
+              "displayName": "Planning\n& GSW\nDate",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Chapter Info\nForm\n(Hubspot)",
+              "displayName": "Chapter Info\nForm\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Goals Form\nCompleted\n(Hubspot)",
+              "displayName": "Goals Form\nCompleted\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Club Fair\n(Hubspot)",
+              "displayName": "Club Fair\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "1st GBM\n(Hubspot)",
+              "displayName": "1st GBM\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Medlife QR Sheet Link\n(Hubspot)",
+              "displayName": "Medlife QR Sheet Link\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First Semester\nBiweekly\nStart Date",
+              "displayName": "First Semester\nBiweekly\nStart Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "2nd Semester\nBiweekly\nStart Date",
+              "displayName": "2nd Semester\nBiweekly\nStart Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First\nSLT Season\n(Hubspot)",
+              "displayName": "First\nSLT Season\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First\nSLT Date\n(Hubspot)",
+              "displayName": "First\nSLT Date\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First\nSLT Location\n(Hubspot)",
+              "displayName": "First\nSLT Location\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "First\nSLT Goal\n(Hubspot)",
+              "displayName": "First\nSLT Goal\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Second\nSLT Season\n(Hubspot)",
+              "displayName": "Second\nSLT Season\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Second\nSLT Date\n(Hubspot)",
+              "displayName": "Second\nSLT Date\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Second\nSLT Location\n(Hubspot)",
+              "displayName": "Second\nSLT Location\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Second\nSLT Goal\n(Hubspot)",
+              "displayName": "Second\nSLT Goal\n(Hubspot)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SLT Destination, Date and Season 1",
+              "displayName": "SLT Destination, Date and Season 1",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SLT Destination, Date and Season 2",
+              "displayName": "SLT Destination, Date and Season 2",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        432,
+        0
+      ],
+      "id": "8bb1dcf1-4e0d-44d7-8db9-5b9fa8abb666",
+      "name": "Update row in sheet",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eOG97Zb2TPghM621",
+          "name": "Google Sheets Automations"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "609",
+            "x-forwarded-for": "54.174.62.167",
+            "accept": "application/json",
+            "x-hubspot-origin-hublet": "na1",
+            "x-hubspot-timeout-millis": "44994",
+            "user-agent": "HubSpot Connect 2.0 (http://dev.hubspot.com/) (namespace: WebhooksPlatformExecution) - AutomationActionsExecutionService-web",
+            "cf-ray": "a2798966bfbb2d11-IAD",
+            "x-hubspot-correlation-id": "019fde3b-1c1a-7a19-bd1d-033fbb90d631",
+            "accept-encoding": "gzip, br",
+            "content-type": "application/json",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "54.174.62.167",
+            "cf-ipcountry": "US",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "gbm_date": "",
+            "hs_object_id": 8631948980,
+            "slt_season_hs": "Summer",
+            "travelers_goal": 8,
+            "qr_database_url": "https://docs.google.com/spreadsheets/d/16SHsrs8OUpbxfmxSTu8wRtu8xDP95EQ_ta5ZLehAJGc",
+            "travelers_goal_2": null,
+            "n2024_25_gsw_date": 1785715200000,
+            "first_day_of_class": 1787011200000,
+            "instagram_handle__c": "https://www.instagram.com/medlifesouthcarolina?igsh=OHh0a3E3cXJxZ3Vm",
+            "activities_fair_date": 1788307200000,
+            "chapter_info_completed": true,
+            "chapter_goals_completed": true,
+            "slt_destination_date_and_season_2": null,
+            "slt_destination__date_and_season_hs": "Summer - Cusco SLT Mobile Clinic - May 15-May 23, 2027"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook-test/ab38f98b-dabc-4947-93f0-68a3d836094e",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-07T21:54:35.689Z",
+      "createdAt": "2026-08-07T21:54:35.689Z",
+      "role": "workflow:owner",
+      "workflowId": "JBEGXx78ZyvYcfWZ",
+      "projectId": "Rg8Ts2b95CWk71eL"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-08-07T22:45:17.254Z",
+  "versionId": "89b0392f-3275-4f9c-8641-24c135cba7ff"
+}
