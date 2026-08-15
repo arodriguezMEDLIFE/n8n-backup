@@ -1,0 +1,1172 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-04-22T19:42:02.938Z",
+    "createdAt": "2026-04-22T19:42:02.938Z",
+    "versionId": "77de166e-4267-4e24-9d42-114e1ee76928",
+    "workflowId": "esC83aA1o38vJZGt",
+    "nodes": [
+      {
+        "parameters": {
+          "jsCode": "const { createHmac } = require('crypto');\n// Get Webhook Data\nconst webhookData = $('Webhook').all()[0].json\n\n//Format into valid str for validation\nconst str = \"POST\" + webhookData.webhookUrl + JSON.stringify(webhookData.body) + webhookData.headers[\"x-hubspot-request-timestamp\"]\n\n//Creation of signature \nconst signature = createHmac('sha256', $vars.webhook_secret).update(str).digest('base64')\n\n//Validation against the HubSpot Signature\nif (signature !== webhookData.headers[\"x-hubspot-signature-v3\"]) {\n  return {status:\"false\",subject: \"Error during webhook validation\", body: \"We couldn't validate the source of the webhook <br/>Signature used: \"+signature}\n}else{\n return {status:\"true\"}\n}\n\n"
+        },
+        "id": "78de977f-51d5-42b1-93d3-e02d47827e26",
+        "name": "validate_webhook",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -1840,
+          64
+        ]
+      },
+      {
+        "parameters": {
+          "operation": "select",
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "all_trips",
+            "mode": "list",
+            "cachedResultName": "all_trips"
+          },
+          "returnAll": true,
+          "where": {
+            "values": [
+              {
+                "column": "trip_id",
+                "value": "={{ $('Webhook').item.json.body.trip_id.toString() }}"
+              }
+            ]
+          },
+          "options": {
+            "outputColumns": [
+              "trip_name",
+              "sku",
+              "url",
+              "trip_id"
+            ]
+          }
+        },
+        "id": "c04ea341-fb1e-456c-8a17-e90963df34d7",
+        "name": "get_trip_data",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          -912,
+          48
+        ],
+        "alwaysOutputData": true,
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({ accessToken: $vars.discount_generator_apikey });\nconsole.log($vars);\nconst discount_key = $(\"Webhook\").all()[0].json.body.discount_property;\nconst properties = {};\nproperties[discount_key] = $(\n  \"add_discount_to_postgres\",\n).all()[0].json.discount_code;\nproperties.trip_url_for_kangaroo =\n  $(\"generate_discount\").all()[0].json.trip_url;\nconst searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n  filterGroups: [\n    {\n      filters: [\n        {\n          value: $(\"add_discount_to_postgres\").all()[0].json.assigned_to,\n          propertyName: \"hs_additional_emails\",\n          operator: \"CONTAINS_TOKEN\",\n        },\n      ],\n    },\n    {\n      filters: [\n        {\n          value: $(\"add_discount_to_postgres\").all()[0].json.assigned_to,\n          propertyName: \"email\",\n          operator: \"EQ\",\n        },\n      ],\n    },\n  ],\n  sorts: [],\n  properties: [],\n  limit: 1,\n  after: 0,\n});\nif (searchResponse.results.length > 0) {\n  console.log(searchResponse.results[0]);\n\n  const apiResponse = await hubspotClient.crm.contacts.basicApi.update(\n    searchResponse.results[0].id,\n    { properties },\n  );\n  return apiResponse;\n} else {\n  throw new Error(\"Contact not found in Hubspot line 37!\");\n}\n"
+        },
+        "id": "2e852216-ad00-4f67-a181-e3d5a18ce30c",
+        "name": "hubspot_discount_update",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          240,
+          32
+        ]
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://api.wetravel.com/v2/draft_trips/{{ $('generate_discount').all()[0].json.trip_id }}/discounts ",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "accept",
+                "value": "application/json"
+              },
+              {
+                "name": "authorization",
+                "value": "=Bearer {{ $('get_refresh_token').item.json.access_token }}"
+              }
+            ]
+          },
+          "sendBody": true,
+          "contentType": "raw",
+          "rawContentType": "application/json",
+          "body": "={{ {data:$('generate_discount').all()[0].json.data} }}",
+          "options": {}
+        },
+        "id": "6e00ac42-13f9-4653-9fa8-b214e3d5e3e2",
+        "name": "create_discount",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -448,
+          48
+        ],
+        "retryOnFail": false
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "=https://api.wetravel.com/v2/draft_trips/{{ $('generate_discount').all()[0].json.trip_id }}/publish",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "accept",
+                "value": "application/json"
+              },
+              {
+                "name": "authorization",
+                "value": "=Bearer {{ $('get_refresh_token').item.json.access_token }}"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "2f0f7db8-3352-4764-9ab8-424753f01655",
+        "name": "publish_trip",
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -240,
+          48
+        ],
+        "retryOnFail": false,
+        "waitBetweenTries": 2000
+      },
+      {
+        "parameters": {
+          "schema": {
+            "__rl": true,
+            "mode": "list",
+            "value": "public"
+          },
+          "table": {
+            "__rl": true,
+            "value": "discount_codes",
+            "mode": "list",
+            "cachedResultName": "discount_codes"
+          },
+          "columns": {
+            "mappingMode": "defineBelow",
+            "value": {
+              "is_redeemed": false,
+              "trip": "={{ $('create_discount').all()[0].json.data.trip_uuid }}",
+              "amount": "={{ $('create_discount').all()[0].json.data.amount }}",
+              "create_date": "={{ $('create_discount').all()[0].json.data.created_at }}",
+              "discount_code": "={{ $('create_discount').all()[0].json.data.name }}",
+              "assigned_to": "={{ $('Webhook').all()[0].json.body.email }}",
+              "first_name": "={{ $('Webhook').all()[0].json.body['first_name'] }}",
+              "last_name": "={{ $('Webhook').all()[0].json.body['last_name'] }}",
+              "company_name": "={{ $('Webhook').all()[0].json.body.chapter }}",
+              "concept": "={{ $('Webhook').all()[0].json.body.discount_type }}"
+            },
+            "matchingColumns": [],
+            "schema": [
+              {
+                "id": "assigned_to",
+                "displayName": "assigned_to",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "first_name",
+                "displayName": "first_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "last_name",
+                "displayName": "last_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "company_name",
+                "displayName": "company_name",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "discount_code",
+                "displayName": "discount_code",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "trip",
+                "displayName": "trip",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "amount",
+                "displayName": "amount",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "number",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "concept",
+                "displayName": "concept",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "string",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "create_date",
+                "displayName": "create_date",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "dateTime",
+                "canBeUsedToMatch": true
+              },
+              {
+                "id": "is_redeemed",
+                "displayName": "is_redeemed",
+                "required": false,
+                "defaultMatch": false,
+                "display": true,
+                "type": "boolean",
+                "canBeUsedToMatch": true
+              }
+            ]
+          },
+          "options": {}
+        },
+        "id": "e0a4b1f4-6ca2-4572-a919-05bd9edef11a",
+        "name": "add_discount_to_postgres",
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.4,
+        "position": [
+          -16,
+          32
+        ],
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "jsCode": "//Format discount information\nconst discountInformation = $('Webhook').all()[0].json.body\nconst trips = $('get_trip_data').all()\nlet trip_id =\"\"\nlet trip_url =\"\"\n//Find associated trip\nfor(let i of trips){\n  if(discountInformation.trip_id.toString() ===i.json.trip_id){\n    trip_id = i.json.trip_id\n    trip_url = i.json.url\n  }\n}\n\n//Generate random code\nconst crypto = require(\"crypto\");\nfunction randomString(length, chars) {\n  const charsLength = chars.length;\n  const randomBytes = crypto.randomBytes(length);\n  let result = new Array(length);\n  let cursor = 0;\n  for (let i = 0; i < length; i++) {\n    cursor += randomBytes[i];\n    result[i] = chars[cursor % charsLength];\n  }\n  return result.join(\"\");\n}\n\n//Check if kangaroo\nlet tru_amount = 0\nif (discountInformation.discount_property === 'kangaroo_code') {\n  tru_amount = Number(discountInformation.amount) / 10\n} else {\n  tru_amount = Number(discountInformation.amount)\n}\n//Generate body for discount\nconst data = {\n  quantity: 1,\n  discount_type: 'amount',\n  name: randomString(15,'QWERTYUIOPLKJHGFDSAZXCVBNM.-@_'),\n  amount: tru_amount\n}\n\nreturn {data:data, trip_id:trip_id, trip_url:trip_url}"
+        },
+        "id": "c656f46a-6032-42bf-85fb-8a5273bcbc27",
+        "name": "generate_discount",
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -672,
+          48
+        ]
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 1
+            },
+            "conditions": [
+              {
+                "id": "c85c6ee0-508b-4fbc-9b71-7cc6c30a4265",
+                "leftValue": "={{ $json.status }}",
+                "rightValue": "true",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "id": "c7c46e1c-03a4-48e6-8263-67f3fb6d2af6",
+        "name": "If",
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2,
+        "position": [
+          -1616,
+          64
+        ]
+      },
+      {
+        "parameters": {
+          "errorMessage": "Webhook not verified"
+        },
+        "id": "205c59df-9ced-48a6-ad27-8960e034a7ed",
+        "name": "Stop and Error",
+        "type": "n8n-nodes-base.stopAndError",
+        "typeVersion": 1,
+        "position": [
+          -1152,
+          448
+        ]
+      },
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "7a364ac2-2528-402f-bbe7-037dc4397576",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2,
+        "position": [
+          -2064,
+          64
+        ],
+        "id": "8a99e476-7662-4ea5-a277-b660fe08eb91",
+        "name": "Webhook",
+        "webhookId": "7a364ac2-2528-402f-bbe7-037dc4397576"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.wetravel.com/v2/auth/tokens/access",
+          "sendHeaders": true,
+          "headerParameters": {
+            "parameters": [
+              {
+                "name": "authorization",
+                "value": "=Bearer {{ $vars.wetravel_api }}"
+              },
+              {
+                "name": "accept",
+                "value": "application/json"
+              }
+            ]
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.2,
+        "position": [
+          -1248,
+          32
+        ],
+        "id": "ac52d812-3072-42a0-832a-10bd2b2113ce",
+        "name": "get_refresh_token"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d59148ab-5049-49c1-8138-b829284e8d72",
+                "leftValue": "",
+                "rightValue": "",
+                "operator": {
+                  "type": "string",
+                  "operation": "equals",
+                  "name": "filter.operator.equals"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          448,
+          32
+        ],
+        "id": "bb282f4f-1c1b-463e-a01d-c2ff3d147ea7",
+        "name": "If1"
+      }
+    ],
+    "connections": {
+      "validate_webhook": {
+        "main": [
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_trip_data": {
+        "main": [
+          [
+            {
+              "node": "generate_discount",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "create_discount": {
+        "main": [
+          [
+            {
+              "node": "publish_trip",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "publish_trip": {
+        "main": [
+          [
+            {
+              "node": "add_discount_to_postgres",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "add_discount_to_postgres": {
+        "main": [
+          [
+            {
+              "node": "hubspot_discount_update",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "generate_discount": {
+        "main": [
+          [
+            {
+              "node": "create_discount",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "get_refresh_token",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Stop and Error",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "validate_webhook",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "get_refresh_token": {
+        "main": [
+          [
+            {
+              "node": "get_trip_data",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "hubspot_discount_update": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Alonso Avalo",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "77de166e-4267-4e24-9d42-114e1ee76928",
+  "connections": {
+    "validate_webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_trip_data": {
+      "main": [
+        [
+          {
+            "node": "generate_discount",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "create_discount": {
+      "main": [
+        [
+          {
+            "node": "publish_trip",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "publish_trip": {
+      "main": [
+        [
+          {
+            "node": "add_discount_to_postgres",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add_discount_to_postgres": {
+      "main": [
+        [
+          {
+            "node": "hubspot_discount_update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "generate_discount": {
+      "main": [
+        [
+          {
+            "node": "create_discount",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "get_refresh_token",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "validate_webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_refresh_token": {
+      "main": [
+        [
+          {
+            "node": "get_trip_data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "hubspot_discount_update": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-05-21T14:54:53.430Z",
+  "id": "esC83aA1o38vJZGt",
+  "isArchived": false,
+  "meta": null,
+  "name": "Discount Generator v2",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const { createHmac } = require('crypto');\n// Get Webhook Data\nconst webhookData = $('Webhook').all()[0].json\n\n//Format into valid str for validation\nconst str = \"POST\" + webhookData.webhookUrl + JSON.stringify(webhookData.body) + webhookData.headers[\"x-hubspot-request-timestamp\"]\n\n//Creation of signature \nconst signature = createHmac('sha256', $vars.webhook_secret).update(str).digest('base64')\n\n//Validation against the HubSpot Signature\nif (signature !== webhookData.headers[\"x-hubspot-signature-v3\"]) {\n  return {status:\"false\",subject: \"Error during webhook validation\", body: \"We couldn't validate the source of the webhook <br/>Signature used: \"+signature}\n}else{\n return {status:\"true\"}\n}\n\n"
+      },
+      "id": "78de977f-51d5-42b1-93d3-e02d47827e26",
+      "name": "validate_webhook",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1840,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "select",
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "all_trips",
+          "mode": "list",
+          "cachedResultName": "all_trips"
+        },
+        "returnAll": true,
+        "where": {
+          "values": [
+            {
+              "column": "trip_id",
+              "value": "={{ $('Webhook').item.json.body.trip_id.toString() }}"
+            }
+          ]
+        },
+        "options": {
+          "outputColumns": [
+            "trip_name",
+            "sku",
+            "url",
+            "trip_id"
+          ]
+        }
+      },
+      "id": "c04ea341-fb1e-456c-8a17-e90963df34d7",
+      "name": "get_trip_data",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        -912,
+        48
+      ],
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\n\nconst hubspotClient = new Client({ accessToken: $vars.discount_generator_apikey });\nconsole.log($vars);\nconst discount_key = $(\"Webhook\").all()[0].json.body.discount_property;\nconst properties = {};\nproperties[discount_key] = $(\n  \"add_discount_to_postgres\",\n).all()[0].json.discount_code;\nproperties.trip_url_for_kangaroo =\n  $(\"generate_discount\").all()[0].json.trip_url;\nconst searchResponse = await hubspotClient.crm.contacts.searchApi.doSearch({\n  filterGroups: [\n    {\n      filters: [\n        {\n          value: $(\"add_discount_to_postgres\").all()[0].json.assigned_to,\n          propertyName: \"hs_additional_emails\",\n          operator: \"CONTAINS_TOKEN\",\n        },\n      ],\n    },\n    {\n      filters: [\n        {\n          value: $(\"add_discount_to_postgres\").all()[0].json.assigned_to,\n          propertyName: \"email\",\n          operator: \"EQ\",\n        },\n      ],\n    },\n  ],\n  sorts: [],\n  properties: [],\n  limit: 1,\n  after: 0,\n});\nif (searchResponse.results.length > 0) {\n  console.log(searchResponse.results[0]);\n\n  const apiResponse = await hubspotClient.crm.contacts.basicApi.update(\n    searchResponse.results[0].id,\n    { properties },\n  );\n  return apiResponse;\n} else {\n  throw new Error(\"Contact not found in Hubspot line 37!\");\n}\n"
+      },
+      "id": "2e852216-ad00-4f67-a181-e3d5a18ce30c",
+      "name": "hubspot_discount_update",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.wetravel.com/v2/draft_trips/{{ $('generate_discount').all()[0].json.trip_id }}/discounts ",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "=Bearer {{ $('get_refresh_token').item.json.access_token }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ {data:$('generate_discount').all()[0].json.data} }}",
+        "options": {}
+      },
+      "id": "6e00ac42-13f9-4653-9fa8-b214e3d5e3e2",
+      "name": "create_discount",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -448,
+        48
+      ],
+      "retryOnFail": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.wetravel.com/v2/draft_trips/{{ $('generate_discount').all()[0].json.trip_id }}/publish",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "accept",
+              "value": "application/json"
+            },
+            {
+              "name": "authorization",
+              "value": "=Bearer {{ $('get_refresh_token').item.json.access_token }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2f0f7db8-3352-4764-9ab8-424753f01655",
+      "name": "publish_trip",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -240,
+        48
+      ],
+      "retryOnFail": false,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "discount_codes",
+          "mode": "list",
+          "cachedResultName": "discount_codes"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "is_redeemed": false,
+            "trip": "={{ $('create_discount').all()[0].json.data.trip_uuid }}",
+            "amount": "={{ $('create_discount').all()[0].json.data.amount }}",
+            "create_date": "={{ $('create_discount').all()[0].json.data.created_at }}",
+            "discount_code": "={{ $('create_discount').all()[0].json.data.name }}",
+            "assigned_to": "={{ $('Webhook').all()[0].json.body.email }}",
+            "first_name": "={{ $('Webhook').all()[0].json.body['first_name'] }}",
+            "last_name": "={{ $('Webhook').all()[0].json.body['last_name'] }}",
+            "company_name": "={{ $('Webhook').all()[0].json.body.chapter }}",
+            "concept": "={{ $('Webhook').all()[0].json.body.discount_type }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "assigned_to",
+              "displayName": "assigned_to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "first_name",
+              "displayName": "first_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_name",
+              "displayName": "last_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company_name",
+              "displayName": "company_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "discount_code",
+              "displayName": "discount_code",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "trip",
+              "displayName": "trip",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "amount",
+              "displayName": "amount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "concept",
+              "displayName": "concept",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "create_date",
+              "displayName": "create_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "is_redeemed",
+              "displayName": "is_redeemed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "boolean",
+              "canBeUsedToMatch": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e0a4b1f4-6ca2-4572-a919-05bd9edef11a",
+      "name": "add_discount_to_postgres",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.4,
+      "position": [
+        -16,
+        32
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "//Format discount information\nconst discountInformation = $('Webhook').all()[0].json.body\nconst trips = $('get_trip_data').all()\nlet trip_id =\"\"\nlet trip_url =\"\"\n//Find associated trip\nfor(let i of trips){\n  if(discountInformation.trip_id.toString() ===i.json.trip_id){\n    trip_id = i.json.trip_id\n    trip_url = i.json.url\n  }\n}\n\n//Generate random code\nconst crypto = require(\"crypto\");\nfunction randomString(length, chars) {\n  const charsLength = chars.length;\n  const randomBytes = crypto.randomBytes(length);\n  let result = new Array(length);\n  let cursor = 0;\n  for (let i = 0; i < length; i++) {\n    cursor += randomBytes[i];\n    result[i] = chars[cursor % charsLength];\n  }\n  return result.join(\"\");\n}\n\n//Check if kangaroo\nlet tru_amount = 0\nif (discountInformation.discount_property === 'kangaroo_code') {\n  tru_amount = Number(discountInformation.amount) / 10\n} else {\n  tru_amount = Number(discountInformation.amount)\n}\n//Generate body for discount\nconst data = {\n  quantity: 1,\n  discount_type: 'amount',\n  name: randomString(15,'QWERTYUIOPLKJHGFDSAZXCVBNM.-@_'),\n  amount: tru_amount\n}\n\nreturn {data:data, trip_id:trip_id, trip_url:trip_url}"
+      },
+      "id": "c656f46a-6032-42bf-85fb-8a5273bcbc27",
+      "name": "generate_discount",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -672,
+        48
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "c85c6ee0-508b-4fbc-9b71-7cc6c30a4265",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c7c46e1c-03a4-48e6-8263-67f3fb6d2af6",
+      "name": "If",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        -1616,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "Webhook not verified"
+      },
+      "id": "205c59df-9ced-48a6-ad27-8960e034a7ed",
+      "name": "Stop and Error",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        448
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "7a364ac2-2528-402f-bbe7-037dc4397576",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -2064,
+        64
+      ],
+      "id": "8a99e476-7662-4ea5-a277-b660fe08eb91",
+      "name": "Webhook",
+      "webhookId": "7a364ac2-2528-402f-bbe7-037dc4397576"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.wetravel.com/v2/auth/tokens/access",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "authorization",
+              "value": "=Bearer {{ $vars.wetravel_api }}"
+            },
+            {
+              "name": "accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1248,
+        32
+      ],
+      "id": "ac52d812-3072-42a0-832a-10bd2b2113ce",
+      "name": "get_refresh_token"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d59148ab-5049-49c1-8138-b829284e8d72",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        448,
+        32
+      ],
+      "id": "bb282f4f-1c1b-463e-a01d-c2ff3d147ea7",
+      "name": "If1"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "n8n.medlifemovement.org",
+            "connection": "upgrade",
+            "content-length": "216",
+            "x-forwarded-for": "54.174.62.143",
+            "x-hubspot-signature-v3": "P92JWWZB9lnmDN1e7k3in25q4GrF85WVBN1WANsKELg=",
+            "x-hubspot-origin-hublet": "na1",
+            "x-hubspot-timeout-millis": "44981",
+            "user-agent": "HubSpot Connect 2.0 (http://dev.hubspot.com/) (namespace: WebhooksPlatformExecution) - AutomationActionsExecutionService-web",
+            "cf-ray": "9f06f2ee8a4b43ff-EWR",
+            "x-hubspot-correlation-id": "019db69d-10de-7ebc-8c35-5bd2225242bb",
+            "accept-encoding": "gzip, br",
+            "content-type": "application/json",
+            "accept": "application/json",
+            "x-hubspot-signature": "dc9533e2af12452a44a82b147cf79fc8a926abc63925695b145d007fd676ecd5",
+            "x-hubspot-signature-version": "v2",
+            "x-hubspot-request-timestamp": "1776885240050",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "54.174.62.143",
+            "cf-ipcountry": "US",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "x-forwarded-proto": "https"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "email": "omarkahla82@gmail.com",
+            "amount": 1071,
+            "chapter": null,
+            "trip_id": 81419489,
+            "last_name": "Suleiman",
+            "first_name": "Omar",
+            "discount_type": "(EXP) First SLT College E-Boarders",
+            "discount_property": "scholarship_code"
+          },
+          "webhookUrl": "https://n8n.medlifemovement.org/webhook/7a364ac2-2528-402f-bbe7-037dc4397576",
+          "executionMode": "production"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": "V2Z4LTMmGT56XZtI"
+  },
+  "shared": [
+    {
+      "updatedAt": "2025-05-21T14:54:53.430Z",
+      "createdAt": "2025-05-21T14:54:53.430Z",
+      "role": "workflow:owner",
+      "workflowId": "esC83aA1o38vJZGt",
+      "projectId": "Yw1aDGzYS0y16pGF"
+    }
+  ],
+  "staticData": null,
+  "tags": [
+    {
+      "updatedAt": "2024-07-17T16:06:53.644Z",
+      "createdAt": "2024-07-17T16:06:53.644Z",
+      "id": "wQigXdeZ5QeUfh2m",
+      "name": "hubspot"
+    },
+    {
+      "updatedAt": "2025-01-08T16:30:09.560Z",
+      "createdAt": "2025-01-08T16:30:09.560Z",
+      "id": "ByGiBEEfze63veYx",
+      "name": "postgres"
+    },
+    {
+      "updatedAt": "2024-07-17T16:00:42.675Z",
+      "createdAt": "2024-07-17T16:00:42.675Z",
+      "id": "Qur7bH3bxKERAV3l",
+      "name": "wetravel"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-04-22T19:42:02.936Z",
+  "versionId": "77de166e-4267-4e24-9d42-114e1ee76928"
+}
