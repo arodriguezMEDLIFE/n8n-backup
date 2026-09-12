@@ -1,0 +1,263 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-09-11T19:44:29.788Z",
+    "createdAt": "2026-09-11T19:44:29.788Z",
+    "versionId": "81bdcbeb-fd3f-448b-a88c-e0ec9f3451e0",
+    "workflowId": "8ZEe71wU7r7oGaIy",
+    "nodes": [
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT\n    trip_id,\n    url,\n    trip_name,\n    sku,\n    start_date,\n    end_date,\n    category,\n    type_of_slt,\n    destination\nFROM\n    all_trips\nWHERE\n    CAST(start_date AS DATE) >= MAKE_DATE(EXTRACT(YEAR FROM CURRENT_DATE)::INT, 9, 1)\n  AND trip_name NOT ILIKE '%Test%'\nORDER BY\n    start_date ASC;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.postgres",
+        "typeVersion": 2.6,
+        "position": [
+          224,
+          0
+        ],
+        "id": "c3b32e10-b9be-409c-a0be-636011ccbc2d",
+        "name": "get_upcoming_trips",
+        "credentials": {
+          "postgres": {
+            "id": "zfr3mLlKKsNl2Quy",
+            "name": "n8n_storage db"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "field": "hours"
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.2,
+        "position": [
+          0,
+          0
+        ],
+        "id": "ffda3233-2bda-44df-8de5-c5f52877356d",
+        "name": "Schedule Trigger"
+      },
+      {
+        "parameters": {
+          "jsCode": "const trips = $input.all().map(item => item.json);\n\nconst options = trips.map((trip, index) => {\n\n  return {\n    label: trip.trip_name,\n    value: trip.trip_id,\n    description: `${trip.destination} | ${trip.start_date} - ${trip.end_date}`,\n    displayOrder: index,\n    hidden: false\n  };\n});\n\nreturn [\n  {\n    json: {\n      label: \"SLT Destination, Date and Season\",\n      description: \"Lista de SLTs disponibles como opciones de dropdown\",\n      options: options\n    }\n  }\n];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          448,
+          0
+        ],
+        "id": "7e10f9a4-66be-46b5-9eb3-5ee35e89d09d",
+        "name": "format_options",
+        "executeOnce": true
+      },
+      {
+        "parameters": {
+          "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_token_3 });\n\nconst propertyConfig = $input.first().json;\n\nconst PropertyUpdate = {\n  groupName: \"operations_information\",\n  hidden: false,\n  options: propertyConfig.options,\n  displayOrder: -1,\n  description: propertyConfig.description,\n  label: propertyConfig.label,\n  type: \"enumeration\",\n  fieldType: \"select\",\n  formField: true,\n};\n\nconst objectType = \"contact\";\nconst propertyName = \"slt_destination_date_and_season\";\n\nconst apiResponse = await hubspotClient.crm.properties.coreApi.update(\n  objectType,\n  propertyName,\n  PropertyUpdate,\n);\n\nreturn [{ json: apiResponse }];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          672,
+          0
+        ],
+        "id": "68dc9232-7073-4cf2-a78f-6c9ffecad99a",
+        "name": "generate_options"
+      }
+    ],
+    "connections": {
+      "get_upcoming_trips": {
+        "main": [
+          [
+            {
+              "node": "format_options",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger": {
+        "main": [
+          [
+            {
+              "node": "get_upcoming_trips",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "format_options": {
+        "main": [
+          [
+            {
+              "node": "generate_options",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Diego Bejarano",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "81bdcbeb-fd3f-448b-a88c-e0ec9f3451e0",
+  "connections": {
+    "get_upcoming_trips": {
+      "main": [
+        [
+          {
+            "node": "format_options",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "get_upcoming_trips",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "format_options": {
+      "main": [
+        [
+          {
+            "node": "generate_options",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-08-28T16:04:45.020Z",
+  "id": "8ZEe71wU7r7oGaIy",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Cron for Trip List in SLT Destination Date & Season (Company)",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT\n    trip_id,\n    url,\n    trip_name,\n    sku,\n    start_date,\n    end_date,\n    category,\n    type_of_slt,\n    destination\nFROM\n    all_trips\nWHERE\n    CAST(start_date AS DATE) >= MAKE_DATE(EXTRACT(YEAR FROM CURRENT_DATE)::INT, 9, 1)\n  AND trip_name NOT ILIKE '%Test%'\nORDER BY\n    start_date ASC;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        224,
+        0
+      ],
+      "id": "c3b32e10-b9be-409c-a0be-636011ccbc2d",
+      "name": "get_upcoming_trips",
+      "credentials": {
+        "postgres": {
+          "id": "zfr3mLlKKsNl2Quy",
+          "name": "n8n_storage db"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ffda3233-2bda-44df-8de5-c5f52877356d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "jsCode": "const trips = $input.all().map(item => item.json);\n\nconst options = trips.map((trip, index) => {\n\n  return {\n    label: trip.trip_name,\n    value: trip.trip_id,\n    description: `${trip.destination} | ${trip.start_date} - ${trip.end_date}`,\n    displayOrder: index,\n    hidden: false\n  };\n});\n\nreturn [\n  {\n    json: {\n      label: \"SLT Destination, Date and Season\",\n      description: \"Lista de SLTs disponibles como opciones de dropdown\",\n      options: options\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "7e10f9a4-66be-46b5-9eb3-5ee35e89d09d",
+      "name": "format_options",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const { Client } = require(\"@hubspot/api-client\");\nconst hubspotClient = new Client({ accessToken: $vars.hs_token_3 });\n\nconst propertyConfig = $input.first().json;\n\nconst PropertyUpdate = {\n  groupName: \"operations_information\",\n  hidden: false,\n  options: propertyConfig.options,\n  displayOrder: -1,\n  description: propertyConfig.description,\n  label: propertyConfig.label,\n  type: \"enumeration\",\n  fieldType: \"select\",\n  formField: true,\n};\n\nconst objectType = \"contact\";\nconst propertyName = \"slt_destination_date_and_season\";\n\nconst apiResponse = await hubspotClient.crm.properties.coreApi.update(\n  objectType,\n  propertyName,\n  PropertyUpdate,\n);\n\nreturn [{ json: apiResponse }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        672,
+        0
+      ],
+      "id": "68dc9232-7073-4cf2-a78f-6c9ffecad99a",
+      "name": "generate_options"
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-08-28T16:04:45.020Z",
+      "createdAt": "2026-08-28T16:04:45.020Z",
+      "role": "workflow:owner",
+      "workflowId": "8ZEe71wU7r7oGaIy",
+      "projectId": "Xr7Tq1f92KLz18mB"
+    }
+  ],
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
+  "tags": [
+    {
+      "updatedAt": "2025-01-08T16:30:09.560Z",
+      "createdAt": "2025-01-08T16:30:09.560Z",
+      "id": "ByGiBEEfze63veYx",
+      "name": "postgres"
+    },
+    {
+      "updatedAt": "2024-07-17T16:06:53.644Z",
+      "createdAt": "2024-07-17T16:06:53.644Z",
+      "id": "wQigXdeZ5QeUfh2m",
+      "name": "hubspot"
+    }
+  ],
+  "triggerCount": 1,
+  "updatedAt": "2026-09-11T19:44:29.786Z",
+  "versionId": "81bdcbeb-fd3f-448b-a88c-e0ec9f3451e0"
+}
