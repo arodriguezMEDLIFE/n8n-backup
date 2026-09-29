@@ -1,0 +1,320 @@
+{
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-09-28T17:46:11.227Z",
+    "createdAt": "2026-09-28T17:46:11.227Z",
+    "versionId": "1ca21f25-f058-4998-9ba3-66edac17f444",
+    "workflowId": "efNX86EoVJKPwVXr",
+    "nodes": [
+      {
+        "parameters": {
+          "httpMethod": "POST",
+          "path": "fcfd1f21-ab44-48f3-875b-487c83991b6d",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.webhook",
+        "typeVersion": 2.1,
+        "position": [
+          -320,
+          32
+        ],
+        "id": "36c72aab-88ac-4ae0-927f-00f2cdb439a2",
+        "name": "Webhook",
+        "webhookId": "fcfd1f21-ab44-48f3-875b-487c83991b6d"
+      },
+      {
+        "parameters": {
+          "jsCode": "function norm(v) {\n  return String(v == null ? '' : v).replace(/\\s+/g, ' ').trim().toLowerCase();\n}\n\nconst body = $json.body || {};\nconst records = Array.isArray(body.records) ? body.records : [];\n\nif (body.source !== 'reconcile') {\n  throw new Error(`Expected source=\"reconcile\" but received \"${body.source || ''}\"`);\n}\n\n// Compatibilidad hacia atrás: si el Apps Script de College todavía no manda\n// schoolType, se asume 'college'. Una vez actualizado ese script, quitar el default.\nconst schoolType = norm(body.schoolType || 'college');\n\nif (records.length === 0) {\n  return [];\n}\n\n// Property de HubSpot compartida para el checkbox de biweekly/monthly,\n// tanto para College como para HS. Confirmado: biweekly_participation.\nconst SHARED_BIWEEKLY_PROPERTY = 'biweekly_participation';\n\nconst FIELD_MAPS = {\n  college: {\n    'status': 'lifecyclestage',\n    'timezone': 'timezone',\n    'planning & gsw': 'b2b_planning__gsw_status',\n    '1st gbm': 'gbm_date',\n    'activities fair': 'b2b_activities_fair_status',\n    'gbm': 'b2b_gbm_status',\n    'biweekly sent 1st semester': 'b2b_biweekly_sent_1st_semester_status',\n    'biweekly sent 2nd semester': 'b2b_biweekly_sent_2nd_semester_status',\n    '__biweekly__': SHARED_BIWEEKLY_PROPERTY,\n    'hootsuite point person': 'hootsuite_point_person',\n    'hootsuite status': 'hotsuite_status',\n    'slt tracker link': 'slt_tracker_link',\n    'givelively link': 'givelively_campaign_url',\n    'webinar date (at gbm)': 'b2b_mm_webinar_date',\n    'webinar completed?': 'b2b_webinar_date_completed',\n    'power hour other date': 'power_hour_date',\n    'power hour completed?': 'b2b_power_hour_completed'\n  },\n  'high school': {\n    'status': 'lifecyclestage',\n    'timezone': 'timezone',\n    'planning & gsw': 'b2b_planning__gsw_status',\n    'gbm': 'b2b_gbm_status',\n    '__biweekly__': SHARED_BIWEEKLY_PROPERTY,\n    'type of post biweekly communication': 'b2b_hs_type_of_post_biweekly_comm',\n    'givelively link': 'givelively_campaign_url',\n    'mm webinar date (taking place at gbm)': 'b2b_mm_webinar_date',\n    'webinar completed?': 'b2b_webinar_date_completed',\n    //'fundraising method': null   // TODO: falta internal name\n  }\n};\n\nconst SHARED_STATUS_VALUE_MAP = {\n  'get started': '23878512',\n  'sustainability': '23925576',\n  'growth': '23925577',\n  'reboot': '23926968',\n  'defunct': '23926969',\n  'unknown': '63214633',\n};\n\nconst VALUE_MAPS = {\n  college: {\n    'status': SHARED_STATUS_VALUE_MAP,\n    'gbm': {\n      '1st gbm preparation': '1st_GBM_Preparation',\n      '1st gbm completed': '1st_GBM_Completed'\n    },\n  },\n  'high school': {\n    'status': SHARED_STATUS_VALUE_MAP,\n    'gbm': {\n      // TODO: confirmar valores válidos para HS (¿los mismos que College?)\n      '1st gbm preparation': '1st_GBM_Preparation',\n      '1st gbm completed': '1st_GBM_Completed'\n    },\n  'type of post biweekly communication': {\n    'automatically communications': 'Automatically communications',\n    'automatically communication': 'Automatically communications',\n    'manually communications': 'Manually communications',\n    'manually communication': 'Manually communications',\n    },\n  }\n};\n\nconst FIELD_MAP = FIELD_MAPS[schoolType];\nconst VALUE_MAP = VALUE_MAPS[schoolType];\n\nif (!FIELD_MAP) {\n  throw new Error(`schoolType desconocido: \"${body.schoolType}\"`);\n}\n\nconst desiredRecords = [];\nconst propertySet = new Set();\nconst unmappedFields = new Set();\nconst invalidValues = [];\n\nfor (const record of records) {\n  const recordId = String(record.recordId == null ? '' : record.recordId).trim();\n  if (!recordId) continue;\n\n  const fields = record.fields && typeof record.fields === 'object' ? record.fields : {};\n  const desiredProperties = {};\n\n  for (const [rawField, rawValue] of Object.entries(fields)) {\n    const field = norm(rawField);\n\n    if (!(field in FIELD_MAP)) {\n      unmappedFields.add(field);\n      continue;\n    }\n\n    const internalName = FIELD_MAP[field];\n    if (!internalName) {\n      unmappedFields.add(field);\n      continue;\n    }\n\n    let value = rawValue == null ? '' : String(rawValue).trim();\n    if (value === '') continue;\n\n    if (VALUE_MAP[field]) {\n      const translated = VALUE_MAP[field][norm(value)];\n      if (translated === undefined) {\n        invalidValues.push({\n          recordId,\n          chapterName: record.chapterName || '',\n          schoolType,\n          field,\n          value,\n        });\n        continue;\n      }\n      value = translated;\n    }\n\n    desiredProperties[internalName] = value;\n    propertySet.add(internalName);\n  }\n\n  if (Object.keys(desiredProperties).length === 0) continue;\n\n  desiredRecords.push({\n    recordId,\n    chapterName: record.chapterName || '',\n    owner: record.owner || '',\n    schoolType,\n    desiredProperties,\n  });\n}\n\nif (invalidValues.length) {\n  throw new Error('Values without a HubSpot mapping: ' + JSON.stringify(invalidValues));\n}\n\nif (desiredRecords.length === 0) {\n  return [];\n}\n\nreturn [{\n  json: {\n    source: body.source,\n    schoolType,\n    generatedAt: body.generatedAt || null,\n    desiredRecords,\n    diagnostics: {\n      schoolType,\n      receivedRecords: records.length,\n      preparedRecords: desiredRecords.length,\n      unmappedFields: Array.from(unmappedFields).sort(),\n    },\n    batchReadBody: {\n      properties: Array.from(propertySet).sort(),\n      inputs: desiredRecords.map(r => ({ id: r.recordId })),\n    },\n  },\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          -80,
+          32
+        ],
+        "id": "b7f4cc7e-cf00-4234-987c-35631df07c88",
+        "name": "Prepare Reconciliation"
+      },
+      {
+        "parameters": {
+          "jsCode": "const plan = $('Prepare Reconciliation').first().json;\nconst hubspotResults = Array.isArray($json.results) ? $json.results : [];\n\nconst currentById = new Map(\n  hubspotResults.map(r => [String(r.id), r.properties || {}])\n);\n\nfunction canonical(property, value) {\n  const text = String(value == null ? '' : value).trim();\n\n  // HubSpot multi-checkbox values are semicolon-separated. Ignore ordering for comparison.\n  if (property === 'biweekly_participation') {\n    return text\n      .split(';')\n      .map(v => v.trim())\n      .filter(Boolean)\n      .sort()\n      .join(';');\n  }\n\n  return text;\n}\n\nconst updates = [];\nconst changes = [];\nconst missingRecordIds = [];\n\nfor (const desired of plan.desiredRecords) {\n  const current = currentById.get(String(desired.recordId));\n\n  if (!current) {\n    missingRecordIds.push(desired.recordId);\n    continue;\n  }\n\n  const changedProperties = {};\n  const propertyChanges = [];\n\n  for (const [property, desiredValue] of Object.entries(desired.desiredProperties)) {\n    const currentValue = current[property] == null ? '' : current[property];\n\n    if (canonical(property, currentValue) === canonical(property, desiredValue)) {\n      continue;\n    }\n\n    changedProperties[property] = desiredValue;\n    propertyChanges.push({\n      property,\n      from: currentValue,\n      to: desiredValue,\n    });\n  }\n\n  if (Object.keys(changedProperties).length === 0) continue;\n\n  updates.push({\n    id: desired.recordId,\n    properties: changedProperties,\n  });\n\n  changes.push({\n    recordId: desired.recordId,\n    chapterName: desired.chapterName,\n    owner: desired.owner,\n    changes: propertyChanges,\n  });\n}\n\nif (missingRecordIds.length) {\n  console.log('Company IDs not returned by HubSpot batch read: ' + missingRecordIds.join(', '));\n}\n\nif (updates.length === 0) {\n  console.log('Reconciliation complete: no HubSpot changes required. Diagnostics: ' + JSON.stringify(plan.diagnostics));\n  return [];\n}\n\nreturn [{\n  json: {\n    diagnostics: {\n      ...plan.diagnostics,\n      hubspotRecordsRead: hubspotResults.length,\n      recordsToUpdate: updates.length,\n      missingRecordIds,\n    },\n    changes,\n    batchUpdateBody: {\n      inputs: updates,\n    },\n  },\n}];"
+        },
+        "type": "n8n-nodes-base.code",
+        "typeVersion": 2,
+        "position": [
+          352,
+          32
+        ],
+        "id": "8085270a-883e-4984-a87d-e4fcc4751374",
+        "name": "Build Diff"
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.hubapi.com/crm/v3/objects/companies/batch/update",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "hubspotAppToken",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json.batchUpdateBody }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          560,
+          32
+        ],
+        "id": "5b273fc2-2c1f-4f74-9029-cb6cb61b7fac",
+        "name": "Batch Update Companies1",
+        "credentials": {
+          "hubspotAppToken": {
+            "id": "FtDaBIfDshdkgR83",
+            "name": "HubSpot App Token account 6"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "method": "POST",
+          "url": "https://api.hubapi.com/crm/v3/objects/companies/batch/read",
+          "authentication": "predefinedCredentialType",
+          "nodeCredentialType": "hubspotAppToken",
+          "sendBody": true,
+          "specifyBody": "json",
+          "jsonBody": "={{ $json.batchReadBody }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.httpRequest",
+        "typeVersion": 4.3,
+        "position": [
+          128,
+          32
+        ],
+        "id": "353f5f5f-7247-4022-a747-e70f36546eac",
+        "name": "Batch Read Companies",
+        "credentials": {
+          "hubspotAppToken": {
+            "id": "FtDaBIfDshdkgR83",
+            "name": "HubSpot App Token account 6"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "Webhook": {
+        "main": [
+          [
+            {
+              "node": "Prepare Reconciliation",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Prepare Reconciliation": {
+        "main": [
+          [
+            {
+              "node": "Batch Read Companies",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Build Diff": {
+        "main": [
+          [
+            {
+              "node": "Batch Update Companies1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Batch Read Companies": {
+        "main": [
+          [
+            {
+              "node": "Build Diff",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "authors": "Diego Bejarano",
+    "name": null,
+    "description": null
+  },
+  "activeVersionId": "1ca21f25-f058-4998-9ba3-66edac17f444",
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Reconciliation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Reconciliation": {
+      "main": [
+        [
+          {
+            "node": "Batch Read Companies",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Diff": {
+      "main": [
+        [
+          {
+            "node": "Batch Update Companies1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Batch Read Companies": {
+      "main": [
+        [
+          {
+            "node": "Build Diff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-09-28T17:39:38.435Z",
+  "id": "efNX86EoVJKPwVXr",
+  "isArchived": false,
+  "meta": null,
+  "name": "(B2B) HS Sync Google Sheets to Hubspot",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "fcfd1f21-ab44-48f3-875b-487c83991b6d",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        32
+      ],
+      "id": "36c72aab-88ac-4ae0-927f-00f2cdb439a2",
+      "name": "Webhook",
+      "webhookId": "fcfd1f21-ab44-48f3-875b-487c83991b6d"
+    },
+    {
+      "parameters": {
+        "jsCode": "function norm(v) {\n  return String(v == null ? '' : v).replace(/\\s+/g, ' ').trim().toLowerCase();\n}\n\nconst body = $json.body || {};\nconst records = Array.isArray(body.records) ? body.records : [];\n\nif (body.source !== 'reconcile') {\n  throw new Error(`Expected source=\"reconcile\" but received \"${body.source || ''}\"`);\n}\n\n// Compatibilidad hacia atrás: si el Apps Script de College todavía no manda\n// schoolType, se asume 'college'. Una vez actualizado ese script, quitar el default.\nconst schoolType = norm(body.schoolType || 'college');\n\nif (records.length === 0) {\n  return [];\n}\n\n// Property de HubSpot compartida para el checkbox de biweekly/monthly,\n// tanto para College como para HS. Confirmado: biweekly_participation.\nconst SHARED_BIWEEKLY_PROPERTY = 'biweekly_participation';\n\nconst FIELD_MAPS = {\n  college: {\n    'status': 'lifecyclestage',\n    'timezone': 'timezone',\n    'planning & gsw': 'b2b_planning__gsw_status',\n    '1st gbm': 'gbm_date',\n    'activities fair': 'b2b_activities_fair_status',\n    'gbm': 'b2b_gbm_status',\n    'biweekly sent 1st semester': 'b2b_biweekly_sent_1st_semester_status',\n    'biweekly sent 2nd semester': 'b2b_biweekly_sent_2nd_semester_status',\n    '__biweekly__': SHARED_BIWEEKLY_PROPERTY,\n    'hootsuite point person': 'hootsuite_point_person',\n    'hootsuite status': 'hotsuite_status',\n    'slt tracker link': 'slt_tracker_link',\n    'givelively link': 'givelively_campaign_url',\n    'webinar date (at gbm)': 'b2b_mm_webinar_date',\n    'webinar completed?': 'b2b_webinar_date_completed',\n    'power hour other date': 'power_hour_date',\n    'power hour completed?': 'b2b_power_hour_completed'\n  },\n  'high school': {\n    'status': 'lifecyclestage',\n    'timezone': 'timezone',\n    'planning & gsw': 'b2b_planning__gsw_status',\n    'gbm': 'b2b_gbm_status',\n    '__biweekly__': SHARED_BIWEEKLY_PROPERTY,\n    'type of post biweekly communication': 'b2b_hs_type_of_post_biweekly_comm',\n    'givelively link': 'givelively_campaign_url',\n    'mm webinar date (taking place at gbm)': 'b2b_mm_webinar_date',\n    'webinar completed?': 'b2b_webinar_date_completed',\n    //'fundraising method': null   // TODO: falta internal name\n  }\n};\n\nconst SHARED_STATUS_VALUE_MAP = {\n  'get started': '23878512',\n  'sustainability': '23925576',\n  'growth': '23925577',\n  'reboot': '23926968',\n  'defunct': '23926969',\n  'unknown': '63214633',\n};\n\nconst VALUE_MAPS = {\n  college: {\n    'status': SHARED_STATUS_VALUE_MAP,\n    'gbm': {\n      '1st gbm preparation': '1st_GBM_Preparation',\n      '1st gbm completed': '1st_GBM_Completed'\n    },\n  },\n  'high school': {\n    'status': SHARED_STATUS_VALUE_MAP,\n    'gbm': {\n      // TODO: confirmar valores válidos para HS (¿los mismos que College?)\n      '1st gbm preparation': '1st_GBM_Preparation',\n      '1st gbm completed': '1st_GBM_Completed'\n    },\n  'type of post biweekly communication': {\n    'automatically communications': 'Automatically communications',\n    'automatically communication': 'Automatically communications',\n    'manually communications': 'Manually communications',\n    'manually communication': 'Manually communications',\n    },\n  }\n};\n\nconst FIELD_MAP = FIELD_MAPS[schoolType];\nconst VALUE_MAP = VALUE_MAPS[schoolType];\n\nif (!FIELD_MAP) {\n  throw new Error(`schoolType desconocido: \"${body.schoolType}\"`);\n}\n\nconst desiredRecords = [];\nconst propertySet = new Set();\nconst unmappedFields = new Set();\nconst invalidValues = [];\n\nfor (const record of records) {\n  const recordId = String(record.recordId == null ? '' : record.recordId).trim();\n  if (!recordId) continue;\n\n  const fields = record.fields && typeof record.fields === 'object' ? record.fields : {};\n  const desiredProperties = {};\n\n  for (const [rawField, rawValue] of Object.entries(fields)) {\n    const field = norm(rawField);\n\n    if (!(field in FIELD_MAP)) {\n      unmappedFields.add(field);\n      continue;\n    }\n\n    const internalName = FIELD_MAP[field];\n    if (!internalName) {\n      unmappedFields.add(field);\n      continue;\n    }\n\n    let value = rawValue == null ? '' : String(rawValue).trim();\n    if (value === '') continue;\n\n    if (VALUE_MAP[field]) {\n      const translated = VALUE_MAP[field][norm(value)];\n      if (translated === undefined) {\n        invalidValues.push({\n          recordId,\n          chapterName: record.chapterName || '',\n          schoolType,\n          field,\n          value,\n        });\n        continue;\n      }\n      value = translated;\n    }\n\n    desiredProperties[internalName] = value;\n    propertySet.add(internalName);\n  }\n\n  if (Object.keys(desiredProperties).length === 0) continue;\n\n  desiredRecords.push({\n    recordId,\n    chapterName: record.chapterName || '',\n    owner: record.owner || '',\n    schoolType,\n    desiredProperties,\n  });\n}\n\nif (invalidValues.length) {\n  throw new Error('Values without a HubSpot mapping: ' + JSON.stringify(invalidValues));\n}\n\nif (desiredRecords.length === 0) {\n  return [];\n}\n\nreturn [{\n  json: {\n    source: body.source,\n    schoolType,\n    generatedAt: body.generatedAt || null,\n    desiredRecords,\n    diagnostics: {\n      schoolType,\n      receivedRecords: records.length,\n      preparedRecords: desiredRecords.length,\n      unmappedFields: Array.from(unmappedFields).sort(),\n    },\n    batchReadBody: {\n      properties: Array.from(propertySet).sort(),\n      inputs: desiredRecords.map(r => ({ id: r.recordId })),\n    },\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -80,
+        32
+      ],
+      "id": "b7f4cc7e-cf00-4234-987c-35631df07c88",
+      "name": "Prepare Reconciliation"
+    },
+    {
+      "parameters": {
+        "jsCode": "const plan = $('Prepare Reconciliation').first().json;\nconst hubspotResults = Array.isArray($json.results) ? $json.results : [];\n\nconst currentById = new Map(\n  hubspotResults.map(r => [String(r.id), r.properties || {}])\n);\n\nfunction canonical(property, value) {\n  const text = String(value == null ? '' : value).trim();\n\n  // HubSpot multi-checkbox values are semicolon-separated. Ignore ordering for comparison.\n  if (property === 'biweekly_participation') {\n    return text\n      .split(';')\n      .map(v => v.trim())\n      .filter(Boolean)\n      .sort()\n      .join(';');\n  }\n\n  return text;\n}\n\nconst updates = [];\nconst changes = [];\nconst missingRecordIds = [];\n\nfor (const desired of plan.desiredRecords) {\n  const current = currentById.get(String(desired.recordId));\n\n  if (!current) {\n    missingRecordIds.push(desired.recordId);\n    continue;\n  }\n\n  const changedProperties = {};\n  const propertyChanges = [];\n\n  for (const [property, desiredValue] of Object.entries(desired.desiredProperties)) {\n    const currentValue = current[property] == null ? '' : current[property];\n\n    if (canonical(property, currentValue) === canonical(property, desiredValue)) {\n      continue;\n    }\n\n    changedProperties[property] = desiredValue;\n    propertyChanges.push({\n      property,\n      from: currentValue,\n      to: desiredValue,\n    });\n  }\n\n  if (Object.keys(changedProperties).length === 0) continue;\n\n  updates.push({\n    id: desired.recordId,\n    properties: changedProperties,\n  });\n\n  changes.push({\n    recordId: desired.recordId,\n    chapterName: desired.chapterName,\n    owner: desired.owner,\n    changes: propertyChanges,\n  });\n}\n\nif (missingRecordIds.length) {\n  console.log('Company IDs not returned by HubSpot batch read: ' + missingRecordIds.join(', '));\n}\n\nif (updates.length === 0) {\n  console.log('Reconciliation complete: no HubSpot changes required. Diagnostics: ' + JSON.stringify(plan.diagnostics));\n  return [];\n}\n\nreturn [{\n  json: {\n    diagnostics: {\n      ...plan.diagnostics,\n      hubspotRecordsRead: hubspotResults.length,\n      recordsToUpdate: updates.length,\n      missingRecordIds,\n    },\n    changes,\n    batchUpdateBody: {\n      inputs: updates,\n    },\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        352,
+        32
+      ],
+      "id": "8085270a-883e-4984-a87d-e4fcc4751374",
+      "name": "Build Diff"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/companies/batch/update",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.batchUpdateBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        560,
+        32
+      ],
+      "id": "5b273fc2-2c1f-4f74-9029-cb6cb61b7fac",
+      "name": "Batch Update Companies1",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "FtDaBIfDshdkgR83",
+          "name": "HubSpot App Token account 6"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.hubapi.com/crm/v3/objects/companies/batch/read",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "hubspotAppToken",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.batchReadBody }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        128,
+        32
+      ],
+      "id": "353f5f5f-7247-4022-a747-e70f36546eac",
+      "name": "Batch Read Companies",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "FtDaBIfDshdkgR83",
+          "name": "HubSpot App Token account 6"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-09-28T17:39:38.435Z",
+      "createdAt": "2026-09-28T17:39:38.435Z",
+      "role": "workflow:owner",
+      "workflowId": "efNX86EoVJKPwVXr",
+      "projectId": "Xr7Tq1f92KLz18mB"
+    }
+  ],
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-09-28T17:46:11.225Z",
+  "versionId": "1ca21f25-f058-4998-9ba3-66edac17f444"
+}
